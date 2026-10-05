@@ -3,8 +3,9 @@ import { createHmac, timingSafeEqual } from "node:crypto";
 import { cookies } from "next/headers";
 import type { DB, Device, Integration, User } from "../domain";
 import { id, sha256 } from "./crypto";
+import { execute } from "./ops";
 import { ApiError } from "./gateway";
-import { audit, getDb, persist } from "./store";
+import { getDb } from "./store";
 
 export const SESSION_COOKIE = "orbis_session";
 
@@ -106,25 +107,21 @@ export async function currentConsoleUser() {
   return { db, user: await consoleUser(db) };
 }
 
-export function createConsoleSession(db: DB, user: User) {
-  const t = signToken("orbc", { u: user.id, exp: Date.now() + TTL_MS });
-  audit(db, { at: new Date().toISOString(), type: "auth.signin", actor: { kind: "user", id: user.id, name: user.name }, summary: `${user.name} signed in to the console via ${db.tenant.settings.sso.provider}` });
-  persist();
-  return t;
+export async function createConsoleSession(db: DB, user: User) {
+  await execute(db, { kind: "signin", user_id: user.id });
+  return signToken("orbc", { u: user.id, exp: Date.now() + TTL_MS });
 }
 
 /** Demo SSO for the iOS app: registers (or reuses) the device and issues a mobile session token. */
-export function registerMobile(db: DB, email: string, device: { name: string; model: string; os: string }) {
+export async function registerMobile(db: DB, email: string, device: { name: string; model: string; os: string }) {
   const user = db.users.find((u) => u.email.toLowerCase() === email.toLowerCase() && u.status === "active");
   if (!user) throw new ApiError(404, "unknown_user", "No Northstar Cloud account for that email.");
   let dev = db.devices.find((d) => d.user_id === user.id && d.name === device.name && d.trust !== "revoked");
   const now = new Date().toISOString();
   if (!dev) {
     dev = { id: id("dev"), user_id: user.id, name: device.name.slice(0, 60), model: device.model.slice(0, 40), os: device.os.slice(0, 30), registered_at: now, last_seen_at: now, trust: "registered", push: true, biometric: "face_id" };
-    db.devices.push(dev);
-    audit(db, { at: now, type: "device.registered", actor: { kind: "user", id: user.id, name: user.name }, target: { type: "device", id: dev.id }, summary: `${dev.name} (${dev.model}) registered via Orbis iOS` });
+    await execute(db, { kind: "device_register", user_id: user.id, device: dev });
   }
   const t = signToken("orbu", { u: user.id, d: dev.id, dn: dev.name, dm: dev.model, os: dev.os, exp: Date.now() + 30 * 24 * 3_600_000 });
-  persist();
   return { token: t, user, device: dev };
 }

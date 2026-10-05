@@ -4,6 +4,8 @@
 
 > Control without killing autonomy.
 
+**Live demo → [orbis-relay.vercel.app](https://orbis-relay.vercel.app)** · [Northstar demo app](https://orbis-relay.vercel.app/demo) · [Console](https://orbis-relay.vercel.app/console) (pick any persona) · [Docs](https://orbis-relay.vercel.app/docs)
+
 ![Launch film poster](apps/web/public/media/orbis-launch-poster.jpg)
 
 This repository is a portfolio-grade build of the *Orbis Relay Master Product Build Blueprint*: a marketing site, a full admin console, a demo customer app, a gateway API with seeded demo data, TypeScript and Python SDKs, a native SwiftUI iOS app, two ML models trained from scratch, and a 40-second launch film.
@@ -110,8 +112,20 @@ CI: `docs/ci/github-actions-ci.yml` runs all of the above plus the iOS suite on 
 ## Launch film
 `apps/web/public/media/orbis-launch.mp4` (40 s, 1080p, Kokoro voiceover, beat-locked to the music bed) was made with Hyperframes from `video/brag-output/composition/index.html`. Re-render with `pnpm video`. The plan, brief and share copy are in `video/brag-output/`.
 
+## Deployment (Vercel)
+
+The demo runs on Vercel serverless functions, where requests can land on different instances. Three things keep every instance consistent without a database:
+
+1. **Deterministic seed.** The tenant is rebuilt from a seeded PRNG, seeded ids and an Ed25519 key derived from `ORBIS_SIGNING_SEED`, so every instance holds byte-identical data and any receipt verifies anywhere.
+2. **Shared op log.** Every mutation is an `Op` (`apps/web/src/lib/server/ops.ts`) applied with ids derived from the op and its recorded timestamp, then appended to a private **Vercel Blob** log (`sync.ts`). Before serving, an instance replays the ops it hasn't seen. A shared *epoch* pins the seed time; a demo reset starts a new epoch.
+3. **Stateless sessions.** Console cookies and iOS tokens are HMAC-signed claims (`ORBIS_SESSION_SECRET`), so they verify on any instance.
+
+Tests cover both properties: two replicas replaying one log converge byte-for-byte (`replica.test.ts`), and two seeds with the same anchor are identical (`seed.test.ts`). Locally, without `BLOB_READ_WRITE_TOKEN`, the single process is the source of truth and data persists to `apps/web/.data/`.
+
+Project settings: Root Directory `apps/web`, framework Next.js, region `iad1`, Fluid compute. Env: `ORBIS_SIGNING_SEED`, `ORBIS_SESSION_SECRET`, `BLOB_READ_WRITE_TOKEN` (from the connected Blob store).
+
 ## What's simulated
-- Persistence is a JSON document, not PostgreSQL; expiry/escalation runs on an in-process timer, not Temporal.
+- Persistence is a deterministic seed plus a Blob op log (or a local JSON file), not PostgreSQL; expiry/escalation is computed on request, not by Temporal.
 - Webhook deliveries are recorded, not sent. SSO is demo personas.
 - Web step-up is a simulated passkey prompt; iOS uses real LocalAuthentication.
 - All organizations, people, vendors and figures are fictional. “Orbis Relay” is a working name.

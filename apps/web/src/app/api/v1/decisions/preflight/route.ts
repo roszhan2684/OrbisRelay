@@ -1,5 +1,6 @@
 import { requireIntegration } from "@/lib/server/auth";
-import { preflight, validateCallbackUrl, ApiError } from "@/lib/server/gateway";
+import { validateCallbackUrl, ApiError, type PreflightResult } from "@/lib/server/gateway";
+import { execute } from "@/lib/server/ops";
 import { handle, json, parseEnvelope, readJson } from "@/lib/server/http";
 import { decisionResponse } from "@/lib/server/present";
 
@@ -14,6 +15,6 @@ export const POST = handle(async (req: Request) => {
   }
   const idem = req.headers.get("idempotency-key");
   if (idem && !body.request_id) envelope.request_id = idem.slice(0, 128);
-  const { action, approval, idempotent_replay } = preflight(db, integration, envelope);
+  const { action, approval, idempotent_replay } = await execute<PreflightResult>(db, { kind: "preflight", integration_id: integration.id, envelope });
   return json(decisionResponse(db, action, approval, idempotent_replay), { status: idempotent_replay ? 200 : 201 });
 });

@@ -1,5 +1,6 @@
 import { requireIntegration } from "@/lib/server/auth";
-import { cancelApproval } from "@/lib/server/gateway";
+import type { ApprovalRecord } from "@/lib/domain";
+import { execute } from "@/lib/server/ops";
 import { handle, json } from "@/lib/server/http";
 
 type Ctx = { params: Promise<{ id: string }> };
@@ -8,6 +9,6 @@ type Ctx = { params: Promise<{ id: string }> };
 export const POST = handle(async (req: Request, ctx: Ctx) => {
   const { id } = await ctx.params;
   const { db, integration } = await requireIntegration(req);
-  const ap = cancelApproval(db, id, integration);
+  const ap = await execute<ApprovalRecord>(db, { kind: "cancel", approval_id: id, integration_id: integration.id });
   return json({ id: ap.id, status: ap.status });
 });

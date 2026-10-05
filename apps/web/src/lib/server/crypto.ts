@@ -61,10 +61,11 @@ export function id(prefix: string) {
 
 /** Run `fn` with deterministic ids, so independent instances build byte-identical seed data. */
 export function withSeededIds<T>(seed: string, fn: () => T): T {
+  const outer = seededIds; // nestable: restore the enclosing deterministic scope afterwards
   seededIds = { seed, n: 0 };
   try {
     return fn();
   } finally {
-    seededIds = null;
+    seededIds = outer;
   }
 }

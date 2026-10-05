@@ -298,6 +298,8 @@ export interface ProtectAnalysis {
 
 export interface DB {
   version: number;
+  /** Shared epoch (serverless sync) this replica was seeded from. */
+  epoch_id?: string;
   seeded_at: string;
   signing_key: { id: string; private_pem: string; public_pem: string; x: string };
   tenant: Tenant;

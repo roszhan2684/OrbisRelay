@@ -35,8 +35,11 @@ export function until(iso: string, now = Date.now()) {
   return `${Math.floor(s / 3600)}h ${Math.round((s % 3600) / 60)}m`;
 }
 
+// Fixed to the tenant timezone so server-rendered and hydrated text always match.
+export const TENANT_TZ = "America/New_York";
+
 export function dateTime(iso: string) {
-  return new Date(iso).toLocaleString("en-US", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
+  return new Date(iso).toLocaleString("en-US", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit", timeZone: TENANT_TZ });
 }
 
 export function shortDate(iso: string) {

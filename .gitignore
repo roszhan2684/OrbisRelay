@@ -21,3 +21,4 @@ video/brag-output/brag.mp4
 video/brag-output/brag.jpg
 # licensed music bed — copy from the brag skill's assets/music before re-rendering
 video/brag-output/composition/assets/music/
+.vercel

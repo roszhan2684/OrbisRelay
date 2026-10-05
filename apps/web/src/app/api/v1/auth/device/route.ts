@@ -9,6 +9,6 @@ export const POST = handle(async (req: Request) => {
   const b = await readJson(req);
   const email = String(b.email ?? "");
   if (!email.includes("@")) throw new ApiError(422, "validation_error", "email required");
-  const res = registerMobile(db, email, { name: String(b.device_name ?? "iPhone"), model: String(b.model ?? "iPhone"), os: String(b.os ?? "iOS") });
+  const res = await registerMobile(db, email, { name: String(b.device_name ?? "iPhone"), model: String(b.model ?? "iPhone"), os: String(b.os ?? "iOS") });
   return json({ token: res.token, user: res.user, device: res.device, tenant: { id: db.tenant.id, name: db.tenant.name } }, { status: 201 });
 });

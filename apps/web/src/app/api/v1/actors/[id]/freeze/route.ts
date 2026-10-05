@@ -1,5 +1,6 @@
 import { requireUser } from "@/lib/server/auth";
-import { freezeActor, unfreezeActor } from "@/lib/server/gateway";
+import type { Freeze } from "@/lib/domain";
+import { execute } from "@/lib/server/ops";
 import { handle, json, readJson } from "@/lib/server/http";
 
 type Ctx = { params: Promise<{ id: string }> };
@@ -9,7 +10,7 @@ export const POST = handle(async (req: Request, ctx: Ctx) => {
   const { id } = await ctx.params;
   const { db, user, channel } = await requireUser(req);
   const body = await readJson(req);
-  const fr = freezeActor(db, id, user, String(body.reason ?? "Emergency freeze"), channel === "ios" ? "ios" : "web");
+  const fr = await execute<Freeze>(db, { kind: "freeze", actor_id: id, user_id: user.id, reason: String(body.reason ?? "Emergency freeze"), channel: channel === "ios" ? "ios" : "web" });
   return json(fr, { status: 201 });
 });
 
@@ -19,5 +20,5 @@ export const DELETE = handle(async (req: Request, ctx: Ctx) => {
   const { db, user } = await requireUser(req);
   const body = await readJson(req);
   const reason = String(body.reason ?? new URL(req.url).searchParams.get("reason") ?? "");
-  return json(unfreezeActor(db, id, user, reason));
+  return json(await execute<Freeze>(db, { kind: "unfreeze", actor_id: id, user_id: user.id, reason }));
 });

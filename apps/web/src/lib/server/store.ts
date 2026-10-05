@@ -43,7 +43,39 @@ const g = globalThis as unknown as { __orbis?: Runtime };
 const rt: Runtime = (g.__orbis ??= { db: null, bus: new EventEmitter(), flushTimer: null, ticker: null, seeding: null, lastTick: 0, gateway: null });
 rt.bus.setMaxListeners(200);
 
+async function syncedDb(): Promise<DB> {
+  const sync = await import("./sync");
+  const { applyOp } = await import("./ops");
+  const { buildSeed } = await import("./seed");
+  const rebuild = async (forceNew = false) => {
+    const epoch = forceNew ? await sync.createEpoch(seedAnchor()) : await sync.resolveEpoch(seedAnchor);
+    sync.resetApplied();
+    const db = buildSeed(new Date(epoch.anchor));
+    db.epoch_id = epoch.id;
+    rt.db = db;
+    await sync.pull(db, (env) => applyOp(db, env), true);
+    return db;
+  };
+  if (!rt.db || !rt.db.epoch_id) {
+    rt.seeding ??= rebuild().finally(() => (rt.seeding = null));
+    await rt.seeding;
+    startTicker();
+  }
+  const db = rt.db!;
+  if ((await sync.pull(db, (env) => applyOp(db, env))) === "rebuild") {
+    rt.seeding ??= rebuild().finally(() => (rt.seeding = null));
+    await rt.seeding;
+    emit({ type: "demo.reset" });
+  }
+  if (rt.gateway && Date.now() - rt.lastTick > 5000) {
+    rt.lastTick = Date.now();
+    rt.gateway.tick(rt.db!);
+  }
+  return rt.db!;
+}
+
 export async function getDb(): Promise<DB> {
+  if (process.env.BLOB_READ_WRITE_TOKEN) return syncedDb();
   if (rt.db) {
     // Request-driven lifecycle tick: serverless instances may be frozen between requests.
     if (rt.gateway && Date.now() - rt.lastTick > 5000) {
@@ -78,6 +110,16 @@ export async function getDb(): Promise<DB> {
 }
 
 export async function resetDb() {
+  if (process.env.BLOB_READ_WRITE_TOKEN) {
+    const sync = await import("./sync");
+    const { buildSeed } = await import("./seed");
+    const epoch = await sync.createEpoch(seedAnchor());
+    sync.resetApplied();
+    rt.db = buildSeed(new Date(epoch.anchor));
+    rt.db.epoch_id = epoch.id;
+    emit({ type: "demo.reset" });
+    return rt.db;
+  }
   const { buildSeed } = await import("./seed");
   rt.db = buildSeed(seedAnchor());
   flushNow();

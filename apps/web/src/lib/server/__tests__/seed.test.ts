@@ -25,7 +25,9 @@ describe("seeded demo organization", () => {
   });
 
   it("audit is chronological (append order; decision latency may skew timestamps by <1s)", () => {
-    for (let i = 1; i < db.audit.length; i++) expect(new Date(db.audit[i].at).getTime() - new Date(db.audit[i - 1].at).getTime(), `${db.audit[i - 1].summary} > ${db.audit[i].summary}`).toBeGreaterThan(-1000);
+    // Scheduled lifecycle events (escalation/expiry) are stamped at their due time, so they may be appended late.
+    const ordered = db.audit.filter((e) => e.type !== "approval.escalated" && !(e.type === "approval.resolved" && e.summary.includes("expired")));
+    for (let i = 1; i < ordered.length; i++) expect(new Date(ordered[i].at).getTime() - new Date(ordered[i - 1].at).getTime(), `${ordered[i - 1].summary} > ${ordered[i].summary}`).toBeGreaterThan(-1000);
   });
 
   it("has the curated pending inbox", () => {

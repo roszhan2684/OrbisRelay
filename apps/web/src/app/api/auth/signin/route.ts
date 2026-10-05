@@ -11,7 +11,7 @@ export const POST = handle(async (req: Request) => {
   const email = String(body.email ?? "alex.chen@northstar.cloud").toLowerCase();
   const user = db.users.find((u) => u.email === email && u.status === "active");
   if (!user) throw new ApiError(404, "unknown_user", "No account for that email.");
-  const t = createConsoleSession(db, user);
+  const t = await createConsoleSession(db, user);
   (await cookies()).set(SESSION_COOKIE, t, { httpOnly: true, sameSite: "lax", path: "/", secure: process.env.NODE_ENV === "production" && !process.env.ORBIS_INSECURE_COOKIES, maxAge: 60 * 60 * 12 });
   return json({ ok: true, user: { id: user.id, name: user.name } });
 });

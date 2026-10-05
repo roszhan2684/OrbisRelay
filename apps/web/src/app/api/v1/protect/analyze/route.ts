@@ -2,7 +2,7 @@ import { requireUser } from "@/lib/server/auth";
 import { id } from "@/lib/server/crypto";
 import { ApiError } from "@/lib/server/gateway";
 import { handle, json, readJson } from "@/lib/server/http";
-import { emit, persist } from "@/lib/server/store";
+import { execute } from "@/lib/server/ops";
 import { analyzeText, analyzeUrl } from "@/lib/ml/analyzer";
 import type { ProtectAnalysis } from "@/lib/domain";
 
@@ -32,8 +32,6 @@ export const POST = handle(async (req: Request) => {
     created_at: new Date().toISOString(),
     channel,
   };
-  db.protect.push(analysis);
-  emit({ type: "protect.analyzed", analysis_id: analysis.id, verdict: analysis.verdict });
-  persist();
+  await execute(db, { kind: "protect", analysis });
   return json(analysis, { status: 201 });
 });

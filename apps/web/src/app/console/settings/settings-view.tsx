@@ -117,7 +117,7 @@ export function SettingsView({ tenant, users, devices }: { tenant: Tenant; users
         <Card>
           <CardHeader title="Plan & usage" description={`${tenant.plan} · platform fee + decision volume (never per approver)`} />
           <div className="p-5">
-            <div className="flex items-baseline justify-between text-[13.5px]"><span>Decisions this month</span><span className="tnum font-semibold">{tenant.usage.decisions_this_month.toLocaleString()} / {tenant.usage.included_decisions.toLocaleString()}</span></div>
+            <div className="flex items-baseline justify-between text-[13.5px]"><span>Decisions this month</span><span className="tnum font-semibold">{tenant.usage.decisions_this_month.toLocaleString("en-US")} / {tenant.usage.included_decisions.toLocaleString("en-US")}</span></div>
             <div className="mt-2"><Meter value={tenant.usage.decisions_this_month} max={tenant.usage.included_decisions} /></div>
             <p className="mt-2 text-[12px] text-muted">Metering is computed after enforcement and can never change a decision.</p>
           </div>

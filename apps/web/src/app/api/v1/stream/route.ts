@@ -1,8 +1,9 @@
 import { requireUser } from "@/lib/server/auth";
 import { errorResponse } from "@/lib/server/http";
-import { subscribe } from "@/lib/server/store";
+import { getDb, subscribe } from "@/lib/server/store";
 
 export const dynamic = "force-dynamic";
+export const maxDuration = 300;
 
 /** GET /v1/stream — Server-Sent Events for live console and phone-twin updates. */
 export async function GET(req: Request) {
@@ -25,9 +26,12 @@ export async function GET(req: Request) {
       send({ type: "hello" });
       const unsub = subscribe(send);
       const ping = setInterval(() => send({ type: "ping" }), 20_000);
+      // Serverless: replay ops written by other instances so this stream sees them too.
+      const sync = process.env.BLOB_READ_WRITE_TOKEN ? setInterval(() => void getDb().catch(() => {}), 2000) : null;
       cleanup = () => {
         unsub();
         clearInterval(ping);
+        if (sync) clearInterval(sync);
       };
       req.signal.addEventListener("abort", () => {
         cleanup();

@@ -21,7 +21,7 @@ import type {
   ReceiptBody,
   User,
 } from "../domain";
-import { hashJson, id, signCanonical, verifyCanonical } from "./crypto";
+import { hashJson, id, signCanonical, verifyCanonical, withSeededIds } from "./crypto";
 import { audit, emit, persist } from "./store";
 
 export class ApiError extends Error {
@@ -134,11 +134,9 @@ export function preflight(
     return { action: existing, approval: db.approvals.find((p) => p.id === existing.approval_id), idempotent_replay: true };
   }
 
-  const started = performance.now();
   const evaluation = evaluate(envelope, liveVersions(db), contextFor(db, at));
-  // Seeding uses a deterministic latency so every instance builds identical history.
-  const measured = opts.silent ? 0 : performance.now() - started;
-  const latency = Math.max(4, Math.round(measured + 6 + (envelope.request_id.charCodeAt(envelope.request_id.length - 1) % 11)));
+  // Deterministic decision latency (evaluation itself is sub-millisecond); keeps replicas byte-identical.
+  const latency = 6 + (hashJson(envelope).charCodeAt(3) % 11);
 
   let status = evaluation.status;
   let effect = evaluation.effect;
@@ -394,12 +392,12 @@ function expireApproval(db: DB, approval: ApprovalRecord, at: Date, opts: OpOpti
   finalize(db, approval, action, "expired", at, opts);
 }
 
-export function cancelApproval(db: DB, approvalId: string, integration: Integration) {
+export function cancelApproval(db: DB, approvalId: string, integration: Integration, opts: OpOptions = {}) {
   const approval = db.approvals.find((a) => a.id === approvalId && a.tenant_id === integration.tenant_id && a.integration.id === integration.id);
   if (!approval) throw new ApiError(404, "not_found", "Approval not found.");
   if (approval.status !== "pending") throw new ApiError(409, "already_resolved", "Approval already resolved.");
   const action = db.actions.find((a) => a.id === approval.action_id)!;
-  finalize(db, approval, action, "cancelled", new Date(), {});
+  finalize(db, approval, action, "cancelled", nowOf(opts), opts);
   return approval;
 }
 
@@ -410,20 +408,26 @@ export function tick(db: DB, at = new Date(), opts: OpOptions = {}) {
     if (a.status !== "pending") continue;
     const created = new Date(a.created_at).getTime();
     const expires = new Date(a.expires_at).getTime();
-    if (expires <= at.getTime()) {
-      expireApproval(db, a, at, opts);
-      changed = true;
-    } else if (a.escalation_level === 0 && at.getTime() - created > (expires - created) * 0.5) {
-      a.escalation_level = 1;
-      a.escalated_at = at.toISOString();
-      audit(db, {
-        at: a.escalated_at,
-        type: "approval.escalated",
-        actor: { kind: "system", id: "orchestrator", name: "Approval orchestrator" },
-        target: { type: "approval", id: a.id },
-        summary: `SLA at 50% for "${a.title}" — escalated to secondary approvers in ${a.route}`,
+    // Lifecycle events are stamped at their scheduled time and get ids derived from the approval,
+    // not from when or where the tick ran — so every replica records identical history.
+    const escalateAt = created + (expires - created) * 0.5;
+    if (a.escalation_level === 0 && at.getTime() > escalateAt) {
+      withSeededIds(`escalate:${a.id}`, () => {
+        a.escalation_level = 1;
+        a.escalated_at = new Date(escalateAt).toISOString();
+        audit(db, {
+          at: a.escalated_at,
+          type: "approval.escalated",
+          actor: { kind: "system", id: "orchestrator", name: "Approval orchestrator" },
+          target: { type: "approval", id: a.id },
+          summary: `SLA at 50% for "${a.title}" — escalated to secondary approvers in ${a.route}`,
+        });
       });
       if (!opts.silent) emit({ type: "approval.escalated", approval_id: a.id });
+      changed = true;
+    }
+    if (expires <= at.getTime()) {
+      withSeededIds(`expire:${a.id}`, () => expireApproval(db, a, new Date(expires), opts));
       changed = true;
     }
   }
