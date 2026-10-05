@@ -168,7 +168,7 @@ export const inputCls =
 
 export function Segmented<T extends string>({ value, onChange, options, className }: { value: T; onChange: (v: T) => void; options: Array<{ value: T; label: React.ReactNode }>; className?: string }) {
   return (
-    <div role="tablist" className={cn("inline-flex rounded-[10px] bg-surface-2 p-0.5 ring-1 ring-inset ring-line", className)}>
+    <div role="tablist" className={cn("inline-flex max-w-full flex-wrap rounded-[10px] bg-surface-2 p-0.5 ring-1 ring-inset ring-line", className)}>
       {options.map((o) => (
         <button
           key={o.value}

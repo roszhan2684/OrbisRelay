@@ -79,6 +79,11 @@ body {
   border-radius: 6px;
 }
 
+/* Grid items default to min-width:auto and grow to their widest unbreakable child (code, hashes). */
+.grid > * {
+  min-width: 0;
+}
+
 .tnum {
   font-variant-numeric: tabular-nums;
 }

@@ -178,7 +178,7 @@ export function DemoApp({ signedIn }: { signedIn: boolean }) {
         </div>
         <div className="flex items-center gap-2">
           <Link href="/console" className="hidden items-center gap-1 rounded-lg px-3 py-1.5 text-[13px] text-white/70 hover:bg-white/10 hover:text-white sm:flex">Orbis console <ArrowUpRight className="size-3.5" /></Link>
-          <Link href="/" className="rounded-lg px-3 py-1.5 text-[13px] text-white/70 hover:bg-white/10 hover:text-white">orbisrelay.dev</Link>
+          <Link href="/" className="rounded-lg px-3 py-1.5 text-[13px] text-white/70 hover:bg-white/10 hover:text-white">Orbis Relay site</Link>
         </div>
       </header>
 

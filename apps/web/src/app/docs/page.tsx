@@ -142,8 +142,8 @@ const summarize = adapter.wrap({
 
           <H id="reference">API reference</H>
           <P>Machine-readable contract: <a className="text-cobalt hover:underline" href="/api/v1/openapi">/api/v1/openapi</a> (OpenAPI 3.1).</P>
-          <div className="mt-4 overflow-hidden rounded-xl border border-line bg-surface">
-            <table className="w-full text-[13.5px]">
+          <div className="mt-4 overflow-x-auto rounded-xl border border-line bg-surface">
+            <table className="w-full min-w-[620px] text-[13.5px]">
               <tbody className="divide-y divide-line">
                 {paths.flatMap(([p, ops]) =>
                   Object.entries(ops).map(([m, op]) => (

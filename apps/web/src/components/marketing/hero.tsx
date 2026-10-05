@@ -22,17 +22,13 @@ export function Hero() {
     <section className="relative overflow-hidden bg-night text-white">
       <div className="night-grid absolute inset-0 [mask-image:radial-gradient(ellipse_at_top,black_30%,transparent_75%)]" aria-hidden />
       <div className="absolute -top-40 left-1/2 h-[520px] w-[900px] -translate-x-1/2 rounded-full bg-[#2747e8]/20 blur-[120px]" aria-hidden />
-      <div className="relative mx-auto grid max-w-[1240px] gap-12 px-5 pb-20 pt-32 lg:grid-cols-[1.02fr_1fr] lg:gap-10 lg:pb-28 lg:pt-40">
+      <div className="relative mx-auto grid max-w-[1240px] gap-12 px-5 pb-20 pt-32 lg:grid-cols-[0.92fr_1.08fr] lg:gap-10 lg:pb-28 lg:pt-40">
         <div className="flex flex-col justify-center">
           <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="inline-flex w-fit items-center gap-2 rounded-full border border-white/12 bg-white/[0.04] px-3 py-1 text-[12.5px] text-white/70">
             <span className="size-1.5 rounded-full bg-[#3dd68c]" /> Human trust infrastructure for autonomous software
           </motion.div>
-          <motion.h1 initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }} className="mt-6 text-[44px] font-semibold leading-[1.02] tracking-[-0.04em] sm:text-[54px] lg:text-[56px] xl:text-[60px]">
-            Let software act.
-            <br />
-            Keep a <span className="font-serif font-normal italic tracking-[-0.01em] text-[#b9c4ff]">human</span> on the
-            <br />
-            decisions that matter.
+          <motion.h1 initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }} className="mt-6 text-balance text-[40px] font-semibold leading-[1.03] tracking-[-0.04em] sm:text-[54px] lg:text-[46px] xl:text-[56px] 2xl:text-[62px]">
+            Let software act. Keep a <span className="font-serif font-normal italic tracking-[-0.01em] text-[#b9c4ff]">human</span> on the decisions that matter.
           </motion.h1>
           <motion.p initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="mt-6 max-w-[540px] text-[17px] leading-relaxed text-white/65">
             Before an AI agent, workflow or internal tool does something risky, it asks Orbis. Deterministic policy decides in milliseconds; high-impact actions go to a verified human on iPhone; every decision comes back with a signed receipt.
@@ -74,7 +70,7 @@ function RelayVisual() {
 
   return (
     <div className="relative">
-      <div className="rounded-[22px] border border-white/10 bg-white/[0.035] p-4 shadow-[0_40px_120px_-40px_rgba(39,71,232,0.45)] backdrop-blur-sm sm:mr-44 lg:mr-48">
+      <div className="rounded-[22px] border border-white/10 bg-white/[0.035] p-4 shadow-[0_40px_120px_-40px_rgba(39,71,232,0.45)] backdrop-blur-sm xl:mr-40">
         <div className="mb-3 flex items-center justify-between px-1 text-[12px] text-white/50">
           <span className="flex items-center gap-2"><span className="size-1.5 animate-pulse rounded-full bg-[#3dd68c]" /> Orbis gateway · live</span>
           <span className="font-mono">POST /v1/decisions/preflight</span>
@@ -104,7 +100,7 @@ function RelayVisual() {
         </ul>
         <p className="mt-2 px-1 text-[11.5px] text-white/35">This is the production policy engine running in your browser on the default Northstar policy pack.</p>
       </div>
-      <div className="absolute -bottom-20 -right-2 hidden origin-bottom-right scale-[0.6] sm:block lg:-right-6">
+      <div className="absolute -bottom-20 -right-4 hidden origin-bottom-right scale-[0.56] xl:block">
         <HeroPhone />
       </div>
     </div>
