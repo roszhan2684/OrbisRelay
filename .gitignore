@@ -1,0 +1,23 @@
+node_modules/
+.next/
+.data/
+*.tsbuildinfo
+.DS_Store
+ml/data/*.csv
+ml/data/*.zip
+ml/data/SMSSpamCollection
+ml/data/readme
+ml/.venv/
+apps/ios/build/
+apps/ios/DerivedData/
+xcuserdata/
+__pycache__/
+video/renders/
+.env*.local
+video/brag-output/composition/snapshots/
+video/brag-output/composition/.hyperframes/
+# render artifacts (published copy lives in apps/web/public/media)
+video/brag-output/brag.mp4
+video/brag-output/brag.jpg
+# licensed music bed — copy from the brag skill's assets/music before re-rendering
+video/brag-output/composition/assets/music/

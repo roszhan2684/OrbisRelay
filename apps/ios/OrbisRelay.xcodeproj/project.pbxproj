@@ -1,0 +1,392 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXContainerItemProxy section */
+		6243C48879ADA18227307687 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1781F676DEDF5767F3243DB0 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 99E3A65F4F675A4C8FFE1D70;
+			remoteInfo = OrbisRelay;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		8E42256A89ABABDDA8DEA8F9 /* OrbisRelay.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OrbisRelay.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		789695E3F2B97A651F49D58C /* OrbisRelayTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OrbisRelayTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		AC6E896E9DD05964D7E47410 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		60D86AF7F62818E455EC2D46 /* OrbisRelay */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = OrbisRelay;
+			sourceTree = "<group>";
+		};
+		864BB2D2707E9DFAC4111545 /* OrbisRelayTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = OrbisRelayTests;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		76535B6EEC56A51C79557182 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6197050EF9E938EBBD8FB520 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		88932FD6DD0EDC80FBF1C921 = {
+			isa = PBXGroup;
+			children = (
+				60D86AF7F62818E455EC2D46 /* OrbisRelay */,
+				864BB2D2707E9DFAC4111545 /* OrbisRelayTests */,
+				8FF14FE9FA3F948C0FBBF13C /* Config */,
+				D71BD8A0B6A6AA54EDBA6454 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		8FF14FE9FA3F948C0FBBF13C /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				AC6E896E9DD05964D7E47410 /* Info.plist */,
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
+		D71BD8A0B6A6AA54EDBA6454 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8E42256A89ABABDDA8DEA8F9 /* OrbisRelay.app */,
+				789695E3F2B97A651F49D58C /* OrbisRelayTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		99E3A65F4F675A4C8FFE1D70 /* OrbisRelay */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A3CC8FCA696CF0258F9074C1 /* Build configuration list for PBXNativeTarget "OrbisRelay" */;
+			buildPhases = (
+				B0F53FC2AFDA3376014A0A9B /* Sources */,
+				76535B6EEC56A51C79557182 /* Frameworks */,
+				7B3FC2D3640485997EC5329C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				60D86AF7F62818E455EC2D46 /* OrbisRelay */,
+			);
+			name = OrbisRelay;
+			packageProductDependencies = (
+			);
+			productName = OrbisRelay;
+			productReference = 8E42256A89ABABDDA8DEA8F9 /* OrbisRelay.app */;
+			productType = "com.apple.product-type.application";
+		};
+		A5649AF0A3F95056C707E3B6 /* OrbisRelayTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2D139795F613872F69A673E4 /* Build configuration list for PBXNativeTarget "OrbisRelayTests" */;
+			buildPhases = (
+				5EFEBFEEA4C1EF5E247E6FBD /* Sources */,
+				6197050EF9E938EBBD8FB520 /* Frameworks */,
+				935230EFF183FD3D08B13CF1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6FA9671EBEFE256E7AD3EB87 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				864BB2D2707E9DFAC4111545 /* OrbisRelayTests */,
+			);
+			name = OrbisRelayTests;
+			packageProductDependencies = (
+			);
+			productName = OrbisRelayTests;
+			productReference = 789695E3F2B97A651F49D58C /* OrbisRelayTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		1781F676DEDF5767F3243DB0 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1600;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					99E3A65F4F675A4C8FFE1D70 = {
+						CreatedOnToolsVersion = 16.0;
+					};
+					A5649AF0A3F95056C707E3B6 = {
+						CreatedOnToolsVersion = 16.0;
+						TestTargetID = 99E3A65F4F675A4C8FFE1D70;
+					};
+				};
+			};
+			buildConfigurationList = A8B5E354B10E55F8FC85B702 /* Build configuration list for PBXProject "OrbisRelay" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 88932FD6DD0EDC80FBF1C921;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = D71BD8A0B6A6AA54EDBA6454 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				99E3A65F4F675A4C8FFE1D70 /* OrbisRelay */,
+				A5649AF0A3F95056C707E3B6 /* OrbisRelayTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		7B3FC2D3640485997EC5329C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		935230EFF183FD3D08B13CF1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		B0F53FC2AFDA3376014A0A9B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5EFEBFEEA4C1EF5E247E6FBD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		6FA9671EBEFE256E7AD3EB87 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 99E3A65F4F675A4C8FFE1D70 /* OrbisRelay */;
+			targetProxy = 6243C48879ADA18227307687 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		7B2EDCE72AD696F18C8E0E01 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_TESTABILITY = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				ONLY_ACTIVE_ARCH = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		DD19BE33917991B70502B49B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		6DCFAFB972CB84A9F2DB13C5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Config/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Orbis;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.business";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Orbis scans QR codes you point it at so it can check the destination before you open it.";
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "Orbis uses Face ID to confirm it is really you before approving high-risk actions.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Orbis reads text from screenshots you explicitly choose so it can check them for scams.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.orbisrelay.ios;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		3CF02467EFBEC21658005BB8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Config/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Orbis;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.business";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Orbis scans QR codes you point it at so it can check the destination before you open it.";
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "Orbis uses Face ID to confirm it is really you before approving high-risk actions.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Orbis reads text from screenshots you explicitly choose so it can check them for scams.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.orbisrelay.ios;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		2FBDB8A56FA862AAA7FA3AC8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.orbisrelay.iosTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/OrbisRelay.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/OrbisRelay";
+			};
+			name = Debug;
+		};
+		85A7A8EC328AE036C89BC7D5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.orbisrelay.iosTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/OrbisRelay.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/OrbisRelay";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A8B5E354B10E55F8FC85B702 /* Build configuration list for PBXProject "OrbisRelay" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7B2EDCE72AD696F18C8E0E01 /* Debug */,
+				DD19BE33917991B70502B49B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A3CC8FCA696CF0258F9074C1 /* Build configuration list for PBXNativeTarget "OrbisRelay" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6DCFAFB972CB84A9F2DB13C5 /* Debug */,
+				3CF02467EFBEC21658005BB8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2D139795F613872F69A673E4 /* Build configuration list for PBXNativeTarget "OrbisRelayTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2FBDB8A56FA862AAA7FA3AC8 /* Debug */,
+				85A7A8EC328AE036C89BC7D5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 1781F676DEDF5767F3243DB0 /* Project object */;
+}

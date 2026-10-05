@@ -1,0 +1,101 @@
+// OpenAPI 3.1 contract for the Orbis Relay v1 API. Served at /api/v1/openapi and exported to docs/api/openapi.json.
+const ref = (n: string) => ({ $ref: `#/components/schemas/${n}` });
+const err = { description: "Error", content: { "application/json": { schema: ref("Error") } } };
+const machine = [{ apiKey: [] }];
+const human = [{ session: [] }, { mobile: [] }];
+const idParam = (name = "id") => ({ name, in: "path", required: true, schema: { type: "string" } });
+const body = (schema: object) => ({ required: true, content: { "application/json": { schema } } });
+const ok = (schema: object, code = "200") => ({ [code]: { description: "OK", content: { "application/json": { schema } } }, "401": err, "403": err, "404": err, "409": err, "422": err });
+
+export const openapi = {
+  openapi: "3.1.0",
+  info: {
+    title: "Orbis Relay API",
+    version: "1.0.0",
+    description: "Human trust infrastructure for autonomous software. Ask before acting: deterministic policy decides, high-impact actions go to a verified human, every final decision gets an Ed25519-signed receipt.",
+  },
+  servers: [{ url: "http://localhost:4310/api/v1", description: "Local demo" }],
+  components: {
+    securitySchemes: {
+      apiKey: { type: "http", scheme: "bearer", description: "Integration key (orb_live_… / orb_test_…). Tenant is derived from the key." },
+      session: { type: "apiKey", in: "cookie", name: "orbis_session", description: "Console session (SSO)." },
+      mobile: { type: "http", scheme: "bearer", description: "Orbis iOS session token (orbu_…) bound to a registered device." },
+    },
+    schemas: {
+      Error: { type: "object", properties: { error: { type: "object", required: ["code", "message"], properties: { code: { type: "string" }, message: { type: "string" }, remediation: { type: "string" } } } } },
+      ActionEnvelope: {
+        type: "object",
+        required: ["actor", "action"],
+        properties: {
+          request_id: { type: "string", maxLength: 128, description: "Idempotency key. Replays with the same payload return the original decision." },
+          actor: { type: "object", required: ["type", "id"], properties: { type: { enum: ["human", "service", "workflow", "agent", "automation"] }, id: { type: "string" }, owner: { type: "string" }, display_name: { type: "string" } } },
+          action: { type: "object", required: ["type"], properties: { type: { enum: ["external_send", "email_send", "payment", "refund", "deploy", "grant_access", "data_export", "record_release", "operational_stop", "config_change", "delete", "invoke_tool"] }, tool: { type: "string" }, title: { type: "string" }, arguments_summary: { type: "string", description: "Redacted summary — never raw payloads." }, parameters: { type: "object", additionalProperties: { type: ["string", "number", "boolean"] } } } },
+          resources: { type: "array", maxItems: 50, items: { type: "object", properties: { type: { type: "string" }, id: { type: "string" }, classification: { enum: ["public", "internal", "confidential", "restricted", "regulated"] }, count: { type: "integer" }, environment: { enum: ["dev", "staging", "production"] }, label: { type: "string" } } } },
+          destination: { type: "object", properties: { type: { enum: ["internal", "external_domain", "external_model", "internal_model", "beneficiary", "environment", "partner", "customer"] }, value: { type: "string" } } },
+          intent: { type: "object", properties: { reason: { type: "string" }, source: { enum: ["agent", "human", "workflow", "system"] } } },
+          business_context: { type: "object", additionalProperties: { type: ["string", "number", "boolean"] } },
+          signals: { type: "object", additionalProperties: { type: "boolean" } },
+          evidence: { type: "array", maxItems: 12, items: { type: "object", properties: { label: { type: "string" }, value: { type: "string" }, source: { type: "string" }, confidence: { enum: ["high", "medium", "low"] } } } },
+          blast_radius: { type: "array", items: { type: "string" } },
+          ttl_seconds: { type: "integer", minimum: 30, maximum: 86400 },
+          callback_url: { type: "string", format: "uri", description: "https only; private/loopback/link-local addresses rejected (SSRF)." },
+        },
+      },
+      Decision: {
+        type: "object",
+        properties: {
+          decision_id: { type: "string" },
+          action_id: { type: "string" },
+          request_id: { type: "string" },
+          status: { enum: ["allow", "warn", "deny", "approval_required"] },
+          final_status: { enum: ["allow", "warn", "deny", "pending", "approved", "approved_modified", "rejected", "expired", "cancelled"] },
+          effect: { type: "string" },
+          frozen: { type: "boolean" },
+          risk: { type: "object", properties: { score: { type: "integer" }, level: { enum: ["low", "medium", "high", "critical"] }, reasons: { type: "array", items: { type: "string" } } } },
+          policy: { type: ["object", "null"], properties: { id: { type: "string" }, version: { type: "integer" }, rule_id: { type: "string" }, reason: { type: "string" } } },
+          approval: { type: ["object", "null"], properties: { id: { type: "string" }, route: { type: "string" }, expires_at: { type: "string", format: "date-time" }, step_up: { enum: ["none", "biometric"] }, status_url: { type: "string" } } },
+          safe_alternatives: { type: "array", items: { type: "object", properties: { id: { type: "string" }, type: { type: "string" }, label: { type: "string" }, description: { type: "string" } } } },
+          approved_parameters: { type: ["object", "null"] },
+          receipt_id: { type: ["string", "null"] },
+          receipt_verification_url: { type: ["string", "null"] },
+          latency_ms: { type: "integer" },
+          idempotent_replay: { type: "boolean" },
+        },
+      },
+      RespondRequest: { type: "object", required: ["decision"], properties: { decision: { enum: ["approve", "approve_modified", "reject", "safe_alternative"] }, alternative_id: { type: "string" }, modified_parameters: { type: "object" }, comment: { type: "string" }, step_up: { type: "object", properties: { method: { enum: ["biometric", "passkey"] }, verified: { type: "boolean" } } } } },
+      Receipt: { type: "object", properties: { id: { type: "string" }, revision: { type: "integer" }, body: { type: "object" }, body_hash: { type: "string" }, signature: { type: "string", description: "Ed25519 over canonical JSON of body (base64url)" }, key_id: { type: "string" }, alg: { const: "Ed25519" } } },
+      ProtectAnalysis: { type: "object", properties: { verdict: { enum: ["safe", "caution", "dangerous"] }, score: { type: "integer" }, recommendation: { type: "string" }, reasons: { type: "array", items: { type: "object" } }, model: { type: "array", items: { type: "object" } } } },
+    },
+  },
+  paths: {
+    "/decisions/preflight": { post: { summary: "Evaluate a proposed action before it executes", security: machine, parameters: [{ name: "Idempotency-Key", in: "header", schema: { type: "string" } }], requestBody: body(ref("ActionEnvelope")), responses: ok(ref("Decision"), "201") } },
+    "/approvals": {
+      post: { summary: "Create a human approval explicitly", security: machine, requestBody: body({ allOf: [ref("ActionEnvelope"), { type: "object", required: ["route"], properties: { route: { type: "string" }, reason: { type: "string" } } }] }), responses: ok(ref("Decision"), "201") },
+      get: { summary: "Approver inbox / console queue", security: human, parameters: [{ name: "status", in: "query", schema: { type: "string" } }, { name: "scope", in: "query", schema: { enum: ["mine", "all"] } }], responses: ok({ type: "object" }) },
+    },
+    "/approvals/{id}": { get: { summary: "Read status and safe display context", security: [...machine, ...human], parameters: [idParam()], responses: ok({ type: "object" }) } },
+    "/approvals/{id}/respond": { post: { summary: "Authorized response; server verifies assignment, state, expiry and step-up", security: human, parameters: [idParam()], requestBody: body(ref("RespondRequest")), responses: { ...ok({ type: "object" }), "410": err, "428": err } } },
+    "/approvals/{id}/cancel": { post: { summary: "Caller withdraws a pending approval", security: machine, parameters: [idParam()], responses: ok({ type: "object" }) } },
+    "/actions": { get: { summary: "Search actions and their decisions/outcomes", security: human, responses: ok({ type: "object" }) } },
+    "/actions/{id}/outcome": { post: { summary: "Caller reports execution outcome (idempotent)", security: machine, parameters: [idParam()], requestBody: body({ type: "object", required: ["status"], properties: { status: { enum: ["succeeded", "failed", "not_executed", "unknown"] }, detail: { type: "string" } } }), responses: ok({ type: "object" }) } },
+    "/receipts/{id}": { get: { summary: "Fetch the final signed decision receipt", security: [...machine, ...human], parameters: [idParam()], responses: ok(ref("Receipt")) } },
+    "/receipts/{id}/verify": { post: { summary: "Verify receipt integrity (stored or supplied copy)", parameters: [idParam()], responses: ok({ type: "object", properties: { valid: { type: "boolean" }, signature_valid: { type: "boolean" }, hash_valid: { type: "boolean" } } }) } },
+    "/receipts/public-key": { get: { summary: "Ed25519 JWK set for offline verification", responses: ok({ type: "object" }) } },
+    "/actors": { get: { summary: "Actor registry with freeze state", security: human, responses: ok({ type: "object" }) } },
+    "/actors/{id}/freeze": {
+      post: { summary: "Freeze an actor — gateway denies all new requests", security: human, parameters: [idParam()], requestBody: body({ type: "object", properties: { reason: { type: "string" } } }), responses: ok({ type: "object" }, "201") },
+      delete: { summary: "Unfreeze with permission and audit reason", security: human, parameters: [idParam()], requestBody: body({ type: "object", required: ["reason"], properties: { reason: { type: "string" } } }), responses: ok({ type: "object" }) },
+    },
+    "/policies": { get: { summary: "List policies and versions", security: [...machine, ...human], responses: ok({ type: "object" }) } },
+    "/policies/simulate": { post: { summary: "Run a candidate policy against historical actions", security: human, requestBody: body({ type: "object", properties: { policy_id: { type: "string" }, version: { type: "integer" }, rules: { type: "array" } } }), responses: ok({ type: "object" }) } },
+    "/policies/{id}/draft": { put: { summary: "Save draft (published versions are immutable)", security: human, parameters: [idParam()], responses: ok({ type: "object" }) } },
+    "/policies/{id}/publish": { post: { summary: "Publish draft with second approver", security: human, parameters: [idParam()], responses: ok({ type: "object" }) } },
+    "/webhooks/test": { post: { summary: "Validate a callback endpoint and preview the signed request", security: machine, responses: ok({ type: "object" }) } },
+    "/audit/events": { get: { summary: "Search the tenant audit trail", security: human, responses: ok({ type: "object" }) } },
+    "/audit/verify": { get: { summary: "Recompute the audit hash chain", security: human, responses: ok({ type: "object" }) } },
+    "/protect/analyze": { post: { summary: "Explicit user-submitted URL/text/QR/screenshot-text risk analysis", security: human, requestBody: body({ type: "object", required: ["kind", "input"], properties: { kind: { enum: ["url", "text", "qr", "screenshot"] }, input: { type: "string", maxLength: 4000 } } }), responses: ok(ref("ProtectAnalysis"), "201") } },
+    "/auth/device": { post: { summary: "Orbis iOS sign-in + device registration (demo SSO)", responses: ok({ type: "object" }, "201") } },
+    "/me": { get: { summary: "Current user, device and permissions", security: human, responses: ok({ type: "object" }) } },
+    "/stream": { get: { summary: "Server-Sent Events for live updates", security: human, responses: { "200": { description: "text/event-stream" } } } },
+  },
+};

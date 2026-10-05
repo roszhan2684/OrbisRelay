@@ -1,0 +1,1335 @@
+[
+  {
+    "id": "pol_conf_external",
+    "name": "Confidential data egress",
+    "description": "Controls confidential and restricted data leaving Northstar's approved trust boundary, including AI providers.",
+    "pack": "AI & Data",
+    "enabled": true,
+    "current_version": 17,
+    "versions": [
+      {
+        "policy_id": "pol_conf_external",
+        "version": 16,
+        "status": "superseded",
+        "rules": [
+          {
+            "id": "ext_model_confidential",
+            "name": "Confidential data → unapproved AI provider",
+            "description": "Agents may not send confidential or higher data to model providers outside the approved trust boundary.",
+            "when": {
+              "all": [
+                {
+                  "field": "destination.type",
+                  "op": "eq",
+                  "value": "external_model"
+                },
+                {
+                  "field": "resource.classification_rank",
+                  "op": "gte",
+                  "value": 2
+                },
+                {
+                  "field": "destination.approved",
+                  "op": "neq",
+                  "value": true
+                }
+              ]
+            },
+            "effect": "warn",
+            "reason": "Confidential data would leave the approved AI trust boundary.",
+            "route": "ai-governance",
+            "step_up": "biometric",
+            "ttl_seconds": 600,
+            "safe_alternatives": [
+              {
+                "id": "redirect_internal_model",
+                "type": "redirect",
+                "label": "Redirect to Approved Internal Model",
+                "description": "Run the same task on Northstar Private LLM (us-east-1, zero retention, SOC 2 boundary).",
+                "apply": {
+                  "destination": "northstar-private-llm"
+                }
+              }
+            ]
+          },
+          {
+            "id": "ext_domain_confidential",
+            "name": "Confidential documents → external domain",
+            "when": {
+              "all": [
+                {
+                  "field": "destination.type",
+                  "op": "eq",
+                  "value": "external_domain"
+                },
+                {
+                  "field": "resource.classification_rank",
+                  "op": "gte",
+                  "value": 2
+                },
+                {
+                  "field": "destination.approved",
+                  "op": "neq",
+                  "value": true
+                }
+              ]
+            },
+            "effect": "require_approval",
+            "reason": "Confidential documents addressed to a domain that is not on the partner allowlist.",
+            "route": "security",
+            "step_up": "biometric",
+            "safe_alternatives": [
+              {
+                "id": "share_secure_room",
+                "type": "redirect",
+                "label": "Share via secure data room",
+                "description": "Send an expiring, watermarked link instead of attachments.",
+                "apply": {
+                  "delivery": "secure-room-link"
+                }
+              }
+            ]
+          }
+        ],
+        "change_note": "Warn-only rollout for external model sends",
+        "created_at": "2026-08-10T00:00:00.000Z",
+        "created_by": "avery.kim",
+        "published_at": "2026-08-10T00:00:00.000Z"
+      },
+      {
+        "policy_id": "pol_conf_external",
+        "version": 17,
+        "status": "published",
+        "rules": [
+          {
+            "id": "ext_model_confidential",
+            "name": "Confidential data → unapproved AI provider",
+            "description": "Agents may not send confidential or higher data to model providers outside the approved trust boundary.",
+            "when": {
+              "all": [
+                {
+                  "field": "destination.type",
+                  "op": "eq",
+                  "value": "external_model"
+                },
+                {
+                  "field": "resource.classification_rank",
+                  "op": "gte",
+                  "value": 2
+                },
+                {
+                  "field": "destination.approved",
+                  "op": "neq",
+                  "value": true
+                }
+              ]
+            },
+            "effect": "require_approval",
+            "reason": "Confidential data would leave the approved AI trust boundary.",
+            "route": "ai-governance",
+            "step_up": "biometric",
+            "ttl_seconds": 600,
+            "safe_alternatives": [
+              {
+                "id": "redirect_internal_model",
+                "type": "redirect",
+                "label": "Redirect to Approved Internal Model",
+                "description": "Run the same task on Northstar Private LLM (us-east-1, zero retention, SOC 2 boundary).",
+                "apply": {
+                  "destination": "northstar-private-llm"
+                }
+              }
+            ]
+          },
+          {
+            "id": "ext_domain_confidential",
+            "name": "Confidential documents → external domain",
+            "when": {
+              "all": [
+                {
+                  "field": "destination.type",
+                  "op": "eq",
+                  "value": "external_domain"
+                },
+                {
+                  "field": "resource.classification_rank",
+                  "op": "gte",
+                  "value": 2
+                },
+                {
+                  "field": "destination.approved",
+                  "op": "neq",
+                  "value": true
+                }
+              ]
+            },
+            "effect": "require_approval",
+            "reason": "Confidential documents addressed to a domain that is not on the partner allowlist.",
+            "route": "security",
+            "step_up": "biometric",
+            "safe_alternatives": [
+              {
+                "id": "share_secure_room",
+                "type": "redirect",
+                "label": "Share via secure data room",
+                "description": "Send an expiring, watermarked link instead of attachments.",
+                "apply": {
+                  "delivery": "secure-room-link"
+                }
+              }
+            ]
+          }
+        ],
+        "change_note": "Enforce: require approval + biometric for unapproved AI providers",
+        "created_at": "2026-09-17T00:00:00.000Z",
+        "created_by": "avery.kim",
+        "published_at": "2026-09-17T00:00:00.000Z"
+      },
+      {
+        "policy_id": "pol_conf_external",
+        "version": 18,
+        "status": "draft",
+        "rules": [
+          {
+            "id": "ext_model_confidential",
+            "name": "Confidential data → unapproved AI provider",
+            "description": "Agents may not send confidential or higher data to model providers outside the approved trust boundary.",
+            "when": {
+              "all": [
+                {
+                  "field": "destination.type",
+                  "op": "eq",
+                  "value": "external_model"
+                },
+                {
+                  "field": "resource.classification_rank",
+                  "op": "gte",
+                  "value": 2
+                },
+                {
+                  "field": "destination.approved",
+                  "op": "neq",
+                  "value": true
+                }
+              ]
+            },
+            "effect": "require_approval",
+            "reason": "Confidential data would leave the approved AI trust boundary.",
+            "route": "ai-governance",
+            "step_up": "biometric",
+            "ttl_seconds": 600,
+            "safe_alternatives": [
+              {
+                "id": "redirect_internal_model",
+                "type": "redirect",
+                "label": "Redirect to Approved Internal Model",
+                "description": "Run the same task on Northstar Private LLM (us-east-1, zero retention, SOC 2 boundary).",
+                "apply": {
+                  "destination": "northstar-private-llm"
+                }
+              }
+            ]
+          },
+          {
+            "id": "ext_domain_confidential",
+            "name": "Confidential documents → external domain",
+            "when": {
+              "all": [
+                {
+                  "field": "destination.type",
+                  "op": "eq",
+                  "value": "external_domain"
+                },
+                {
+                  "field": "resource.classification_rank",
+                  "op": "gte",
+                  "value": 2
+                },
+                {
+                  "field": "destination.approved",
+                  "op": "neq",
+                  "value": true
+                }
+              ]
+            },
+            "effect": "require_approval",
+            "reason": "Confidential documents addressed to a domain that is not on the partner allowlist.",
+            "route": "security",
+            "step_up": "biometric",
+            "safe_alternatives": [
+              {
+                "id": "share_secure_room",
+                "type": "redirect",
+                "label": "Share via secure data room",
+                "description": "Send an expiring, watermarked link instead of attachments.",
+                "apply": {
+                  "delivery": "secure-room-link"
+                }
+              }
+            ]
+          },
+          {
+            "id": "approved_model_low_friction",
+            "name": "Approved models stay autonomous",
+            "when": {
+              "all": [
+                {
+                  "field": "destination.type",
+                  "op": "eq",
+                  "value": "internal_model"
+                },
+                {
+                  "field": "destination.approved",
+                  "op": "eq",
+                  "value": true
+                }
+              ]
+            },
+            "effect": "allow_log",
+            "reason": "Approved internal model; logged for audit only."
+          },
+          {
+            "id": "restricted_never_external",
+            "name": "Restricted data never leaves",
+            "when": {
+              "all": [
+                {
+                  "field": "destination.external",
+                  "op": "eq",
+                  "value": true
+                },
+                {
+                  "field": "resource.classification",
+                  "op": "eq",
+                  "value": "restricted"
+                }
+              ]
+            },
+            "effect": "deny",
+            "reason": "Restricted data may not be transmitted outside Northstar under any approval."
+          }
+        ],
+        "change_note": "Draft: auto-allow approved internal model, hard-deny restricted egress",
+        "created_at": "2026-10-03T00:00:00.000Z",
+        "created_by": "alex.chen"
+      }
+    ]
+  },
+  {
+    "id": "pol_payments",
+    "name": "Payments & payouts",
+    "description": "Step-up approval for new beneficiaries and extreme-value payments.",
+    "pack": "Finance",
+    "enabled": true,
+    "current_version": 9,
+    "versions": [
+      {
+        "policy_id": "pol_payments",
+        "version": 8,
+        "status": "superseded",
+        "rules": [
+          {
+            "id": "new_beneficiary_high",
+            "name": "New beneficiary over $10k",
+            "when": {
+              "all": [
+                {
+                  "field": "action.type",
+                  "op": "eq",
+                  "value": "payment"
+                },
+                {
+                  "field": "amount_usd",
+                  "op": "gte",
+                  "value": 10000
+                },
+                {
+                  "field": "destination.approved",
+                  "op": "neq",
+                  "value": true
+                }
+              ]
+            },
+            "effect": "require_approval",
+            "reason": "First payment to an unverified beneficiary above the $10,000 autonomous threshold.",
+            "route": "finance-controller",
+            "step_up": "biometric",
+            "editable_fields": [
+              {
+                "key": "amount_usd",
+                "label": "Amount (USD)",
+                "type": "number",
+                "min": 0
+              }
+            ],
+            "safe_alternatives": [
+              {
+                "id": "verify_then_pay",
+                "type": "reduce_scope",
+                "label": "Pay $1 verification deposit first",
+                "description": "Confirm beneficiary bank details with a $1 micro-deposit before releasing funds.",
+                "apply": {
+                  "amount_usd": 1,
+                  "hold_remaining": true
+                }
+              }
+            ]
+          }
+        ],
+        "change_note": "Initial beneficiary rule",
+        "created_at": "2026-07-13T00:00:00.000Z",
+        "created_by": "jordan.patel",
+        "published_at": "2026-07-13T00:00:00.000Z"
+      },
+      {
+        "policy_id": "pol_payments",
+        "version": 9,
+        "status": "published",
+        "rules": [
+          {
+            "id": "new_beneficiary_high",
+            "name": "New beneficiary over $10k",
+            "when": {
+              "all": [
+                {
+                  "field": "action.type",
+                  "op": "eq",
+                  "value": "payment"
+                },
+                {
+                  "field": "amount_usd",
+                  "op": "gte",
+                  "value": 10000
+                },
+                {
+                  "field": "destination.approved",
+                  "op": "neq",
+                  "value": true
+                }
+              ]
+            },
+            "effect": "require_approval",
+            "reason": "First payment to an unverified beneficiary above the $10,000 autonomous threshold.",
+            "route": "finance-controller",
+            "step_up": "biometric",
+            "editable_fields": [
+              {
+                "key": "amount_usd",
+                "label": "Amount (USD)",
+                "type": "number",
+                "min": 0
+              }
+            ],
+            "safe_alternatives": [
+              {
+                "id": "verify_then_pay",
+                "type": "reduce_scope",
+                "label": "Pay $1 verification deposit first",
+                "description": "Confirm beneficiary bank details with a $1 micro-deposit before releasing funds.",
+                "apply": {
+                  "amount_usd": 1,
+                  "hold_remaining": true
+                }
+              }
+            ]
+          },
+          {
+            "id": "extreme_payment_quorum",
+            "name": "Payments ≥ $250k need two controllers",
+            "when": {
+              "all": [
+                {
+                  "field": "action.type",
+                  "op": "eq",
+                  "value": "payment"
+                },
+                {
+                  "field": "amount_usd",
+                  "op": "gte",
+                  "value": 250000
+                }
+              ]
+            },
+            "effect": "require_quorum",
+            "quorum": {
+              "required": 2,
+              "of": 3
+            },
+            "reason": "Extreme-value payment requires two of three authorized controllers.",
+            "route": "finance-controller",
+            "step_up": "biometric"
+          },
+          {
+            "id": "known_vendor_small",
+            "name": "Known vendors under $10k",
+            "when": {
+              "all": [
+                {
+                  "field": "action.type",
+                  "op": "eq",
+                  "value": "payment"
+                },
+                {
+                  "field": "amount_usd",
+                  "op": "lt",
+                  "value": 10000
+                },
+                {
+                  "field": "destination.approved",
+                  "op": "eq",
+                  "value": true
+                }
+              ]
+            },
+            "effect": "allow_log",
+            "reason": "Routine payment to a verified vendor."
+          }
+        ],
+        "change_note": "Add quorum for ≥ $250k and auto-allow known vendors",
+        "created_at": "2026-08-30T00:00:00.000Z",
+        "created_by": "jordan.patel",
+        "published_at": "2026-08-30T00:00:00.000Z"
+      }
+    ]
+  },
+  {
+    "id": "pol_refunds",
+    "name": "Customer refunds",
+    "description": "Keeps support automation fast for small refunds, escalates large ones.",
+    "pack": "Support",
+    "enabled": true,
+    "current_version": 5,
+    "versions": [
+      {
+        "policy_id": "pol_refunds",
+        "version": 5,
+        "status": "published",
+        "rules": [
+          {
+            "id": "refund_over_threshold",
+            "name": "Refund above $2,500",
+            "when": {
+              "all": [
+                {
+                  "field": "action.type",
+                  "op": "eq",
+                  "value": "refund"
+                },
+                {
+                  "field": "amount_usd",
+                  "op": "gt",
+                  "value": 2500
+                }
+              ]
+            },
+            "effect": "require_approval",
+            "reason": "Refund exceeds the $2,500 autonomous support threshold.",
+            "route": "support-manager",
+            "step_up": "none",
+            "editable_fields": [
+              {
+                "key": "amount_usd",
+                "label": "Refund amount (USD)",
+                "type": "number",
+                "min": 0,
+                "max": 50000
+              }
+            ],
+            "safe_alternatives": [
+              {
+                "id": "service_credit",
+                "type": "reduce_scope",
+                "label": "Issue as service credit",
+                "description": "Apply the amount as account credit instead of a card refund.",
+                "apply": {
+                  "method": "service_credit"
+                }
+              }
+            ]
+          },
+          {
+            "id": "refund_warn",
+            "name": "Refund $500–$2,500",
+            "when": {
+              "all": [
+                {
+                  "field": "action.type",
+                  "op": "eq",
+                  "value": "refund"
+                },
+                {
+                  "field": "amount_usd",
+                  "op": "gt",
+                  "value": 500
+                }
+              ]
+            },
+            "effect": "warn",
+            "reason": "Refund above $500 — allowed, support lead notified."
+          },
+          {
+            "id": "refund_hard_cap",
+            "name": "Refund hard cap",
+            "when": {
+              "all": [
+                {
+                  "field": "action.type",
+                  "op": "eq",
+                  "value": "refund"
+                },
+                {
+                  "field": "amount_usd",
+                  "op": "gt",
+                  "value": 50000
+                }
+              ]
+            },
+            "effect": "deny",
+            "reason": "Refunds above $50,000 must go through finance, not support automation."
+          }
+        ],
+        "change_note": "Raise autonomous threshold to $2,500",
+        "created_at": "2026-09-09T00:00:00.000Z",
+        "created_by": "sam.rivera",
+        "published_at": "2026-09-09T00:00:00.000Z"
+      }
+    ]
+  },
+  {
+    "id": "pol_prod_change",
+    "name": "Production change control",
+    "description": "Change-window enforcement for production deploys.",
+    "pack": "Engineering",
+    "enabled": true,
+    "current_version": 12,
+    "versions": [
+      {
+        "policy_id": "pol_prod_change",
+        "version": 11,
+        "status": "superseded",
+        "rules": [
+          {
+            "id": "prod_outside_window",
+            "name": "Production deploy outside change window",
+            "when": {
+              "all": [
+                {
+                  "field": "action.type",
+                  "op": "eq",
+                  "value": "deploy"
+                },
+                {
+                  "field": "resource.environment",
+                  "op": "eq",
+                  "value": "production"
+                },
+                {
+                  "field": "signals.outside_change_window",
+                  "op": "eq",
+                  "value": true
+                }
+              ]
+            },
+            "effect": "require_approval",
+            "reason": "Production change requested outside the approved change window.",
+            "route": "eng-oncall",
+            "step_up": "biometric",
+            "editable_fields": [
+              {
+                "key": "window_minutes",
+                "label": "Change window (minutes)",
+                "type": "duration_minutes",
+                "min": 5,
+                "max": 60
+              }
+            ],
+            "safe_alternatives": [
+              {
+                "id": "next_window",
+                "type": "schedule",
+                "label": "Schedule for next change window",
+                "description": "Queue the deploy for the 02:00 UTC window with automatic rollback armed.",
+                "apply": {
+                  "scheduled_for": "next_window"
+                }
+              }
+            ]
+          },
+          {
+            "id": "prod_failing_tests",
+            "name": "Block deploys with failing tests",
+            "when": {
+              "all": [
+                {
+                  "field": "action.type",
+                  "op": "eq",
+                  "value": "deploy"
+                },
+                {
+                  "field": "resource.environment",
+                  "op": "eq",
+                  "value": "production"
+                },
+                {
+                  "field": "signals.tests_passed",
+                  "op": "eq",
+                  "value": false
+                }
+              ]
+            },
+            "effect": "deny",
+            "reason": "Required checks are failing; production deploy is blocked."
+          },
+          {
+            "id": "prod_in_window",
+            "name": "In-window production deploys",
+            "when": {
+              "all": [
+                {
+                  "field": "action.type",
+                  "op": "eq",
+                  "value": "deploy"
+                },
+                {
+                  "field": "resource.environment",
+                  "op": "eq",
+                  "value": "production"
+                },
+                {
+                  "field": "signals.outside_change_window",
+                  "op": "neq",
+                  "value": true
+                }
+              ]
+            },
+            "effect": "warn",
+            "reason": "Deploy inside an approved change window."
+          }
+        ],
+        "change_note": "Warn on in-window deploys",
+        "created_at": "2026-07-31T00:00:00.000Z",
+        "created_by": "riley.okafor",
+        "published_at": "2026-07-31T00:00:00.000Z"
+      },
+      {
+        "policy_id": "pol_prod_change",
+        "version": 12,
+        "status": "published",
+        "rules": [
+          {
+            "id": "prod_outside_window",
+            "name": "Production deploy outside change window",
+            "when": {
+              "all": [
+                {
+                  "field": "action.type",
+                  "op": "eq",
+                  "value": "deploy"
+                },
+                {
+                  "field": "resource.environment",
+                  "op": "eq",
+                  "value": "production"
+                },
+                {
+                  "field": "signals.outside_change_window",
+                  "op": "eq",
+                  "value": true
+                }
+              ]
+            },
+            "effect": "require_approval",
+            "reason": "Production change requested outside the approved change window.",
+            "route": "eng-oncall",
+            "step_up": "biometric",
+            "editable_fields": [
+              {
+                "key": "window_minutes",
+                "label": "Change window (minutes)",
+                "type": "duration_minutes",
+                "min": 5,
+                "max": 60
+              }
+            ],
+            "safe_alternatives": [
+              {
+                "id": "next_window",
+                "type": "schedule",
+                "label": "Schedule for next change window",
+                "description": "Queue the deploy for the 02:00 UTC window with automatic rollback armed.",
+                "apply": {
+                  "scheduled_for": "next_window"
+                }
+              }
+            ]
+          },
+          {
+            "id": "prod_failing_tests",
+            "name": "Block deploys with failing tests",
+            "when": {
+              "all": [
+                {
+                  "field": "action.type",
+                  "op": "eq",
+                  "value": "deploy"
+                },
+                {
+                  "field": "resource.environment",
+                  "op": "eq",
+                  "value": "production"
+                },
+                {
+                  "field": "signals.tests_passed",
+                  "op": "eq",
+                  "value": false
+                }
+              ]
+            },
+            "effect": "deny",
+            "reason": "Required checks are failing; production deploy is blocked."
+          },
+          {
+            "id": "prod_in_window",
+            "name": "In-window production deploys",
+            "when": {
+              "all": [
+                {
+                  "field": "action.type",
+                  "op": "eq",
+                  "value": "deploy"
+                },
+                {
+                  "field": "resource.environment",
+                  "op": "eq",
+                  "value": "production"
+                },
+                {
+                  "field": "signals.outside_change_window",
+                  "op": "neq",
+                  "value": true
+                }
+              ]
+            },
+            "effect": "allow_log",
+            "reason": "Deploy inside an approved change window."
+          }
+        ],
+        "change_note": "In-window deploys become autonomous (allow+log)",
+        "created_at": "2026-09-21T00:00:00.000Z",
+        "created_by": "riley.okafor",
+        "published_at": "2026-09-21T00:00:00.000Z"
+      }
+    ]
+  },
+  {
+    "id": "pol_privileged_access",
+    "name": "Privileged access",
+    "description": "Just-in-time, auto-expiring privileged access with biometric step-up.",
+    "pack": "Identity",
+    "enabled": true,
+    "current_version": 7,
+    "versions": [
+      {
+        "policy_id": "pol_privileged_access",
+        "version": 7,
+        "status": "published",
+        "rules": [
+          {
+            "id": "prod_admin_access",
+            "name": "Production admin access",
+            "when": {
+              "all": [
+                {
+                  "field": "action.type",
+                  "op": "eq",
+                  "value": "grant_access"
+                },
+                {
+                  "field": "resource.environment",
+                  "op": "eq",
+                  "value": "production"
+                }
+              ]
+            },
+            "effect": "require_approval",
+            "reason": "Privileged production access requires manager approval and auto-expiry.",
+            "route": "eng-manager",
+            "step_up": "biometric",
+            "editable_fields": [
+              {
+                "key": "duration_minutes",
+                "label": "Access duration (minutes)",
+                "type": "duration_minutes",
+                "min": 5,
+                "max": 60
+              }
+            ],
+            "safe_alternatives": [
+              {
+                "id": "read_only",
+                "type": "reduce_scope",
+                "label": "Grant read-only replica access",
+                "description": "Read-only access to the analytics replica, no approval required.",
+                "apply": {
+                  "role": "db_readonly_replica"
+                }
+              }
+            ]
+          },
+          {
+            "id": "access_too_long",
+            "name": "No standing privileged access",
+            "when": {
+              "all": [
+                {
+                  "field": "action.type",
+                  "op": "eq",
+                  "value": "grant_access"
+                },
+                {
+                  "field": "duration_minutes",
+                  "op": "gt",
+                  "value": 240
+                }
+              ]
+            },
+            "effect": "deny",
+            "reason": "Privileged grants longer than 4 hours are never permitted."
+          }
+        ],
+        "change_note": "Cap duration at 4h, step-up required",
+        "created_at": "2026-08-25T00:00:00.000Z",
+        "created_by": "avery.kim",
+        "published_at": "2026-08-25T00:00:00.000Z"
+      }
+    ]
+  },
+  {
+    "id": "pol_bulk_export",
+    "name": "Bulk data export",
+    "description": "Blocks bulk sensitive exports by default; exceptions need data owner + security.",
+    "pack": "AI & Data",
+    "enabled": true,
+    "current_version": 4,
+    "versions": [
+      {
+        "policy_id": "pol_bulk_export",
+        "version": 4,
+        "status": "published",
+        "rules": [
+          {
+            "id": "bulk_export_block",
+            "name": "Bulk sensitive export without ticket",
+            "when": {
+              "all": [
+                {
+                  "field": "action.type",
+                  "op": "eq",
+                  "value": "data_export"
+                },
+                {
+                  "field": "record_count",
+                  "op": "gte",
+                  "value": 10000
+                },
+                {
+                  "field": "resource.classification_rank",
+                  "op": "gte",
+                  "value": 2
+                },
+                {
+                  "field": "context.ticket",
+                  "op": "not_exists"
+                }
+              ]
+            },
+            "effect": "deny",
+            "reason": "Bulk export of sensitive records is blocked by default. File an exception ticket to request review."
+          },
+          {
+            "id": "bulk_export_exception",
+            "name": "Bulk export exception (data owner + security)",
+            "when": {
+              "all": [
+                {
+                  "field": "action.type",
+                  "op": "eq",
+                  "value": "data_export"
+                },
+                {
+                  "field": "record_count",
+                  "op": "gte",
+                  "value": 10000
+                },
+                {
+                  "field": "context.ticket",
+                  "op": "exists"
+                }
+              ]
+            },
+            "effect": "require_quorum",
+            "quorum": {
+              "required": 2,
+              "of": 2
+            },
+            "reason": "Exception export requires both the data owner and security.",
+            "route": "data-owner",
+            "step_up": "biometric",
+            "safe_alternatives": [
+              {
+                "id": "pseudonymize",
+                "type": "redact",
+                "label": "Export pseudonymized dataset",
+                "description": "Hash emails/phones and drop free-text fields; no approval needed.",
+                "apply": {
+                  "transform": "pseudonymize"
+                }
+              }
+            ]
+          }
+        ],
+        "change_note": "Ticketed exception path with 2-of-2 quorum",
+        "created_at": "2026-09-03T00:00:00.000Z",
+        "created_by": "casey.nguyen",
+        "published_at": "2026-09-03T00:00:00.000Z"
+      }
+    ]
+  },
+  {
+    "id": "pol_sales_comms",
+    "name": "External sales communications",
+    "description": "Prevents agents from sending non-public pricing externally.",
+    "pack": "Sales",
+    "enabled": true,
+    "current_version": 3,
+    "versions": [
+      {
+        "policy_id": "pol_sales_comms",
+        "version": 3,
+        "status": "published",
+        "rules": [
+          {
+            "id": "nonpublic_pricing",
+            "name": "Non-public pricing to external recipient",
+            "when": {
+              "all": [
+                {
+                  "field": "action.type",
+                  "op": "eq",
+                  "value": "email_send"
+                },
+                {
+                  "field": "destination.external",
+                  "op": "eq",
+                  "value": true
+                },
+                {
+                  "field": "resource.classification_rank",
+                  "op": "gte",
+                  "value": 2
+                }
+              ]
+            },
+            "effect": "require_approval",
+            "reason": "Agent-drafted email contains confidential pricing for an external recipient.",
+            "route": "sales-leader",
+            "step_up": "none",
+            "safe_alternatives": [
+              {
+                "id": "auto_redact",
+                "type": "redact",
+                "label": "Auto-redact restricted sections",
+                "description": "Strip the discount schedule and send the public price sheet.",
+                "apply": {
+                  "redact": "pricing_tiers"
+                }
+              }
+            ]
+          }
+        ],
+        "change_note": "Auto-redact alternative",
+        "created_at": "2026-08-20T00:00:00.000Z",
+        "created_by": "morgan.lee",
+        "published_at": "2026-08-20T00:00:00.000Z"
+      }
+    ]
+  },
+  {
+    "id": "pol_regulated",
+    "name": "Regulated data transfer",
+    "description": "Privacy officer approval for regulated (HIPAA) record releases.",
+    "pack": "Compliance",
+    "enabled": true,
+    "current_version": 6,
+    "versions": [
+      {
+        "policy_id": "pol_regulated",
+        "version": 6,
+        "status": "published",
+        "rules": [
+          {
+            "id": "phi_release",
+            "name": "Regulated records → external partner",
+            "when": {
+              "all": [
+                {
+                  "field": "action.type",
+                  "op": "eq",
+                  "value": "record_release"
+                },
+                {
+                  "field": "resource.classification",
+                  "op": "eq",
+                  "value": "regulated"
+                },
+                {
+                  "field": "destination.external",
+                  "op": "eq",
+                  "value": true
+                }
+              ]
+            },
+            "effect": "require_approval",
+            "reason": "Regulated health records leaving Northstar require a privacy officer with documented purpose.",
+            "route": "privacy",
+            "step_up": "biometric",
+            "editable_fields": [
+              {
+                "key": "record_limit",
+                "label": "Record limit",
+                "type": "number",
+                "min": 1
+              }
+            ]
+          },
+          {
+            "id": "phi_large_batch",
+            "name": "Large regulated batch quorum",
+            "when": {
+              "all": [
+                {
+                  "field": "action.type",
+                  "op": "eq",
+                  "value": "record_release"
+                },
+                {
+                  "field": "record_count",
+                  "op": "gte",
+                  "value": 25000
+                }
+              ]
+            },
+            "effect": "require_quorum",
+            "quorum": {
+              "required": 2,
+              "of": 3
+            },
+            "reason": "Batches over 25,000 regulated records need two privacy approvers.",
+            "route": "privacy",
+            "step_up": "biometric"
+          }
+        ],
+        "change_note": "Quorum for batches > 25k",
+        "created_at": "2026-08-15T00:00:00.000Z",
+        "created_by": "casey.nguyen",
+        "published_at": "2026-08-15T00:00:00.000Z"
+      }
+    ]
+  },
+  {
+    "id": "pol_ops_safety",
+    "name": "Operational safety",
+    "description": "Facility automation recommendations that stop physical systems.",
+    "pack": "Operations",
+    "enabled": true,
+    "current_version": 2,
+    "versions": [
+      {
+        "policy_id": "pol_ops_safety",
+        "version": 2,
+        "status": "published",
+        "rules": [
+          {
+            "id": "line_stop",
+            "name": "Operational stop recommendation",
+            "when": {
+              "all": [
+                {
+                  "field": "action.type",
+                  "op": "eq",
+                  "value": "operational_stop"
+                }
+              ]
+            },
+            "effect": "require_approval",
+            "reason": "Stopping physical infrastructure has high operational impact and needs the site manager.",
+            "route": "facility-ops",
+            "step_up": "none",
+            "safe_alternatives": [
+              {
+                "id": "reduce_load",
+                "type": "reduce_scope",
+                "label": "Reduce load to 40% instead",
+                "description": "Shift workloads to DC-West and run chiller line 2 at reduced load while maintenance is scheduled.",
+                "apply": {
+                  "mode": "reduced_load_40"
+                }
+              }
+            ]
+          }
+        ],
+        "change_note": "Reduced-load alternative",
+        "created_at": "2026-08-05T00:00:00.000Z",
+        "created_by": "taylor.brooks",
+        "published_at": "2026-08-05T00:00:00.000Z"
+      }
+    ]
+  },
+  {
+    "id": "pol_agent_guardrails",
+    "name": "Agent baseline guardrails",
+    "description": "Baseline controls applied to every registered AI agent.",
+    "pack": "AI & Data",
+    "enabled": true,
+    "current_version": 11,
+    "versions": [
+      {
+        "policy_id": "pol_agent_guardrails",
+        "version": 10,
+        "status": "superseded",
+        "rules": [
+          {
+            "id": "agent_anomaly",
+            "name": "Agent behaviour anomaly",
+            "when": {
+              "all": [
+                {
+                  "field": "actor.type",
+                  "op": "eq",
+                  "value": "agent"
+                },
+                {
+                  "field": "signals.actor_anomaly",
+                  "op": "eq",
+                  "value": true
+                }
+              ]
+            },
+            "effect": "warn",
+            "reason": "Agent activity is outside its 14-day baseline; security has been notified."
+          },
+          {
+            "id": "agent_prod_delete",
+            "name": "Agents cannot delete in production",
+            "when": {
+              "all": [
+                {
+                  "field": "actor.type",
+                  "op": "eq",
+                  "value": "agent"
+                },
+                {
+                  "field": "action.type",
+                  "op": "eq",
+                  "value": "delete"
+                },
+                {
+                  "field": "resource.environment",
+                  "op": "eq",
+                  "value": "production"
+                }
+              ]
+            },
+            "effect": "deny",
+            "reason": "Destructive production operations are never delegated to agents."
+          }
+        ],
+        "change_note": "Anomaly + prod delete",
+        "created_at": "2026-07-21T00:00:00.000Z",
+        "created_by": "alex.chen",
+        "published_at": "2026-07-21T00:00:00.000Z"
+      },
+      {
+        "policy_id": "pol_agent_guardrails",
+        "version": 11,
+        "status": "published",
+        "rules": [
+          {
+            "id": "agent_anomaly",
+            "name": "Agent behaviour anomaly",
+            "when": {
+              "all": [
+                {
+                  "field": "actor.type",
+                  "op": "eq",
+                  "value": "agent"
+                },
+                {
+                  "field": "signals.actor_anomaly",
+                  "op": "eq",
+                  "value": true
+                }
+              ]
+            },
+            "effect": "warn",
+            "reason": "Agent activity is outside its 14-day baseline; security has been notified."
+          },
+          {
+            "id": "agent_prod_delete",
+            "name": "Agents cannot delete in production",
+            "when": {
+              "all": [
+                {
+                  "field": "actor.type",
+                  "op": "eq",
+                  "value": "agent"
+                },
+                {
+                  "field": "action.type",
+                  "op": "eq",
+                  "value": "delete"
+                },
+                {
+                  "field": "resource.environment",
+                  "op": "eq",
+                  "value": "production"
+                }
+              ]
+            },
+            "effect": "deny",
+            "reason": "Destructive production operations are never delegated to agents."
+          },
+          {
+            "id": "agent_low_risk_tools",
+            "name": "Low-sensitivity tool calls",
+            "when": {
+              "all": [
+                {
+                  "field": "actor.type",
+                  "op": "eq",
+                  "value": "agent"
+                },
+                {
+                  "field": "action.type",
+                  "op": "eq",
+                  "value": "invoke_tool"
+                },
+                {
+                  "field": "resource.classification_rank",
+                  "op": "lte",
+                  "value": 1
+                }
+              ]
+            },
+            "effect": "allow_log",
+            "reason": "Internal/public data tool call — autonomous, logged."
+          }
+        ],
+        "change_note": "Low-sensitivity tool calls stay autonomous",
+        "created_at": "2026-09-11T00:00:00.000Z",
+        "created_by": "alex.chen",
+        "published_at": "2026-09-11T00:00:00.000Z"
+      }
+    ]
+  }
+]

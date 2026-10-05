@@ -1,0 +1,43 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Policy engine (unit + golden regression)
+        run: pnpm --filter @orbis/policy-core test
+      - name: Web — ML parity, seed invariants, receipts, audit chain
+        run: pnpm --filter web test
+      - name: Typecheck
+        run: pnpm -r --if-present typecheck
+      - name: Lint
+        run: pnpm --filter web lint
+      - name: Build
+        run: pnpm --filter web build
+      - name: SDK integration tests against a live gateway
+        run: |
+          pnpm --filter web start &
+          npx wait-on http://localhost:4310/api/v1/receipts/public-key
+          pnpm --filter @orbis/sdk test
+          python3 -m unittest discover -s packages/python-sdk/tests -v
+
+  ios:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and unit-test Orbis iOS
+        run: |
+          xcodebuild test -project apps/ios/OrbisRelay.xcodeproj -scheme OrbisRelay \
+            -destination 'platform=iOS Simulator,name=iPhone 16' CODE_SIGN_IDENTITY="-"

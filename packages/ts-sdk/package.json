@@ -1,0 +1,20 @@
+{
+  "name": "@orbis/sdk",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Orbis Relay TypeScript SDK: preflight, await approval, report outcome, verify receipts.",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@orbis/policy-core": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4",
+    "@types/node": "^22.0.0"
+  }
+}

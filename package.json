@@ -1,0 +1,21 @@
+{
+  "name": "orbis-relay",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Orbis Relay \u2014 human trust infrastructure for autonomous software",
+  "scripts": {
+    "dev": "pnpm --filter web dev",
+    "build": "pnpm --filter web build",
+    "start": "pnpm --filter web start",
+    "test": "pnpm --filter @orbis/policy-core test && pnpm --filter web test",
+    "test:sdk": "pnpm --filter @orbis/sdk test && python3 -m unittest discover -s packages/python-sdk/tests",
+    "typecheck": "pnpm -r --if-present typecheck",
+    "lint": "pnpm --filter web lint",
+    "ios:test": "xcodebuild test -project apps/ios/OrbisRelay.xcodeproj -scheme OrbisRelay -destination 'platform=iOS Simulator,name=iPhone 17 Pro' -derivedDataPath apps/ios/DerivedData CODE_SIGN_IDENTITY=-",
+    "ml:train": "python3 ml/phishing_url/train.py && python3 ml/message_scam/train.py",
+    "contracts": "node --experimental-strip-types --no-warnings scripts/export-contracts.mjs",
+    "video": "cd video/brag-output/composition && npx hyperframes render --quality delivery --output ../brag.mp4",
+    "demo:reset": "rm -f apps/web/.data/store.json"
+  },
+  "packageManager": "pnpm@11.4.0"
+}

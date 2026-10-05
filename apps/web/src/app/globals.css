@@ -1,0 +1,109 @@
+@import "tailwindcss";
+
+/* Orbis Relay design tokens — calm, precise enterprise; restrained cobalt; semantic risk. */
+@theme {
+  --font-sans: var(--font-switzer), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, "SF Mono", Menlo, monospace;
+  --font-serif: var(--font-instrument), ui-serif, Georgia, serif;
+
+  --color-page: #f6f7f9;
+  --color-surface: #ffffff;
+  --color-surface-2: #f2f4f7;
+  --color-surface-3: #eaecf0;
+  --color-line: #e4e7ec;
+  --color-line-strong: #d0d5dd;
+  --color-ink: #0b1220;
+  --color-ink-2: #344054;
+  --color-muted: #5d6b82;
+  --color-faint: #98a2b3;
+
+  --color-cobalt: #2747e8;
+  --color-cobalt-600: #1f3bd0;
+  --color-cobalt-700: #1a30a8;
+  --color-cobalt-50: #eef1fe;
+  --color-cobalt-100: #dde3fd;
+
+  --color-night: #070b17;
+  --color-night-2: #0d1326;
+  --color-night-3: #151d36;
+
+  --color-low: #0e7c4a;
+  --color-low-bg: #e7f6ee;
+  --color-medium: #8a5a00;
+  --color-medium-bg: #fff4d6;
+  --color-high: #c2410c;
+  --color-high-bg: #ffede3;
+  --color-critical: #b42318;
+  --color-critical-bg: #fee4e2;
+
+  /* chart series (validated: scripts/validate_palette.js, light surface) */
+  --color-series-auto: #2a78d6;
+  --color-series-human: #eb6834;
+  --color-series-blocked: #4a3aa7;
+  --color-grid: #e7e9ee;
+
+  --radius-card: 14px;
+  --shadow-card: 0 1px 2px rgba(16, 24, 40, 0.04), 0 1px 1px rgba(16, 24, 40, 0.03);
+  --shadow-pop: 0 12px 32px -8px rgba(16, 24, 40, 0.18), 0 4px 8px -4px rgba(16, 24, 40, 0.08);
+
+  --animate-pulse-ring: pulse-ring 2.2s cubic-bezier(0.2, 0.7, 0.2, 1) infinite;
+  @keyframes pulse-ring {
+    0% { box-shadow: 0 0 0 0 rgba(39, 71, 232, 0.35); }
+    70% { box-shadow: 0 0 0 10px rgba(39, 71, 232, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(39, 71, 232, 0); }
+  }
+}
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background: var(--color-page);
+  color: var(--color-ink);
+  font-feature-settings: "ss01", "cv11";
+}
+
+::selection {
+  background: var(--color-cobalt-100);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-cobalt);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+.hairline-grid {
+  background-image: linear-gradient(to right, rgba(11, 18, 32, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(11, 18, 32, 0.05) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+.night-grid {
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media (forced-colors: active) {
+  .risk-badge { border: 1px solid CanvasText; }
+}

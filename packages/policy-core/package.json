@@ -1,0 +1,16 @@
+{
+  "name": "@orbis/policy-core",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Deterministic, versioned policy evaluation and risk scoring for Orbis Relay. No I/O, no model calls.",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4"
+  }
+}
