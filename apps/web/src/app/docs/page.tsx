@@ -13,7 +13,7 @@ const TOC = [
   ["approvals", "Approval lifecycle"],
   ["receipts", "Receipts"],
   ["webhooks", "Webhooks"],
-  ["agents", "Agent adapter"],
+  ["agents", "Agent adapter"], ["ml", "Endpoint intelligence"],
   ["errors", "Errors"],
   ["reference", "API reference"],
 ] as const;
@@ -132,6 +132,19 @@ const summarize = adapter.wrap({
   run: (a) => llm.summarize(a),
 });
 // Denials throw ToolBlockedError — the agent can explain and re-plan.`}</Code>
+
+          <H id="ml">Endpoint intelligence</H>
+          <P>An optional macOS endpoint runtime (<code>apps/macos-endpoint</code>, Swift + Core ML) scores each action locally from privacy-preserving metadata. Destinations are hashed on the device and content never leaves it. The gateway also scores every action itself. The edge risk model is <b>advisory</b>: deterministic policy decides first, and the model can only raise an outcome (allow → warn → approval), never lower one. It is ignored when unavailable, stale, incompatible or killed, and that rule is recorded on the decision and the receipt.</P>
+          <Code title="Attach a local signal to a preflight (what orbis-endpoint does)">{`POST /v1/decisions/preflight
+{ …envelope,
+  "endpoint_signal": { "endpoint_id": "ep_procurement-agent_host",
+    "signal": { "model_version": "1.0.0", "feature_schema": "edge-features/1", "class": "high_risk",
+                "risk": 0.99, "abstain": false, "runtime": "coreml-fp32", "reasons": [ … ] } } }
+
+→ "ml": { "source": "local+cloud", "model": "orbis-edge-risk@1.0.0", "class": "high_risk",
+          "explanation": "High risk because sensitive data is going to an unverified destination…",
+          "fusion": { "rule": "deterministic_approval_wins", "changed": false } }`}</Code>
+          <P>Endpoints fetch an Ed25519-signed manifest (<code>GET /v1/endpoint/models/manifest</code>). It is bound to a tenant, feature schema, minimum app version, expiry and a monotonic sequence. The endpoint verifies the artifact sha256, compiles and smoke-tests the model, and activates it atomically. Model mutations (<code>/v1/ml/models/:v/promote</code>, <code>/rollback</code>, <code>/v1/ml/settings</code>) need an admin role, passkey step-up and a passing release-gate report. Analyst labels from <code>POST /v1/ml/review/:prediction_id</code> are exported with <code>GET /v1/ml/feedback/export</code> for offline retraining; they never change the live model. See <Link className="text-cobalt hover:underline" href="/console/intelligence">Console → Intelligence</Link> for the registry, evaluation, fleet, drift and review queue.</P>
 
           <H id="errors">Errors</H>
           <Code>{`{ "error": { "code": "step_up_required", "message": "…", "remediation": "Complete Face ID and resubmit." } }

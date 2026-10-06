@@ -1,0 +1,269 @@
+{
+  "feature_schema": "edge-features/1",
+  "n_features": 85,
+  "names": [
+    "actor_type=human",
+    "actor_type=agent",
+    "actor_type=service",
+    "actor_type=automation",
+    "actor_type=unknown",
+    "action_type=external_send",
+    "action_type=file_upload",
+    "action_type=clipboard_export",
+    "action_type=tool_invoke",
+    "action_type=database_query",
+    "action_type=privilege_grant",
+    "action_type=payment",
+    "action_type=refund",
+    "action_type=production_deploy",
+    "action_type=secrets_access",
+    "action_type=model_provider_send",
+    "action_type=bulk_download",
+    "action_type=destructive_delete",
+    "action_type=config_change",
+    "action_type=physical_operation",
+    "action_type=unknown",
+    "classification=public",
+    "classification=internal",
+    "classification=confidential",
+    "classification=restricted",
+    "classification=regulated",
+    "classification=secret",
+    "classification=unknown",
+    "destination_type=none",
+    "destination_type=internal",
+    "destination_type=internal_model",
+    "destination_type=approved_vendor",
+    "destination_type=external_domain",
+    "destination_type=external_ai_provider",
+    "destination_type=beneficiary",
+    "destination_type=external_identity",
+    "destination_type=partner",
+    "destination_type=production_env",
+    "destination_type=unknown",
+    "destination_trust=trusted",
+    "destination_trust=approved",
+    "destination_trust=unverified",
+    "destination_trust=blocked",
+    "destination_trust=unknown",
+    "privilege_level=standard",
+    "privilege_level=elevated",
+    "privilege_level=admin",
+    "privilege_level=unknown",
+    "device_posture=managed",
+    "device_posture=unmanaged",
+    "device_posture=unknown",
+    "tool_risk_class=low",
+    "tool_risk_class=medium",
+    "tool_risk_class=high",
+    "tool_risk_class=unknown",
+    "environment=none",
+    "environment=dev",
+    "environment=staging",
+    "environment=production",
+    "environment=unknown",
+    "resource_log",
+    "amount_log",
+    "off_hours",
+    "weekend",
+    "production_without_window",
+    "has_ticket",
+    "rate_5m",
+    "rate_1h",
+    "rate_ratio",
+    "unique_dest_1h",
+    "first_destination",
+    "first_tool",
+    "first_action",
+    "resource_z",
+    "baseline_insufficient",
+    "unknown_fields",
+    "class_rank",
+    "x_sensitive_external",
+    "x_sensitive_untrusted",
+    "x_privileged_new_dest",
+    "x_high_amount_off_hours",
+    "x_destructive_production",
+    "x_new_tool_elevated",
+    "x_secret_egress",
+    "x_bulk_sensitive"
+  ],
+  "one_hot_blocks": [
+    {
+      "field": "actor_type",
+      "vocab": [
+        "human",
+        "agent",
+        "service",
+        "automation"
+      ],
+      "unknown_index": 4
+    },
+    {
+      "field": "action_type",
+      "vocab": [
+        "external_send",
+        "file_upload",
+        "clipboard_export",
+        "tool_invoke",
+        "database_query",
+        "privilege_grant",
+        "payment",
+        "refund",
+        "production_deploy",
+        "secrets_access",
+        "model_provider_send",
+        "bulk_download",
+        "destructive_delete",
+        "config_change",
+        "physical_operation"
+      ],
+      "unknown_index": 15
+    },
+    {
+      "field": "classification",
+      "vocab": [
+        "public",
+        "internal",
+        "confidential",
+        "restricted",
+        "regulated",
+        "secret"
+      ],
+      "unknown_index": 6
+    },
+    {
+      "field": "destination_type",
+      "vocab": [
+        "none",
+        "internal",
+        "internal_model",
+        "approved_vendor",
+        "external_domain",
+        "external_ai_provider",
+        "beneficiary",
+        "external_identity",
+        "partner",
+        "production_env"
+      ],
+      "unknown_index": 10
+    },
+    {
+      "field": "destination_trust",
+      "vocab": [
+        "trusted",
+        "approved",
+        "unverified",
+        "blocked"
+      ],
+      "unknown_index": 4
+    },
+    {
+      "field": "privilege_level",
+      "vocab": [
+        "standard",
+        "elevated",
+        "admin"
+      ],
+      "unknown_index": 3
+    },
+    {
+      "field": "device_posture",
+      "vocab": [
+        "managed",
+        "unmanaged"
+      ],
+      "unknown_index": 2
+    },
+    {
+      "field": "tool_risk_class",
+      "vocab": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "unknown_index": 3
+    },
+    {
+      "field": "environment",
+      "vocab": [
+        "none",
+        "dev",
+        "staging",
+        "production"
+      ],
+      "unknown_index": 4
+    }
+  ],
+  "numeric": [
+    "resource_log",
+    "amount_log",
+    "off_hours",
+    "weekend",
+    "production_without_window",
+    "has_ticket",
+    "rate_5m",
+    "rate_1h",
+    "rate_ratio",
+    "unique_dest_1h",
+    "first_destination",
+    "first_tool",
+    "first_action",
+    "resource_z",
+    "baseline_insufficient",
+    "unknown_fields",
+    "class_rank",
+    "x_sensitive_external",
+    "x_sensitive_untrusted",
+    "x_privileged_new_dest",
+    "x_high_amount_off_hours",
+    "x_destructive_production",
+    "x_new_tool_elevated",
+    "x_secret_egress",
+    "x_bulk_sensitive"
+  ],
+  "constants": {
+    "window_5m_ms": 300000,
+    "hour_ms": 3600000,
+    "day_ms": 86400000,
+    "seen_cap": 4096,
+    "ring_cap": 200,
+    "times_cap": 10000,
+    "min_baseline": 5,
+    "min_anomaly_baseline": 20,
+    "business_hours": [
+      8,
+      19
+    ]
+  },
+  "class_rank": {
+    "public": 0,
+    "internal": 1,
+    "confidential": 2,
+    "restricted": 3,
+    "regulated": 3,
+    "secret": 4,
+    "unknown": 2
+  },
+  "external_destinations": [
+    "approved_vendor",
+    "beneficiary",
+    "external_ai_provider",
+    "external_domain",
+    "external_identity",
+    "partner",
+    "unknown"
+  ],
+  "untrusted": [
+    "blocked",
+    "unknown",
+    "unverified"
+  ],
+  "elevated": [
+    "admin",
+    "elevated",
+    "unknown"
+  ],
+  "anomaly_schema": "orbis-anomaly-robust/1",
+  "unknown_policy": "Unknown/missing enum values map to an explicit 'unknown' one-hot column. Every field except action.tool_risk_class also counts toward unknown_fields (the OOD signal). For cross features unknown classification is sensitive, unknown destination is external+untrusted, unknown privilege is elevated."
+}

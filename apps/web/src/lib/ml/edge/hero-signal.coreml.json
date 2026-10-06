@@ -1,0 +1,42 @@
+{
+  "abstain": false,
+  "anomaly_score": 0.33079752032373744,
+  "anomaly_sufficient": true,
+  "anomaly_top": [
+    "first_destination",
+    "volume"
+  ],
+  "class": "high_risk",
+  "feature_schema": "edge-features/1",
+  "guarded": false,
+  "inference_us": 31,
+  "model": "orbis-edge-risk",
+  "model_version": "1.0.0",
+  "ood": false,
+  "policy_version": "1.0.0+cal1",
+  "probs": [
+    3.104365617322562e-14,
+    1.0266044016447824e-11,
+    6.319598218826128e-07,
+    0.999999368029881
+  ],
+  "reasons": [
+    {
+      "code": "sensitive_to_untrusted",
+      "label": "Sensitive data to an unverified destination"
+    },
+    {
+      "code": "sensitive_external",
+      "label": "Sensitive data leaving the organisation"
+    },
+    {
+      "code": "first_destination",
+      "label": "Destination never used by this actor"
+    }
+  ],
+  "risk": 0.9999999999897029,
+  "runtime": "coreml-fp32",
+  "source": "local",
+  "recorded_with": "orbis-endpoint replay fixtures/endpoint-events/hero.jsonl (Swift + Core ML fp32, Apple M4 Pro)",
+  "endpoint_id": "ep_procurement-agent_host"
+}

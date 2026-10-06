@@ -1,0 +1,77 @@
+{
+  "model": "orbis-edge-risk@1.0.0",
+  "trained_at": "2026-10-06T07:40:20Z",
+  "git_sha": "4e3533e404816e2f28f8171e882f0763e56f2614",
+  "dataset": "northstar-actions@1.0.0",
+  "dataset_manifest_files": {
+    "anomaly.npy": "3a9f2bd0d2a243cb7053acd457269f7502d4844242b96ffa72db2f06e231aca8",
+    "events.jsonl": "ead0195b966611d61b61beecc2ed332365fbcf4483b042eb0c21881a6dc3801c",
+    "features.npy": "b743557d3d2b77d79e59d898ecf0640a517274476e7ebdfe705c0a8d8370e63b",
+    "gold.json": "95bc55dfcd628ef200c36a4d9c0f8672fd666b353f0e294b9cd0e35eec03a960",
+    "gold_features.npy": "b7d1ca539914d8ae21d2199452a10ee82249c91ea0af89ed7d858698123a28f9",
+    "labels.jsonl": "8d8924e60057c48a231625c868b87d621290109819d69b017d725b79b78767d6"
+  },
+  "feature_schema": "edge-features/1",
+  "random_seed": 0,
+  "hyperparameters": {
+    "hidden": [
+      32,
+      16
+    ],
+    "epochs_max": 120,
+    "best_epoch": 59,
+    "lr": 0.003,
+    "weight_decay": 0.0001,
+    "batch": 512,
+    "seed": 0
+  },
+  "dependency_lock_sha256": "92fbd6e182d466652fe8886412650d2d833be62c08f9f6c7e81a03f69ee0fb32",
+  "training_duration_seconds": 19.36,
+  "final_fit_seconds": 2.365,
+  "hardware": {
+    "cpu": "Apple M4 Pro",
+    "machine": "arm64",
+    "os": "Darwin 25.6.0",
+    "python": "3.11.0"
+  },
+  "mlflow": {
+    "experiment": "orbis-edge-risk",
+    "parent_run_id": "f6f39f5d7f3b4c2c82c6bdc3a20bcd58",
+    "run_id": "ed699d85bd0546b390202fbc0c765163",
+    "tracking_uri": "sqlite:///ml/mlruns/mlflow.db"
+  },
+  "metrics": {
+    "mean_cost": 0.07319000367511944,
+    "macro_f1": 0.9284409471351406,
+    "high_risk_escalation_recall": 0.9117647058823529,
+    "risky_escalation_recall": 0.9795454545454545,
+    "false_escalation_rate": 0.0023990403838464614,
+    "ece": 0.01461657100499755,
+    "brier": 0.03346040783725734
+  },
+  "gold": {
+    "high_risk_escalation_recall": 1.0,
+    "risky_escalation_recall": 1.0,
+    "hard_negative_false_positive_rate": 0.0
+  },
+  "calibration_method": "temperature scaling (T=0.912089) fit on validation NLL; stored separately in decision_policy.json",
+  "threshold_configuration": {
+    "tau_high": 0.88,
+    "tau_review": 0.24,
+    "rule": "Security-favouring operating point.",
+    "cost_tolerance": 0.05
+  },
+  "artifacts": [
+    "adversarial_report.json",
+    "coreml",
+    "decision_policy.json",
+    "dist",
+    "error-analysis.md",
+    "evaluation_report.json",
+    "model.json",
+    "onnx",
+    "parity_report.json",
+    "reproduce_report.json",
+    "training_run.json"
+  ]
+}

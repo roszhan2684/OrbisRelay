@@ -16,7 +16,7 @@ const DATA_DIR = process.env.ORBIS_DATA_DIR ?? (process.env.VERCEL ? path.join(o
 /** Seed time anchored to the hour, so concurrently started serverless instances build the same tenant. */
 export const seedAnchor = () => new Date(Math.floor(Date.now() / 3_600_000) * 3_600_000);
 const FILE = path.join(DATA_DIR, "store.json");
-export const STORE_VERSION = 5;
+export const STORE_VERSION = 6;
 
 export type LiveEvent =
   | { type: "action.created"; action_id: string; status: string; title: string }
@@ -27,6 +27,7 @@ export type LiveEvent =
   | { type: "policy.published"; policy_id: string; version: number }
   | { type: "outcome.reported"; action_id: string; status: string }
   | { type: "protect.analyzed"; analysis_id: string; verdict: string }
+  | { type: "ml.changed"; kind: string; version?: string }
   | { type: "demo.reset" };
 
 interface Runtime {

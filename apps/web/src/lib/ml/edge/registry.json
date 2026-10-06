@@ -1,0 +1,1205 @@
+{
+ "model_name": "orbis-edge-risk",
+ "feature_schema": "edge-features/1",
+ "versions": [
+  {
+   "version": "0.9.0",
+   "architecture": "logreg-C1",
+   "n_params": 344,
+   "feature_schema": "edge-features/1",
+   "dataset": "northstar-actions@1.0.0",
+   "policy_version": "0.9.0+cal1",
+   "origin": "initial training run",
+   "trained_at": null,
+   "mlflow_run_id": "6d67d8442e5c43f988297c5afa18e2d6",
+   "git_sha": null,
+   "metrics": {
+    "test": {
+     "mean_cost": 0.08257993384785006,
+     "macro_f1": 0.8716283188776417,
+     "high_risk_escalation_recall": 0.9117647058823529,
+     "risky_escalation_recall": 0.9795454545454545,
+     "false_escalation_rate": 0.003998400639744102,
+     "safe_precision": 0.9981967541574834,
+     "ece": 0.035980740657385026,
+     "brier": 0.06890130829193598,
+     "risky_pr_auc": 0.9798892392533618,
+     "risky_roc_auc": 0.9909545272799971,
+     "abstention_rate": 0.001470047776552738,
+     "n": 5442
+    },
+    "gold": {
+     "high_risk_escalation_recall": 1.0,
+     "risky_escalation_recall": 1.0,
+     "hard_negative_false_positive_rate": 0.0
+    }
+   },
+   "gates": null,
+   "parity": null,
+   "benchmark": null,
+   "reproducibility": null,
+   "comparison": null,
+   "artifacts": {
+    "portable_sha256": "887221f79a095dc73a6dbb22d9cb52d34f5254686eb95602cfbca29eb3a32790",
+    "policy_sha256": "fee06d0d60126b70b9b2905a64e23a86743c699dc817fd1acd6be452a5344402"
+   }
+  },
+  {
+   "version": "1.0.0",
+   "architecture": "mlp-32x16",
+   "n_params": 3348,
+   "feature_schema": "edge-features/1",
+   "dataset": "northstar-actions@1.0.0",
+   "policy_version": "1.0.0+cal1",
+   "origin": "initial training run",
+   "trained_at": "2026-10-06T07:40:20Z",
+   "mlflow_run_id": "ed699d85bd0546b390202fbc0c765163",
+   "git_sha": "4e3533e404816e2f28f8171e882f0763e56f2614",
+   "metrics": {
+    "test": {
+     "mean_cost": 0.07319000367511944,
+     "macro_f1": 0.9284409471351406,
+     "high_risk_escalation_recall": 0.9117647058823529,
+     "risky_escalation_recall": 0.9795454545454545,
+     "false_escalation_rate": 0.0023990403838464614,
+     "safe_precision": 0.9981996399279855,
+     "ece": 0.01461657100499755,
+     "brier": 0.03346040783725734,
+     "risky_pr_auc": 0.978690294343635,
+     "risky_roc_auc": 0.9859501653883902,
+     "abstention_rate": 0.001470047776552738,
+     "n": 5442
+    },
+    "gold": {
+     "high_risk_escalation_recall": 1.0,
+     "risky_escalation_recall": 1.0,
+     "hard_negative_false_positive_rate": 0.0
+    }
+   },
+   "gates": {
+    "status": "pass",
+    "baseline": "0.9.0",
+    "gates": [
+     {
+      "name": "schema_compatibility",
+      "status": "pass",
+      "observed": {
+       "feature_schema": "edge-features/1",
+       "input_dim": 85
+      },
+      "threshold": {
+       "feature_schema": "edge-features/1",
+       "input_dim": 85
+      },
+      "source": "ml/models/risk_classifier/1.0.0/model.json"
+     },
+     {
+      "name": "reproducibility",
+      "status": "pass",
+      "observed": {
+       "dataset_hashes": true,
+       "max_metric_delta": 0.0
+      },
+      "threshold": {
+       "tolerance": 1e-06
+      },
+      "source": "ml/models/risk_classifier/1.0.0/reproduce_report.json"
+     },
+     {
+      "name": "coreml_parity",
+      "status": "pass",
+      "observed": {
+       "max_probability_delta": 4.3435278096470853e-07,
+       "class_agreement": 1.0
+      },
+      "threshold": {
+       "max_probability_delta": 0.0001
+      },
+      "source": "ml/models/risk_classifier/1.0.0/parity_report.json"
+     },
+     {
+      "name": "onnx_parity",
+      "status": "pass",
+      "observed": {
+       "max_probability_delta": 4.783048013767832e-07
+      },
+      "threshold": {
+       "max_probability_delta": 0.0001
+      },
+      "source": "ml/models/risk_classifier/1.0.0/parity_report.json"
+     },
+     {
+      "name": "swift_feature_and_model_parity",
+      "status": "pass",
+      "observed": "Executed 7 tests, with 0 failures (0 unexpected) in 0.441 (0.442) seconds",
+      "threshold": "all fixtures within 1e-9 (features) / 1e-4 (Core ML)",
+      "source": "apps/macos-endpoint ParityTests"
+     },
+     {
+      "name": "golden_scenarios_no_regression",
+      "status": "pass",
+      "observed": {
+       "failures": [],
+       "gated": 90
+      },
+      "threshold": "0 failures",
+      "source": "ml/models/risk_classifier/1.0.0/evaluation_report.json"
+     },
+     {
+      "name": "gold_high_risk_escalation_recall",
+      "status": "pass",
+      "observed": 1.0,
+      "threshold": ">= 0.97",
+      "source": "ml/models/risk_classifier/1.0.0/evaluation_report.json"
+     },
+     {
+      "name": "gold_suspicious_plus_high_recall",
+      "status": "pass",
+      "observed": 1.0,
+      "threshold": ">= 0.94",
+      "source": "ml/models/risk_classifier/1.0.0/evaluation_report.json"
+     },
+     {
+      "name": "test_safe_action_precision",
+      "status": "pass",
+      "observed": 0.9981996399279855,
+      "threshold": ">= 0.95",
+      "source": "ml/models/risk_classifier/1.0.0/evaluation_report.json"
+     },
+     {
+      "name": "gold_hard_negative_false_positive_rate",
+      "status": "pass",
+      "observed": 0.0,
+      "threshold": "<= 0.05",
+      "source": "ml/models/risk_classifier/1.0.0/evaluation_report.json"
+     },
+     {
+      "name": "false_positive_budget",
+      "status": "pass",
+      "observed": 0.0023990403838464614,
+      "threshold": "<= 0.02",
+      "source": "ml/models/risk_classifier/1.0.0/evaluation_report.json"
+     },
+     {
+      "name": "calibration_ece",
+      "status": "pass",
+      "observed": 0.01461657100499755,
+      "threshold": "<= 0.05",
+      "source": "ml/models/risk_classifier/1.0.0/evaluation_report.json"
+     },
+     {
+      "name": "model_size",
+      "status": "pass",
+      "observed": 16.3,
+      "threshold": "<= 5120 KB",
+      "source": "ml/models/risk_classifier/1.0.0/parity_report.json"
+     },
+     {
+      "name": "endpoint_latency_p95",
+      "status": "pass",
+      "observed": {
+       "inference_p95_ms": 0.0573,
+       "pipeline_p95_ms": 0.063,
+       "device": "Apple M4 Pro"
+      },
+      "threshold": "<= 20.0 ms",
+      "source": "ml/benchmarks/results/orbis-edge-risk/1.0.0/Mac16,8-Apple-M4-Pro/2026-10-06T07-25-02Z-fp32-cpu_only.json"
+     },
+     {
+      "name": "endpoint_memory",
+      "status": "pass",
+      "observed": {
+       "peak_footprint_mb": 20.95,
+       "model_load_delta_mb": 6.61
+      },
+      "threshold": "<= 75.0 MB (whole process)",
+      "source": "ml/benchmarks/results/orbis-edge-risk/1.0.0/Mac16,8-Apple-M4-Pro/2026-10-06T07-25-02Z-fp32-cpu_only.json"
+     },
+     {
+      "name": "energy_proxy_sustained_cpu",
+      "status": "pass",
+      "observed": {
+       "cpu_percent_of_one_core": 2.524,
+       "seconds": 600,
+       "rate_eps": 50,
+       "cpu_ms_per_1k_inferences": 53.27
+      },
+      "threshold": "<= 10.0% of one core at 50 events/s",
+      "source": "ml/benchmarks/results/sustained/10min-50eps/2026-10-06T07-37-26Z-fp32-cpu_only.json",
+      "note": "PROXY \u2014 energy was not measured (needs powermetrics/Instruments on a physical session). CPU time is the reported stand-in."
+     },
+     {
+      "name": "adversarial_suite",
+      "status": "pass",
+      "observed": {
+       "required": "12/12",
+       "documented_limitations": [
+        "disguised classification ('internal') emailed to a new domain",
+        "agent-asserted ticket flag on $40k+ refunds"
+       ]
+      },
+      "threshold": "all required cases pass",
+      "source": "ml/models/risk_classifier/1.0.0/adversarial_report.json"
+     },
+     {
+      "name": "protected_slice_regression",
+      "status": "pass",
+      "observed": "none",
+      "threshold": "no protected slice worse than 2% vs 0.9.0",
+      "source": "ml/models/risk_classifier/0.9.0/evaluation_report.json"
+     },
+     {
+      "name": "model_card_complete",
+      "status": "pass",
+      "observed": {
+       "missing_sections": []
+      },
+      "threshold": [
+       "Model details",
+       "Intended use",
+       "Out of scope",
+       "Training data",
+       "Evaluation",
+       "Calibration",
+       "Runtime",
+       "Known limitations",
+       "Lineage"
+      ],
+      "source": "ml/models/risk_classifier/1.0.0/MODEL_CARD.md"
+     }
+    ]
+   },
+   "parity": {
+    "coreml-fp32": {
+     "max_abs_probability_delta": 4.3435278096470853e-07,
+     "class_agreement": 1.0,
+     "passed": true,
+     "bytes": 16682
+    },
+    "coreml-fp16": {
+     "max_abs_probability_delta": 0.004252911845658458,
+     "class_agreement": 0.9998162440279309,
+     "passed": true,
+     "bytes": 10844
+    },
+    "coreml-int8": {
+     "max_abs_probability_delta": 0.052383571674843976,
+     "class_agreement": 0.9996324880558618,
+     "passed": false,
+     "bytes": 7855
+    },
+    "onnx-fp32": {
+     "max_abs_probability_delta": 4.783048013767832e-07,
+     "class_agreement": 1.0,
+     "passed": true,
+     "bytes": 13832
+    },
+    "onnx-int8": {
+     "max_abs_probability_delta": 0.04597433833955472,
+     "class_agreement": 0.9996324880558618,
+     "passed": false,
+     "bytes": 5988
+    }
+   },
+   "benchmark": {
+    "source": "ml/benchmarks/results/orbis-edge-risk/1.0.0/Mac16,8-Apple-M4-Pro/2026-10-06T07-25-02Z-fp32-cpu_only.json",
+    "device": {
+     "cores": 12,
+     "cpu": "Apple M4 Pro",
+     "model": "Mac16,8",
+     "os": "Version 26.6.2 (Build 25G83)"
+    },
+    "runtime": "coreml-fp32",
+    "compute_units": "cpu_only",
+    "measured_at": "2026-10-06T07:25:02Z",
+    "cold_ms": 47.64925,
+    "warm_us": {
+     "max": 1333.916,
+     "mean": 41.7976653499999,
+     "n": 20000,
+     "p50": 38.291,
+     "p95": 57.25204999999997,
+     "p99": 101.0012499999998,
+     "throughput_per_s": 23897.538129510845
+    },
+    "pipeline_us": {
+     "max": 841.666,
+     "mean": 53.22752417302801,
+     "n": 1179,
+     "p50": 49.959,
+     "p95": 62.9631,
+     "p99": 132.78872000000038
+    },
+    "portable_swift_us": {
+     "max": 34.042,
+     "mean": 0.8988061000000367,
+     "p50": 0.875,
+     "p95": 0.917,
+     "p99": 1.208
+    },
+    "memory_mb": {
+     "after_model_load": 16.750572204589844,
+     "model_load_delta": 6.609535217285156,
+     "peak_footprint": 20.95374298095703,
+     "peak_rss": 30.75,
+     "process_baseline": 10.141036987304688
+    },
+    "idle_cpu_percent": 0.0004999999999988347,
+    "cpu_ms_per_1k": 53.495999999999995
+   },
+   "reproducibility": {
+    "passed": true,
+    "weights_bit_identical": true
+   },
+   "comparison": null,
+   "artifacts": {
+    "portable_sha256": "279fb6e8eacbc8a8fd8db3426e642cd48c219bb69dd7cb6789b73c67a795e791",
+    "policy_sha256": "b07e08fd492a2c91030e78d03a598ec08e8f00d823b11973beb9742b97789350",
+    "coreml_fp32_zip": {
+     "url": "/models/orbis-edge-risk/1.0.0/OrbisEdgeRisk-fp32.mlpackage.zip",
+     "bytes": 14326,
+     "sha256": "3ebcb59196c6d2ef6c019459d1a65b48411affb702ad07cb0d11da9eb1bf84c0"
+    }
+   }
+  },
+  {
+   "version": "1.1.0",
+   "architecture": "mlp-32x16",
+   "n_params": 3348,
+   "feature_schema": "edge-features/1",
+   "dataset": "northstar-actions@1.1.0",
+   "policy_version": "1.1.0+cal1",
+   "origin": "retraining pipeline (drift \u2192 review queue \u2192 candidate)",
+   "trained_at": "2026-10-06T07:42:17Z",
+   "mlflow_run_id": "de8ec85f37cc4c83bf7e4134bd4f7bbe",
+   "git_sha": null,
+   "metrics": {
+    "test": {
+     "mean_cost": 0.07475192943770673,
+     "macro_f1": 0.9163240167976682,
+     "high_risk_escalation_recall": 0.9117647058823529,
+     "risky_escalation_recall": 0.9795454545454545,
+     "false_escalation_rate": 0.005197920831667333,
+     "safe_precision": 0.9981945837512538,
+     "ece": 0.011641751722346933,
+     "brier": 0.03384231537117219,
+     "risky_pr_auc": 0.9625905712968371,
+     "risky_roc_auc": 0.993709788811748,
+     "abstention_rate": 0.001470047776552738,
+     "n": 5442
+    },
+    "gold": {
+     "high_risk_escalation_recall": 1.0,
+     "risky_escalation_recall": 0.9666666666666667,
+     "hard_negative_false_positive_rate": 0.0
+    },
+    "window_holdout": {
+     "mean_cost": 0.010668945312499999,
+     "macro_f1": 0.9116042185070885,
+     "high_risk_escalation_recall": 1.0,
+     "risky_escalation_recall": 1.0,
+     "false_escalation_rate": 0.002149959688255845,
+     "safe_precision": 1.0,
+     "ece": 0.005415367431443174,
+     "brier": 0.05887362870855926,
+     "risky_pr_auc": 0.9997382622115608,
+     "risky_roc_auc": 0.9999734838305117,
+     "abstention_rate": null,
+     "n": 4096
+    }
+   },
+   "gates": {
+    "status": "fail",
+    "baseline": "1.0.0",
+    "gates": [
+     {
+      "name": "schema_compatibility",
+      "status": "pass",
+      "observed": {
+       "feature_schema": "edge-features/1",
+       "input_dim": 85
+      },
+      "threshold": {
+       "feature_schema": "edge-features/1",
+       "input_dim": 85
+      },
+      "source": "ml/models/risk_classifier/1.1.0/model.json"
+     },
+     {
+      "name": "reproducibility",
+      "status": "pass",
+      "observed": {
+       "dataset_hashes": true,
+       "max_metric_delta": 0.0
+      },
+      "threshold": {
+       "tolerance": 1e-06
+      },
+      "source": "ml/models/risk_classifier/1.1.0/reproduce_report.json"
+     },
+     {
+      "name": "coreml_parity",
+      "status": "pass",
+      "observed": {
+       "max_probability_delta": 5.068862913293337e-07,
+       "class_agreement": 1.0
+      },
+      "threshold": {
+       "max_probability_delta": 0.0001
+      },
+      "source": "ml/models/risk_classifier/1.1.0/parity_report.json"
+     },
+     {
+      "name": "onnx_parity",
+      "status": "pass",
+      "observed": {
+       "max_probability_delta": 4.5154766281640946e-07
+      },
+      "threshold": {
+       "max_probability_delta": 0.0001
+      },
+      "source": "ml/models/risk_classifier/1.1.0/parity_report.json"
+     },
+     {
+      "name": "swift_feature_and_model_parity",
+      "status": "pass",
+      "observed": "Executed 7 tests, with 0 failures (0 unexpected) in 0.442 (0.444) seconds",
+      "threshold": "all fixtures within 1e-9 (features) / 1e-4 (Core ML)",
+      "source": "apps/macos-endpoint ParityTests"
+     },
+     {
+      "name": "golden_scenarios_no_regression",
+      "status": "fail",
+      "observed": {
+       "failures": [
+        "g-s27",
+        "g-s28"
+       ],
+       "gated": 90
+      },
+      "threshold": "0 failures",
+      "source": "ml/models/risk_classifier/1.1.0/evaluation_report.json"
+     },
+     {
+      "name": "gold_high_risk_escalation_recall",
+      "status": "pass",
+      "observed": 1.0,
+      "threshold": ">= 0.97",
+      "source": "ml/models/risk_classifier/1.1.0/evaluation_report.json"
+     },
+     {
+      "name": "gold_suspicious_plus_high_recall",
+      "status": "pass",
+      "observed": 0.9666666666666667,
+      "threshold": ">= 0.94",
+      "source": "ml/models/risk_classifier/1.1.0/evaluation_report.json"
+     },
+     {
+      "name": "test_safe_action_precision",
+      "status": "pass",
+      "observed": 0.9981945837512538,
+      "threshold": ">= 0.95",
+      "source": "ml/models/risk_classifier/1.1.0/evaluation_report.json"
+     },
+     {
+      "name": "gold_hard_negative_false_positive_rate",
+      "status": "pass",
+      "observed": 0.0,
+      "threshold": "<= 0.05",
+      "source": "ml/models/risk_classifier/1.1.0/evaluation_report.json"
+     },
+     {
+      "name": "false_positive_budget",
+      "status": "pass",
+      "observed": 0.005197920831667333,
+      "threshold": "<= 0.02",
+      "source": "ml/models/risk_classifier/1.1.0/evaluation_report.json"
+     },
+     {
+      "name": "calibration_ece",
+      "status": "pass",
+      "observed": 0.011641751722346933,
+      "threshold": "<= 0.05",
+      "source": "ml/models/risk_classifier/1.1.0/evaluation_report.json"
+     },
+     {
+      "name": "model_size",
+      "status": "pass",
+      "observed": 16.3,
+      "threshold": "<= 5120 KB",
+      "source": "ml/models/risk_classifier/1.1.0/parity_report.json"
+     },
+     {
+      "name": "endpoint_latency_p95",
+      "status": "pass",
+      "observed": {
+       "inference_p95_ms": 0.0559,
+       "pipeline_p95_ms": 0.0614,
+       "device": "Apple M4 Pro"
+      },
+      "threshold": "<= 20.0 ms",
+      "source": "ml/benchmarks/results/orbis-edge-risk/1.1.0/Mac16,8-Apple-M4-Pro/2026-10-06T07-43-05Z-fp32-cpu_only.json"
+     },
+     {
+      "name": "endpoint_memory",
+      "status": "pass",
+      "observed": {
+       "peak_footprint_mb": 20.98,
+       "model_load_delta_mb": 6.67
+      },
+      "threshold": "<= 75.0 MB (whole process)",
+      "source": "ml/benchmarks/results/orbis-edge-risk/1.1.0/Mac16,8-Apple-M4-Pro/2026-10-06T07-43-05Z-fp32-cpu_only.json"
+     },
+     {
+      "name": "energy_proxy_sustained_cpu",
+      "status": "pass",
+      "observed": {
+       "cpu_percent_of_one_core": 2.524,
+       "seconds": 600,
+       "rate_eps": 50,
+       "cpu_ms_per_1k_inferences": 53.27
+      },
+      "threshold": "<= 10.0% of one core at 50 events/s",
+      "source": "ml/benchmarks/results/sustained/10min-50eps/2026-10-06T07-37-26Z-fp32-cpu_only.json",
+      "note": "PROXY \u2014 energy was not measured (needs powermetrics/Instruments on a physical session). CPU time is the reported stand-in."
+     },
+     {
+      "name": "adversarial_suite",
+      "status": "pass",
+      "observed": {
+       "required": "12/12",
+       "documented_limitations": [
+        "disguised classification ('internal') emailed to a new domain"
+       ]
+      },
+      "threshold": "all required cases pass",
+      "source": "ml/models/risk_classifier/1.1.0/adversarial_report.json"
+     },
+     {
+      "name": "protected_slice_regression",
+      "status": "fail",
+      "observed": {
+       "difficulty=hard_negative (false-escalation)": 0.035
+      },
+      "threshold": "no protected slice worse than 2% vs 1.0.0",
+      "source": "ml/models/risk_classifier/1.0.0/evaluation_report.json"
+     },
+     {
+      "name": "model_card_complete",
+      "status": "pass",
+      "observed": {
+       "missing_sections": []
+      },
+      "threshold": [
+       "Model details",
+       "Intended use",
+       "Out of scope",
+       "Training data",
+       "Evaluation",
+       "Calibration",
+       "Runtime",
+       "Known limitations",
+       "Lineage"
+      ],
+      "source": "ml/models/risk_classifier/1.1.0/MODEL_CARD.md"
+     }
+    ]
+   },
+   "parity": {
+    "coreml-fp32": {
+     "max_abs_probability_delta": 5.068862913293337e-07,
+     "class_agreement": 1.0,
+     "passed": true,
+     "bytes": 16682
+    },
+    "coreml-fp16": {
+     "max_abs_probability_delta": 0.003080986651796236,
+     "class_agreement": 0.9998162440279309,
+     "passed": true,
+     "bytes": 10844
+    },
+    "coreml-int8": {
+     "max_abs_probability_delta": 0.023582754345278456,
+     "class_agreement": 0.9996324880558618,
+     "passed": false,
+     "bytes": 7855
+    },
+    "onnx-fp32": {
+     "max_abs_probability_delta": 4.5154766281640946e-07,
+     "class_agreement": 1.0,
+     "passed": true,
+     "bytes": 13832
+    },
+    "onnx-int8": {
+     "max_abs_probability_delta": 0.04788683967589619,
+     "class_agreement": 0.9996324880558618,
+     "passed": false,
+     "bytes": 5988
+    }
+   },
+   "benchmark": {
+    "source": "ml/benchmarks/results/orbis-edge-risk/1.1.0/Mac16,8-Apple-M4-Pro/2026-10-06T07-43-05Z-fp32-cpu_only.json",
+    "device": {
+     "cores": 12,
+     "cpu": "Apple M4 Pro",
+     "model": "Mac16,8",
+     "os": "Version 26.6.2 (Build 25G83)"
+    },
+    "runtime": "coreml-fp32",
+    "compute_units": "cpu_only",
+    "measured_at": "2026-10-06T07:43:05Z",
+    "cold_ms": 49.499625,
+    "warm_us": {
+     "max": 506.292,
+     "mean": 39.75433039999998,
+     "n": 20000,
+     "p50": 37.625,
+     "p95": 55.87704999999997,
+     "p99": 81.58482999999987,
+     "throughput_per_s": 25126.308129308694
+    },
+    "pipeline_us": {
+     "max": 427.5,
+     "mean": 51.75601187446989,
+     "n": 1179,
+     "p50": 49,
+     "p95": 61.35469999999999,
+     "p99": 115.00902000000018
+    },
+    "portable_swift_us": {
+     "max": 21.375,
+     "mean": 0.8649177999999831,
+     "p50": 0.875,
+     "p95": 0.916,
+     "p99": 0.959
+    },
+    "memory_mb": {
+     "after_model_load": 16.81311798095703,
+     "model_load_delta": 6.672080993652344,
+     "peak_footprint": 20.98499298095703,
+     "peak_rss": 30.90625,
+     "process_baseline": 10.141036987304688
+    },
+    "idle_cpu_percent": 0.0015399999999976541,
+    "cpu_ms_per_1k": 53.47229999999999
+   },
+   "reproducibility": {
+    "passed": true,
+    "weights_bit_identical": true
+   },
+   "comparison": {
+    "candidate": "orbis-edge-risk@1.1.0",
+    "production": "orbis-edge-risk@1.0.0",
+    "test": {
+     "mean_cost": {
+      "production": 0.07319000367511944,
+      "candidate": 0.07475192943770673
+     },
+     "macro_f1": {
+      "production": 0.9284409471351406,
+      "candidate": 0.9163240167976682
+     },
+     "high_risk_escalation_recall": {
+      "production": 0.9117647058823529,
+      "candidate": 0.9117647058823529
+     },
+     "risky_escalation_recall": {
+      "production": 0.9795454545454545,
+      "candidate": 0.9795454545454545
+     },
+     "false_escalation_rate": {
+      "production": 0.0023990403838464614,
+      "candidate": 0.005197920831667333
+     },
+     "safe_precision": {
+      "production": 0.9981996399279855,
+      "candidate": 0.9981945837512538
+     },
+     "ece": {
+      "production": 0.01461657100499755,
+      "candidate": 0.011641751722346933
+     }
+    },
+    "gold": {
+     "high_risk_escalation_recall": {
+      "production": 1.0,
+      "candidate": 1.0
+     },
+     "risky_escalation_recall": {
+      "production": 1.0,
+      "candidate": 0.9666666666666667
+     },
+     "hard_negative_false_positive_rate": {
+      "production": 0.0,
+      "candidate": 0.0
+     }
+    },
+    "window_holdout": {
+     "mean_cost": {
+      "production": 0.130419921875,
+      "candidate": 0.010668945312499999
+     },
+     "macro_f1": {
+      "production": 0.8947017334313909,
+      "candidate": 0.9116042185070885
+     },
+     "high_risk_escalation_recall": {
+      "production": 0.8850574712643678,
+      "candidate": 1.0
+     },
+     "risky_escalation_recall": {
+      "production": 0.9546666666666667,
+      "candidate": 1.0
+     },
+     "false_escalation_rate": {
+      "production": 0.0016124697661918839,
+      "candidate": 0.002149959688255845
+     },
+     "safe_precision": {
+      "production": 0.9954448017148981,
+      "candidate": 1.0
+     },
+     "ece": {
+      "production": 0.020650946762004456,
+      "candidate": 0.005415367431443174
+     }
+    },
+    "note": "window_holdout = every event from window days 10-13 (never reviewed or trained on); ground truth is available only because the window is synthetic."
+   },
+   "artifacts": {
+    "portable_sha256": "1f0366981a2e75976fe2799f6b6190f594bd652194e7c733fe78b9008078a011",
+    "policy_sha256": "784678a3baa8d32ba00851b0cae971fd4c9629170f0c1aef273cbf97d986c09f",
+    "coreml_fp32_zip": {
+     "url": "/models/orbis-edge-risk/1.1.0/OrbisEdgeRisk-fp32.mlpackage.zip",
+     "bytes": 14341,
+     "sha256": "b507fce41a662e3a42eb03966df622d5ab6571789dd1babd5ca6f0ed9be13fce"
+    }
+   }
+  }
+ ],
+ "benchmark_matrix": [
+  {
+   "version": "1.0.0",
+   "precision": "fp32",
+   "compute_units": "cpu_only",
+   "warm_p50_us": 38.291,
+   "warm_p95_us": 57.25204999999997,
+   "pipeline_p95_us": 62.9631,
+   "cold_ms": 47.64925,
+   "peak_mb": 20.95374298095703,
+   "artifact_bytes": 17002
+  },
+  {
+   "version": "1.0.0",
+   "precision": "fp32",
+   "compute_units": "all",
+   "warm_p50_us": 38.458,
+   "warm_p95_us": 55.75,
+   "pipeline_p95_us": 64.6753,
+   "cold_ms": 50.345458,
+   "peak_mb": 21.735015869140625,
+   "artifact_bytes": 17002
+  },
+  {
+   "version": "1.0.0",
+   "precision": "fp32",
+   "compute_units": "cpu_ane",
+   "warm_p50_us": 38.917,
+   "warm_p95_us": 61.542,
+   "pipeline_p95_us": 68.1711,
+   "cold_ms": 48.368584,
+   "peak_mb": 21.047515869140625,
+   "artifact_bytes": 17002
+  },
+  {
+   "version": "1.0.0",
+   "precision": "fp16",
+   "compute_units": "cpu_only",
+   "warm_p50_us": 38.958,
+   "warm_p95_us": 60.292,
+   "pipeline_p95_us": 63.1661,
+   "cold_ms": 53.812792,
+   "peak_mb": 20.98499298095703,
+   "artifact_bytes": 11164
+  },
+  {
+   "version": "1.0.0",
+   "precision": "fp16",
+   "compute_units": "all",
+   "warm_p50_us": 38.792,
+   "warm_p95_us": 55.5,
+   "pipeline_p95_us": 66.0503,
+   "cold_ms": 52.681458,
+   "peak_mb": 21.906890869140625,
+   "artifact_bytes": 11164
+  },
+  {
+   "version": "1.0.0",
+   "precision": "int8",
+   "compute_units": "cpu_only",
+   "warm_p50_us": 38.625,
+   "warm_p95_us": 55.21009999999997,
+   "pipeline_p95_us": 65.69169999999994,
+   "cold_ms": 49.202792,
+   "peak_mb": 20.84436798095703,
+   "artifact_bytes": 8175
+  },
+  {
+   "version": "1.1.0",
+   "precision": "fp32",
+   "compute_units": "cpu_only",
+   "warm_p50_us": 37.625,
+   "warm_p95_us": 55.87704999999997,
+   "pipeline_p95_us": 61.35469999999999,
+   "cold_ms": 49.499625,
+   "peak_mb": 20.98499298095703,
+   "artifact_bytes": 17002
+  }
+ ],
+ "sustained": {
+  "source": "ml/benchmarks/results/sustained/10min-50eps/2026-10-06T07-37-26Z-fp32-cpu_only.json",
+  "cpu_percent": 2.5239599920659828,
+  "events": 30000,
+  "footprint_growth_mb": 0.234375,
+  "pipeline_us": {
+   "max": 7485.083,
+   "mean": 209.5060022999997,
+   "p50": 197.625,
+   "p95": 284.958,
+   "p99": 436.006249999999
+  },
+  "seconds": 600.013036958,
+  "target_rate_eps": 50,
+  "device": {
+   "cores": 12,
+   "cpu": "Apple M4 Pro",
+   "model": "Mac16,8",
+   "os": "Version 26.6.2 (Build 25G83)"
+  }
+ },
+ "baselines": {
+  "dataset": "northstar-actions@1.0.0",
+  "selection_rule": "lowest validation mean security cost among models with a portable (Core ML/ONNX/TS/Swift) export; tie-break fewer parameters. Test and gold were not used for selection.",
+  "selected": "mlp-32x16",
+  "models": [
+   {
+    "name": "rule",
+    "run_id": "e1ea34af2ce04d859b995c5655cf02a0",
+    "portable": false,
+    "n_params": null,
+    "fit_seconds": 0.069,
+    "temperature": 1.0,
+    "tau_review": 0.04,
+    "tau_high": 0.04,
+    "val_mean_cost": 0.366948538294274,
+    "val_macro_f1": 0.3986743773967257,
+    "val_risky_escalation_recall": 0.7689243027888446,
+    "val_false_escalation_rate": 0.20781893004115226,
+    "val_ece": 0.34086464082690093,
+    "test_mean_cost": 0.5124954061006983,
+    "test_macro_f1": 0.364856729761599,
+    "test_high_risk_escalation_recall": 0.9117647058823529,
+    "test_risky_escalation_recall": 0.7045454545454546,
+    "test_false_escalation_rate": 0.19352259096361454,
+    "test_safe_precision": 0.9687800192122958,
+    "test_ece": 0.3347167848848349,
+    "test_brier": 0.6705455975632881,
+    "test_risky_pr_auc": 0.1947874085357198,
+    "test_risky_roc_auc": 0.7555114317909201,
+    "gold_high_risk_escalation_recall": 1.0,
+    "gold_risky_escalation_recall": 0.8833333333333333,
+    "gold_hard_negative_false_positive_rate": 0.25
+   },
+   {
+    "name": "logreg-C1",
+    "run_id": "6523d115314a49aebd07d35782f408ed",
+    "portable": true,
+    "n_params": 344,
+    "fit_seconds": 0.106,
+    "temperature": 0.498909,
+    "tau_review": 0.56,
+    "tau_high": 0.78,
+    "val_mean_cost": 0.015970041072722877,
+    "val_macro_f1": 0.8942950674383895,
+    "val_risky_escalation_recall": 1.0,
+    "val_false_escalation_rate": 0.004372427983539095,
+    "val_ece": 0.028781719298524626,
+    "test_mean_cost": 0.08257993384785006,
+    "test_macro_f1": 0.8716283188776417,
+    "test_high_risk_escalation_recall": 0.9117647058823529,
+    "test_risky_escalation_recall": 0.9795454545454545,
+    "test_false_escalation_rate": 0.003998400639744102,
+    "test_safe_precision": 0.9981967541574834,
+    "test_ece": 0.035980740657385026,
+    "test_brier": 0.06890130829193598,
+    "test_risky_pr_auc": 0.9798892392533618,
+    "test_risky_roc_auc": 0.9909545272799971,
+    "gold_high_risk_escalation_recall": 1.0,
+    "gold_risky_escalation_recall": 1.0,
+    "gold_hard_negative_false_positive_rate": 0.0
+   },
+   {
+    "name": "logreg-C10",
+    "run_id": "8e0212d4d3de4c2b83a1f85beef0e3ca",
+    "portable": true,
+    "n_params": 344,
+    "fit_seconds": 0.201,
+    "temperature": 0.591447,
+    "tau_review": 0.24,
+    "tau_high": 0.86,
+    "val_mean_cost": 0.015390190867359266,
+    "val_macro_f1": 0.900566028744184,
+    "val_risky_escalation_recall": 1.0,
+    "val_false_escalation_rate": 0.0038580246913580245,
+    "val_ece": 0.03513531863286116,
+    "test_mean_cost": 0.08838662256523337,
+    "test_macro_f1": 0.8741320602916333,
+    "test_high_risk_escalation_recall": 0.9019607843137255,
+    "test_risky_escalation_recall": 0.9772727272727273,
+    "test_false_escalation_rate": 0.003998400639744102,
+    "test_safe_precision": 0.9979967948717948,
+    "test_ece": 0.04201563078680057,
+    "test_brier": 0.06988184257447218,
+    "test_risky_pr_auc": 0.9753578212334596,
+    "test_risky_roc_auc": 0.9897200210824761,
+    "gold_high_risk_escalation_recall": 1.0,
+    "gold_risky_escalation_recall": 1.0,
+    "gold_hard_negative_false_positive_rate": 0.0
+   },
+   {
+    "name": "hgb",
+    "run_id": "b7210c844c434498b6478519829d220f",
+    "portable": false,
+    "n_params": null,
+    "fit_seconds": 12.697,
+    "temperature": 1.183258,
+    "tau_review": 0.04,
+    "tau_high": 0.04,
+    "val_mean_cost": 0.0106789079487799,
+    "val_macro_f1": 0.9390983279333547,
+    "val_risky_escalation_recall": 1.0,
+    "val_false_escalation_rate": 0.0030864197530864196,
+    "val_ece": 0.010926758626608,
+    "test_mean_cost": 0.06653803748621831,
+    "test_macro_f1": 0.9107863895262913,
+    "test_high_risk_escalation_recall": 0.9313725490196079,
+    "test_risky_escalation_recall": 0.9840909090909091,
+    "test_false_escalation_rate": 0.0023990403838464614,
+    "test_safe_precision": 0.9985991594956974,
+    "test_ece": 0.00799440952209859,
+    "test_brier": 0.0376705051167637,
+    "test_risky_pr_auc": 0.9898469507130477,
+    "test_risky_roc_auc": 0.9955086147359238,
+    "gold_high_risk_escalation_recall": 1.0,
+    "gold_risky_escalation_recall": 0.9666666666666667,
+    "gold_hard_negative_false_positive_rate": 0.0
+   },
+   {
+    "name": "mlp-32x16",
+    "run_id": "ed699d85bd0546b390202fbc0c765163",
+    "portable": true,
+    "n_params": 3348,
+    "fit_seconds": 2.365,
+    "temperature": 0.912089,
+    "tau_review": 0.24,
+    "tau_high": 0.88,
+    "val_mean_cost": 0.01063058709833293,
+    "val_macro_f1": 0.9426027744499403,
+    "val_risky_escalation_recall": 1.0,
+    "val_false_escalation_rate": 0.00360082304526749,
+    "val_ece": 0.012723432345774879,
+    "test_mean_cost": 0.07319000367511944,
+    "test_macro_f1": 0.9284409471351406,
+    "test_high_risk_escalation_recall": 0.9117647058823529,
+    "test_risky_escalation_recall": 0.9795454545454545,
+    "test_false_escalation_rate": 0.0023990403838464614,
+    "test_safe_precision": 0.9981996399279855,
+    "test_ece": 0.01461657100499755,
+    "test_brier": 0.03346040783725734,
+    "test_risky_pr_auc": 0.978690294343635,
+    "test_risky_roc_auc": 0.9859501653883902,
+    "gold_high_risk_escalation_recall": 1.0,
+    "gold_risky_escalation_recall": 1.0,
+    "gold_hard_negative_false_positive_rate": 0.0
+   },
+   {
+    "name": "mlp-64x32",
+    "run_id": "7c1c68a12759443f99b89e175a577f1e",
+    "portable": true,
+    "n_params": 7716,
+    "fit_seconds": 0.615,
+    "temperature": 0.912607,
+    "tau_review": 0.08,
+    "tau_high": 0.74,
+    "val_mean_cost": 0.011500362406378353,
+    "val_macro_f1": 0.9295187302392491,
+    "val_risky_escalation_recall": 1.0,
+    "val_false_escalation_rate": 0.0038580246913580245,
+    "val_ece": 0.0058391515554869775,
+    "test_mean_cost": 0.07513781697905182,
+    "test_macro_f1": 0.9061260005936158,
+    "test_high_risk_escalation_recall": 0.9117647058823529,
+    "test_risky_escalation_recall": 0.9795454545454545,
+    "test_false_escalation_rate": 0.003598560575769692,
+    "test_safe_precision": 0.9981974764670539,
+    "test_ece": 0.006720551907319803,
+    "test_brier": 0.03577325871580274,
+    "test_risky_pr_auc": 0.9832525448290577,
+    "test_risky_roc_auc": 0.9921236051034131,
+    "gold_high_risk_escalation_recall": 1.0,
+    "gold_risky_escalation_recall": 1.0,
+    "gold_hard_negative_false_positive_rate": 0.0
+   }
+  ]
+ },
+ "dataset": {
+  "actors": 49,
+  "class_distribution": {
+   "excluded": {
+    "high_risk": 63,
+    "safe_normal": 5419,
+    "safe_unusual": 266,
+    "suspicious_review": 456
+   },
+   "test": {
+    "high_risk": 102,
+    "safe_normal": 4749,
+    "safe_unusual": 253,
+    "suspicious_review": 338
+   },
+   "train": {
+    "high_risk": 247,
+    "safe_normal": 15517,
+    "safe_unusual": 815,
+    "suspicious_review": 910
+   },
+   "val": {
+    "high_risk": 78,
+    "safe_normal": 3667,
+    "safe_unusual": 221,
+    "suspicious_review": 173
+   }
+  },
+  "creation_commit": "4e3533e404816e2f28f8171e882f0763e56f2614",
+  "difficulty_breakdown": {
+   "adversarial": 848,
+   "easy": 31414,
+   "hard_negative": 1012
+  },
+  "feature_schema": "edge-features/1",
+  "files": {
+   "anomaly.npy": {
+    "bytes": 266320,
+    "sha256": "3a9f2bd0d2a243cb7053acd457269f7502d4844242b96ffa72db2f06e231aca8"
+   },
+   "events.jsonl": {
+    "bytes": 24625882,
+    "sha256": "ead0195b966611d61b61beecc2ed332365fbcf4483b042eb0c21881a6dc3801c"
+   },
+   "features.npy": {
+    "bytes": 22626448,
+    "sha256": "b743557d3d2b77d79e59d898ecf0640a517274476e7ebdfe705c0a8d8370e63b"
+   },
+   "gold.json": {
+    "bytes": 2199119,
+    "sha256": "95bc55dfcd628ef200c36a4d9c0f8672fd666b353f0e294b9cd0e35eec03a960"
+   },
+   "gold_features.npy": {
+    "bytes": 63368,
+    "sha256": "b7d1ca539914d8ae21d2199452a10ee82249c91ea0af89ed7d858698123a28f9"
+   },
+   "labels.jsonl": {
+    "bytes": 16165968,
+    "sha256": "8d8924e60057c48a231625c868b87d621290109819d69b017d725b79b78767d6"
+   }
+  },
+  "generation_config_hash": "ecc09905e525af45e3a121c0d80f2be6a1d87c1a8d8769ab6b4b5b73d0ec4435",
+  "generator": "orbis_ml.generator",
+  "gold": {
+   "content_sha256": "95bc55dfcd628ef200c36a4d9c0f8672fd666b353f0e294b9cd0e35eec03a960",
+   "distribution": {
+    "high_risk": 32,
+    "safe_normal": 22,
+    "safe_unusual": 8,
+    "suspicious_review": 31
+   },
+   "gated": 90,
+   "known_limitations": 3,
+   "scenarios": 93
+  },
+  "label_noise": 0.01,
+  "label_schema": "event-label/1",
+  "label_state_breakdown": {
+   "synthetic": 32998,
+   "weak_label": 276
+  },
+  "leakage_checks": {
+   "duplicate_event_ids_across_splits": 0,
+   "gold_actor_overlap": 0,
+   "held_out_actor_rows_in_train_or_val": 0,
+   "label_fields_in_features": "none \u2014 features read only the event; labels live in a separate file",
+   "result": "pass",
+   "test_only_variant_rows_in_train_or_val": 0,
+   "train_test_day_overlap": 0
+  },
+  "name": "northstar-actions",
+  "numpy": "2.4.6",
+  "privacy_review": {
+   "content_fields": "none \u2014 events carry metadata, counts, enums and 16-hex destination hashes only",
+   "distinct_intent_texts": 2,
+   "pii": "none \u2014 all actors, domains and amounts are synthetic (Northstar Cloud is fictional)",
+   "raw_destinations_found": 0,
+   "result": "pass"
+  },
+  "python": "3.11.0",
+  "row_count": 33274,
+  "scenario_families": {
+   "adversarial": 824,
+   "hard_negative": 1012,
+   "high_risk": 481,
+   "normal": 29719,
+   "suspicious": 1238
+  },
+  "scenario_templates": 73,
+  "schema_version": "endpoint-event/1",
+  "seed": 20261005,
+  "source_breakdown": {
+   "synthetic": 33274
+  },
+  "split_counts": {
+   "excluded": 6204,
+   "test": 5442,
+   "train": 17489,
+   "val": 4139
+  },
+  "split_rule": {
+   "held_out_actors": [
+    "procurement-agent-3",
+    "support-copilot-4",
+    "ci-deployer-3",
+    "sales-agent-3",
+    "ops-agent-3",
+    "engineer.harper",
+    "finance-analyst.cam",
+    "sales-rep.devon"
+   ],
+   "test_days": [
+    23,
+    27
+   ],
+   "test_only": [
+    "template_variant>=2",
+    "disguised_classification"
+   ],
+   "train_days": [
+    0,
+    17
+   ],
+   "val_days": [
+    18,
+    22
+   ]
+  },
+  "version": "1.0.0"
+ }
+}

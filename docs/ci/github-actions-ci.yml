@@ -16,9 +16,9 @@ jobs:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - name: Policy engine (unit + golden regression)
+      - name: Policy engine + fusion (unit + golden regression)
         run: pnpm --filter @orbis/policy-core test
-      - name: Web — ML parity, seed invariants, receipts, audit chain
+      - name: Web — ML parity (Python ↔ TS features + models), seed invariants, receipts, audit chain
         run: pnpm --filter web test
       - name: Typecheck
         run: pnpm -r --if-present typecheck
@@ -32,6 +32,36 @@ jobs:
           npx wait-on http://localhost:4310/api/v1/receipts/public-key
           pnpm --filter @orbis/sdk test
           python3 -m unittest discover -s packages/python-sdk/tests -v
+
+  cxx-parity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: C++20 feature calculator — parity + ASan/UBSan
+        run: make -C packages/cxx-risk-core test sanitize CXX=clang++
+
+  ml-release-gates:
+    # Core ML conversion/prediction and the Swift parity gate need macOS.
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m venv ml/.venv && ml/.venv/bin/pip install -r ml/requirements.lock
+      - name: Reproducibility gate (dataset regenerates hash-identical; retrain bit-identical)
+        run: cd ml && .venv/bin/python -m orbis_ml dataset >/dev/null && .venv/bin/python -m orbis_ml reproduce --version 1.0.0
+      - name: Conversion parity + adversarial suite
+        run: cd ml && .venv/bin/python -m orbis_ml convert --version 1.0.0 && .venv/bin/python -m orbis_ml adversarial --version 1.0.0
+      - name: Release gates (blocks promotion on any failure)
+        run: cd ml && .venv/bin/python -m orbis_ml gates --version 1.0.0 --baseline 0.9.0
+
+  endpoint:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Swift endpoint — feature/model parity, manifest security, lifecycle, daemon
+        run: cd apps/macos-endpoint && swift test
 
   ios:
     runs-on: macos-15

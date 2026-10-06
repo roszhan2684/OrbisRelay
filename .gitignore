@@ -22,3 +22,8 @@ video/brag-output/brag.jpg
 # licensed music bed — copy from the brag skill's assets/music before re-rendering
 video/brag-output/composition/assets/music/
 .vercel
+# v2 ML: data regenerates from manifests; MLflow store is local
+ml/datasets/data/
+ml/mlruns/
+apps/macos-endpoint/.build/
+packages/cxx-risk-core/build/

@@ -22,6 +22,7 @@ import type {
   User,
 } from "../domain";
 import { hashJson, id, signCanonical, verifyCanonical, withSeededIds } from "./crypto";
+import { approvalMl, fuseDecision, score, type EndpointSignalInput } from "./ml";
 import { audit, emit, persist } from "./store";
 
 export class ApiError extends Error {
@@ -124,7 +125,7 @@ export function preflight(
   db: DB,
   integration: Integration,
   envelope: ActionEnvelope,
-  opts: OpOptions & { forceApproval?: { route: string; reason: string } } = {},
+  opts: OpOptions & { forceApproval?: { route: string; reason: string }; endpointSignal?: EndpointSignalInput } = {},
 ): PreflightResult {
   const at = nowOf(opts);
   const existing = db.actions.find((a) => a.integration_id === integration.id && a.request_id === envelope.request_id);
@@ -138,9 +139,19 @@ export function preflight(
   // Deterministic decision latency (evaluation itself is sub-millisecond); keeps replicas byte-identical.
   const latency = 6 + (hashJson(envelope).charCodeAt(3) % 11);
 
-  let status = evaluation.status;
-  let effect = evaluation.effect;
+  // Edge intelligence (§25): score, then fuse. ML may raise the outcome, never lower it.
+  const scored = score(db, envelope, integration, at, opts.endpointSignal);
+  const fusion = fuseDecision(db, { status: evaluation.status, effect: evaluation.effect, frozen: evaluation.frozen }, scored);
+
+  let status = fusion.status;
+  let effect = fusion.effect;
   let approvalSpec = evaluation.approval;
+  if (fusion.changed) {
+    const mlRule = { policy_id: "sys_ml_fusion", policy_name: "Edge risk escalation", version: 1, rule_id: fusion.rule, rule_name: fusion.rule === "model_raised_to_warn" ? "Model flagged — warn" : "Model escalated — human review", effect, reason: fusion.reason };
+    evaluation.matched = [mlRule, ...evaluation.matched];
+    evaluation.deciding = mlRule;
+    if (status === "approval_required") approvalSpec = { route: fusion.route ?? "security", step_up: scored.prediction.class === "high_risk" ? "biometric" : "none", ttl_seconds: envelope.ttl_seconds ?? 900, editable_fields: [] };
+  }
   if (opts.forceApproval && status !== "deny") {
     status = "approval_required";
     effect = "require_approval";
@@ -167,11 +178,16 @@ export function preflight(
       matched: evaluation.matched,
       deciding: evaluation.deciding,
       policy_versions: liveVersions(db).map((v) => ({ policy_id: v.policy.id, version: v.version.version })),
+      deterministic_status: evaluation.status,
+      fusion: { rule: fusion.rule, changed: fusion.changed, reason: fusion.reason },
     },
+    prediction_id: scored.prediction.id,
     decision_id: id("dec"),
     final_status: observe ? (status === "approval_required" ? "warn" : status) : status === "approval_required" ? "pending" : status,
   };
   db.actions.push(action);
+  scored.prediction.action_id = action.id;
+  db.ml.predictions.push(scored.prediction);
   for (const d of [envelope.destination?.value?.toLowerCase()].filter(Boolean) as string[]) {
     if (!db.known_destinations.includes(d)) db.known_destinations.push(d);
   }
@@ -191,7 +207,7 @@ export function preflight(
     actor: sysActor,
     target: { type: "action", id: action.id },
     summary: `${actionTitle(envelope)} → ${observe ? `observed (${status})` : status}${evaluation.deciding ? ` · ${evaluation.deciding.rule_name} v${evaluation.deciding.version}` : ""}`,
-    data: { risk: evaluation.risk.score, effect, envelope_hash: action.envelope_hash },
+    data: { risk: evaluation.risk.score, effect, envelope_hash: action.envelope_hash, ml: scored.prediction.class ? `${scored.prediction.model_version}:${scored.prediction.class}:${scored.prediction.risk?.toFixed(3)}` : `fallback:${scored.prediction.fallback}`, fusion: fusion.rule },
   });
 
   let approval: ApprovalRecord | undefined;
@@ -239,6 +255,7 @@ export function preflight(
       actor: { id: envelope.actor.id, type: envelope.actor.type, name: actorRec?.name ?? envelope.actor.display_name ?? envelope.actor.id },
       integration: { id: integration.id, name: integration.name },
       parameters: envelope.action.parameters ?? {},
+      ml: approvalMl(db, scored.prediction),
     };
     db.approvals.push(approval);
     action.approval_id = approval.id;
@@ -371,6 +388,16 @@ function finalize(db: DB, approval: ApprovalRecord, action: ActionRecord, status
   approval.status = status as ApprovalRecord["status"];
   approval.resolved_at = at.toISOString();
   action.final_status = status;
+  // A human decision is a weak label (blueprint §19): it feeds monitoring and the review queue, never
+  // online training. Approvals can be wrong, so confidence is 0.5.
+  if (action.prediction_id && (status === "approved" || status === "approved_modified" || status === "rejected")) {
+    const last = approval.responses[approval.responses.length - 1];
+    db.ml.feedback.push({
+      id: id("fb"), prediction_id: action.prediction_id, action_id: action.id,
+      label: status === "approved" ? "safe_unusual" : "suspicious_review", label_state: "human_decision_proxy", confidence: 0.5, source: "approval",
+      reviewed_by: last?.user_name ?? "approver", reviewed_at: at.toISOString(), note: `approval ${status.replace("_", " ")}`,
+    });
+  }
   issueReceipt(db, action, at);
   const integration = db.integrations.find((i) => i.id === action.integration_id);
   if (integration) deliverWebhook(db, integration, "approval.resolved", action, at);
@@ -457,7 +484,7 @@ export function issueReceipt(db: DB, action: ActionRecord, at: Date) {
     policy: ev.deciding ? { id: ev.deciding.policy_id, version: ev.deciding.version, rule_id: ev.deciding.rule_id } : null,
     policy_versions: ev.policy_versions,
     risk: { score: ev.risk.score, level: ev.risk.level, reasons: ev.risk.reasons.map((r) => r.code) },
-    enrichment: { used: false },
+    enrichment: enrichmentFor(db, action),
     decision: { status: ev.status, effect: ev.effect, final_status: action.final_status },
     approvals: (approval?.responses ?? []).map((r) => ({
       user_id: r.user_id,
@@ -489,6 +516,23 @@ export function issueReceipt(db: DB, action: ActionRecord, at: Date) {
   db.receipts.push(receipt);
   action.receipt_id = receiptId;
   return receipt;
+}
+
+function enrichmentFor(db: DB, action: ActionRecord): ReceiptBody["enrichment"] {
+  const p = action.prediction_id ? db.ml.predictions.find((x) => x.id === action.prediction_id) : undefined;
+  if (!p) return { used: false };
+  if (!p.class || p.risk === null) return { used: false, fallback: p.fallback, feature_schema: p.feature_schema, fusion_rule: action.evaluation.fusion?.rule };
+  return {
+    used: true,
+    model: `orbis-edge-risk@${p.model_version}`,
+    feature_schema: p.feature_schema,
+    policy_version: p.policy_version ?? undefined,
+    source: p.source,
+    class: p.class,
+    risk: Math.round(p.risk * 10_000) / 10_000,
+    abstain: p.abstain,
+    fusion_rule: action.evaluation.fusion?.rule,
+  };
 }
 
 export function latestReceipt(db: DB, receiptId: string, tenantId: string) {

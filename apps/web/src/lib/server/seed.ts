@@ -1,6 +1,8 @@
 import "server-only";
-import { APPROVED_DESTINATIONS, buildDefaultPolicies, type ActionEnvelope, type Policy } from "@orbis/policy-core";
-import type { Actor, ApprovalRecord, DB, Device, Integration, User } from "../domain";
+import { APPROVED_DESTINATIONS, buildDefaultPolicies, DEFAULT_FUSION_POLICY, type ActionEnvelope, type Policy } from "@orbis/policy-core";
+import type { Actor, ApprovalRecord, DB, Device, EndpointRecord, Integration, User } from "../domain";
+import heroSignal from "../ml/edge/hero-signal.coreml.json";
+import { bucketOf, modelSigningKey, newModelRecords, registryEntry } from "./ml";
 import { analyzeText, analyzeUrl } from "../ml/analyzer";
 import { id, newSigningKey, sha256, withSeededIds } from "./crypto";
 import { freezeActor, preflight, reportOutcome, respond, tick, unfreezeActor } from "./gateway";
@@ -84,7 +86,7 @@ const integrationDefs: Array<Omit<Integration, "tenant_id" | "api_keys" | "creat
 const actorDefs: Array<Omit<Actor, "tenant_id" | "created_at">> = [
   { id: "procurement-agent", type: "agent", name: "Procurement Agent", description: "Summarizes vendor contracts and drafts RFP responses.", owner_team: "Finance Ops", integration_id: "int_procurement", trust: "trusted", baseline_per_hour: 3, tools: [{ tool: "llm.summarize", risk_class: "high" }, { tool: "docs.search", risk_class: "low" }, { tool: "email.send", risk_class: "high" }] },
   { id: "ap-workflow", type: "workflow", name: "AP Payment Run", description: "Schedules and releases vendor payments.", owner_team: "Finance", integration_id: "int_ap", trust: "trusted", baseline_per_hour: 2, tools: [{ tool: "payments.release", risk_class: "high" }] },
-  { id: "support-copilot", type: "agent", name: "Support Copilot", description: "Resolves tickets; issues refunds and credits.", owner_team: "Support", integration_id: "int_support", trust: "trusted", baseline_per_hour: 4, tools: [{ tool: "billing.refund", risk_class: "medium" }, { tool: "tickets.reply", risk_class: "low" }] },
+  { id: "support-copilot", type: "agent", name: "Support Copilot", description: "Resolves tickets; issues refunds and credits.", owner_team: "Support", integration_id: "int_support", trust: "trusted", baseline_per_hour: 4, tools: [{ tool: "billing.refund", risk_class: "medium" }, { tool: "tickets.reply", risk_class: "low" }, { tool: "crm.lookup", risk_class: "low" }] },
   { id: "ci-deployer", type: "automation", name: "CI Deployer", description: "Promotes builds through staging to production.", owner_team: "Platform Eng", integration_id: "int_deploy", trust: "trusted", baseline_per_hour: 2, tools: [{ tool: "deploy.promote", risk_class: "high" }] },
   { id: "access-broker", type: "service", name: "Access Broker", description: "Brokers just-in-time privileged access.", owner_team: "Security", integration_id: "int_access", trust: "trusted", baseline_per_hour: 1, tools: [{ tool: "iam.grant", risk_class: "high" }] },
   { id: "export-workflow", type: "workflow", name: "Warehouse Export", description: "Exports datasets to analytics sandboxes.", owner_team: "Data Platform", integration_id: "int_data", trust: "trusted", baseline_per_hour: 1, tools: [{ tool: "warehouse.export", risk_class: "high" }] },
@@ -195,7 +197,20 @@ function buildSeedInner(now: Date): DB {
     sessions: [],
     approved_destinations: [...APPROVED_DESTINATIONS],
     known_destinations: [...APPROVED_DESTINATIONS, "contoso-retail.com", "fabrikam.com"],
+    ml: {
+      fusion: { ...DEFAULT_FUSION_POLICY },
+      kill_switch: false,
+      models: newModelRecords(now),
+      manifest_seq: 11,
+      signing_key: modelSigningKey(),
+      endpoints: [],
+      activations: [],
+      baselines: {},
+      predictions: [],
+      feedback: [],
+    },
   };
+  seedEndpoints(db, now, r);
 
   const iphoneModels = ["iPhone 17 Pro", "iPhone 16", "iPhone 17", "iPhone 15 Pro", "iPhone Air"];
   db.devices = db.users
@@ -426,10 +441,36 @@ function buildSeedInner(now: Date): DB {
     at(t, () => void preflight(db, integ(tpl.integration), { ...tpl.env, request_id: `req_frozen_${k}`, ttl_seconds: 1800 }, { at: new Date(t), silent: true }));
   }
 
-  // Yesterday's hero run: completed with Safe Redirect.
+  // Demo B — behavioural drift: the support copilot's restricted CRM pulls double every day for a week.
+  // Deterministic policy has no rule for read-only lookups; the behavioural signals are what notice it.
+  for (let d = 0; d < 7; d++) {
+    for (let k = 0; k < 4; k++) {
+      const day0 = Math.floor((now.getTime() - (7 - d) * 86_400_000) / 86_400_000) * 86_400_000;
+      const t = day0 + (14 + k * 2) * 3_600_000 + Math.round(r() * 1_800_000); // 10:00-16:30 New York
+      if (t > now.getTime() - 3_600_000) continue;
+      const count = 20 * 2 ** d;
+      const env: ActionEnvelope = {
+        request_id: `req_ramp_${d}_${k}`,
+        actor: { type: "agent", id: "support-copilot", owner: "support" },
+        action: { type: "invoke_tool", tool: "crm.lookup", title: `Look up ${count.toLocaleString("en-US")} customer records`, arguments_summary: `CRM lookup across ${count.toLocaleString("en-US")} accounts for "billing dispute triage"` },
+        resources: [{ type: "customer_record", classification: "restricted", count }],
+        intent: { reason: "Billing dispute triage", source: "agent" },
+        ttl_seconds: 3600,
+      };
+      at(t, () => {
+        const res = preflight(db, integ("int_support"), env, { at: new Date(t), silent: true });
+        at(t + 5000, () => {
+          if (!res.action.outcome && res.action.final_status !== "pending" && t + 5000 < now.getTime()) reportOutcome(db, res.action.id, integ("int_support"), ["allow", "warn"].includes(res.action.final_status) ? "succeeded" : "not_executed", undefined, { at: new Date(t + 5000), silent: true });
+        });
+      });
+    }
+  }
+
+  // Yesterday's hero run: the procurement host's endpoint agent scored it locally (Swift + Core ML,
+  // recorded from `orbis-endpoint replay fixtures/endpoint-events/hero.jsonl`); completed with Safe Redirect.
   const heroT = now.getTime() - 26 * 3_600_000;
   at(heroT, () => {
-    const res = preflight(db, integ("int_procurement"), heroEnvelope(`req_hero_${heroT.toString(36)}`, "summarizr.io"), { at: new Date(heroT), silent: true });
+    const res = preflight(db, integ("int_procurement"), heroEnvelope(`req_hero_${heroT.toString(36)}`, "summarizr.io"), { at: new Date(heroT), silent: true, endpointSignal: { endpoint_id: heroSignal.endpoint_id, signal: heroSignal } });
     if (!res.approval) return;
     respond(db, res.approval.id, user("usr_avery_kim"), { decision: "safe_alternative", alternative_id: "redirect_internal_model", step_up: { method: "biometric", verified: true, device_id: "dev_avery_kim" }, channel: "ios" }, { at: new Date(heroT + 48_000), silent: true });
     reportOutcome(db, res.action.id, integ("int_procurement"), "succeeded", "Summary generated on northstar-private-llm", { at: new Date(heroT + 61_000), silent: true });
@@ -623,6 +664,50 @@ function seedPendingApprovals(db: DB, now: Date, schedule: (ms: number, run: () 
     blast_radius: ["$310,000 leaves the operating account", "Q4 freight capacity reserved"],
   }, 600)));
   q(31, () => results.quorum?.approval && respond(db, results.quorum.approval.id, db.users.find((u) => u.id === "usr_jordan_patel")!, { decision: "approve", step_up: { method: "biometric", verified: true, device_id: "dev_jordan_patel" }, channel: "ios" }, { at: ago(31), silent: true }));
+}
+
+/**
+ * Demo endpoint fleet (portfolio mode simulates the fleet, blueprint §17.3). Health numbers are scaled
+ * from the measured Apple M4 Pro benchmark. Real `orbis-endpoint` processes register alongside as real=true.
+ */
+function seedEndpoints(db: DB, now: Date, r: () => number) {
+  const bench = registryEntry("1.0.0")?.benchmark;
+  const p95 = (bench?.warm_us.p95 ?? 57) / 1000;
+  const pipe = (bench?.pipeline_us.p95 ?? 63) / 1000;
+  const mem = bench?.memory_mb.peak_footprint ?? 21;
+  const ago = (h: number) => new Date(now.getTime() - h * 3_600_000).toISOString();
+  const mk = (id: string, name: string, kind: EndpointRecord["kind"], owner: string, extra: Partial<EndpointRecord> = {}): EndpointRecord => {
+    const f = 0.85 + r() * 0.6;
+    return {
+      id, name, kind, owner, os: kind === "developer_mac" ? "macOS 26.6" : "macOS 26.6 (server)", app_version: "2.0.0", bucket: bucketOf(id),
+      model_version: "1.0.0", feature_schema: "edge-features/1", last_update_at: ago(15 * 24 - Math.round(r() * 20)), last_seen_at: ago(r() * 0.2), signature: "verified", state: "healthy",
+      health: { inference_p95_ms: +(p95 * f).toFixed(4), pipeline_p95_ms: +(pipe * f * 1.1).toFixed(4), memory_mb: +(mem * (0.95 + r() * 0.15)).toFixed(1), cpu_percent: +(0.4 + r() * 2.2).toFixed(2), queue_depth: Math.round(r() * 3), failures_24h: 0, fallbacks_24h: 0 },
+      telemetry: { events_24h: Math.round(200 + r() * 4000), high_priority_24h: Math.round(r() * 40), dropped_24h: 0 }, real: false, ...extra,
+    };
+  };
+  const hosts: Array<[string, string, string]> = [
+    ["ep_procurement-agent_host", "procurement-agent host (Mac mini M4)", "int_procurement"],
+    ["ep_support-copilot_host", "support-copilot host (Mac mini M4)", "int_support"],
+    ["ep_ops-agent_host", "ops-agent host (Mac Studio)", "int_ops"],
+    ["ep_sales-agent_host", "sales-agent host (Mac mini M4)", "int_sales"],
+    ["ep_facility-ai_host", "facility-ai host (Mac mini M2)", "int_facility"],
+    ["ep_ap-workflow_host", "AP workflow host (Mac mini M4)", "int_ap"],
+    ["ep_export-workflow_host", "warehouse export host (Mac mini M4)", "int_data"],
+  ];
+  const eps: EndpointRecord[] = hosts.map(([id, name, iid]) => mk(id, name, "agent_host", db.integrations.find((i) => i.id === iid)?.name ?? iid, { integration_id: iid }));
+  for (const u of db.users) eps.push(mk(`ep_mbp_${u.id.slice(4)}`, `${u.name.split(" ")[0]}'s MacBook Pro`, "developer_mac", u.name));
+  for (let k = 1; k <= 4; k++) eps.push(mk(`ep_ci_runner_${k}`, `CI runner ${k} (macOS)`, "ci_runner", "Platform Eng"));
+  const set = (id: string, patch: Partial<EndpointRecord>) => Object.assign(eps.find((e) => e.id === id)!, patch);
+  set("ep_mbp_taylor_brooks", { model_version: "0.9.0", last_seen_at: ago(4 * 24 + 3), last_update_at: ago(41 * 24), state: "stale", note: "Offline 4 days — still on 0.9.0 (old but valid signature); updates on next check-in." });
+  set("ep_mbp_quinn_harper", { model_version: "0.9.0", last_seen_at: ago(3 * 24 + 7), last_update_at: ago(40 * 24), state: "stale", note: "Offline 3 days — 0.9.0 manifest expires in 4 days." });
+  set("ep_ci_runner_4", { app_version: "1.4.2", feature_schema: "edge-features/0", model_version: null, state: "incompatible", note: "App 1.4.2 only supports edge-features/0 — model refused, endpoint runs deterministic fallback until upgraded.", health: { inference_p95_ms: 0, pipeline_p95_ms: 0.012, memory_mb: 9.8, cpu_percent: 0.2, queue_depth: 0, failures_24h: 0, fallbacks_24h: 1312 } });
+  set("ep_facility-ai_host", { state: "degraded", note: "Older M2 host under thermal pressure — p95 above fleet median, still within the 20 ms budget.", health: { inference_p95_ms: +(p95 * 3.1).toFixed(4), pipeline_p95_ms: +(pipe * 3.4).toFixed(4), memory_mb: 23.4, cpu_percent: 6.8, queue_depth: 14, failures_24h: 0, fallbacks_24h: 0 } });
+  db.ml.endpoints = eps;
+  db.ml.activations = [
+    { endpoint_id: "ep_ci_runner_2", version: "1.0.0", activated: false, error: "signature verification failed — manifest payload modified in transit (MITM drill); previous model kept", at: ago(6 * 24 + 5) },
+    { endpoint_id: "ep_ci_runner_2", version: "1.0.0", activated: true, at: ago(6 * 24 + 4), compile_ms: 27.1 },
+    ...eps.filter((e) => e.model_version === "1.0.0").slice(0, 12).map((e, i) => ({ endpoint_id: e.id, version: "1.0.0", activated: true, at: ago(15 * 24 - i), compile_ms: +(24 + r() * 8).toFixed(1) })),
+  ];
 }
 
 function seedProtect(db: DB, now: Date) {

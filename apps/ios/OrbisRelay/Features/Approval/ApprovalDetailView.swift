@@ -16,6 +16,7 @@ struct ApprovalDetailView: View {
                     VStack(alignment: .leading, spacing: 14) {
                         header(a, now: ctx.date)
                         policyCard(a)
+                        if let ml = a.ml { mlCard(ml) }
                         if !a.evidence.isEmpty { evidenceCard(a) }
                         if !a.blastRadius.isEmpty { blastCard(a) }
                         if editing { editCard(a) }
@@ -79,6 +80,36 @@ struct ApprovalDetailView: View {
             Text("\(a.policy.name) · v\(a.policy.version) · \(a.policy.ruleId)").font(.caption.monospaced()).foregroundStyle(.secondary)
             Text("Routed to \(a.route.routeLabel)").font(.caption).foregroundStyle(.secondary)
         }
+    }
+
+    /// Blueprint §16: model signal in human terms — never raw ML internals.
+    private func mlCard(_ ml: ApprovalML) -> some View {
+        Card {
+            HStack {
+                SectionTitle(text: "Edge risk signal", icon: "cpu")
+                Spacer()
+                Text(ml.abstain ? "Uncertain" : ml.classLabel)
+                    .font(.caption.weight(.semibold))
+                    .padding(.horizontal, 8).padding(.vertical, 3)
+                    .background((ml.class == "high_risk" ? Theme.critical : ml.class == "suspicious_review" ? Color.orange : Color.secondary).opacity(0.14), in: Capsule())
+                    .foregroundStyle(ml.class == "high_risk" ? Theme.critical : ml.class == "suspicious_review" ? Color.orange : Color.secondary)
+            }
+            Text(ml.explanation).font(.body).fixedSize(horizontal: false, vertical: true)
+            if !ml.reasons.isEmpty {
+                VStack(alignment: .leading, spacing: 4) {
+                    ForEach(ml.reasons.prefix(3), id: \.code) { r in Label(r.label, systemImage: "circle.fill").labelStyle(BulletLabel()) }
+                }
+            }
+            Text(ml.baseline).font(.caption).foregroundStyle(.secondary)
+            HStack(spacing: 6) {
+                Image(systemName: ml.source == "cloud" ? "cloud" : "laptopcomputer")
+                Text("\(ml.sourceLabel) · orbis-edge-risk \(ml.modelVersion) · risk \(Int((ml.risk * 100).rounded()))%")
+            }
+            .font(.caption.monospaced()).foregroundStyle(.secondary)
+            Text(ml.escalatedByModel ? "Policy allowed this; the model asked for a human. It can raise review, never approve." : "Policy decided; the model signal is evidence only.")
+                .font(.caption2).foregroundStyle(.secondary)
+        }
+        .accessibilityElement(children: .combine)
     }
 
     private func evidenceCard(_ a: Approval) -> some View {

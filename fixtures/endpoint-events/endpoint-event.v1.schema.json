@@ -1,0 +1,227 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orbis-relay.vercel.app/schemas/endpoint-event.v1.json",
+  "title": "Orbis endpoint event (endpoint-event/1)",
+  "description": "Privacy-preserving, metadata-only event emitted by the Orbis endpoint runtime before a sensitive action executes. Raw content and raw destinations are never included.",
+  "type": "object",
+  "required": [
+    "schema",
+    "event_id",
+    "timestamp",
+    "actor",
+    "action"
+  ],
+  "properties": {
+    "schema": {
+      "const": "endpoint-event/1"
+    },
+    "event_id": {
+      "type": "string",
+      "maxLength": 128
+    },
+    "tenant_id": {
+      "type": "string"
+    },
+    "timestamp": {
+      "type": "string",
+      "pattern": "^(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2}):(\\d{2})(?:\\.(\\d{1,3}))?Z$"
+    },
+    "tz_offset_minutes": {
+      "type": "integer",
+      "minimum": -840,
+      "maximum": 840
+    },
+    "endpoint_id": {
+      "type": "string"
+    },
+    "session_id": {
+      "type": "string"
+    },
+    "app": {
+      "type": "string"
+    },
+    "actor": {
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "description": "One of ['human', 'agent', 'service', 'automation']; anything else is treated as 'unknown' (never safe).",
+          "examples": [
+            "human",
+            "agent",
+            "service",
+            "automation"
+          ]
+        },
+        "owner": {
+          "type": "string"
+        },
+        "privilege_level": {
+          "type": "string",
+          "description": "One of ['standard', 'elevated', 'admin']; anything else is treated as 'unknown' (never safe).",
+          "examples": [
+            "standard",
+            "elevated",
+            "admin"
+          ]
+        }
+      }
+    },
+    "action": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "One of ['external_send', 'file_upload', 'clipboard_export', 'tool_invoke', 'database_query', 'privilege_grant', 'payment', 'refund', 'production_deploy', 'secrets_access', 'model_provider_send', 'bulk_download', 'destructive_delete', 'config_change', 'physical_operation']; anything else is treated as 'unknown' (never safe).",
+          "examples": [
+            "external_send",
+            "file_upload",
+            "clipboard_export",
+            "tool_invoke",
+            "database_query",
+            "privilege_grant",
+            "payment",
+            "refund",
+            "production_deploy",
+            "secrets_access",
+            "model_provider_send",
+            "bulk_download",
+            "destructive_delete",
+            "config_change",
+            "physical_operation"
+          ]
+        },
+        "tool": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "tool_risk_class": {
+          "type": "string",
+          "description": "One of ['low', 'medium', 'high']; anything else is treated as 'unknown' (never safe).",
+          "examples": [
+            "low",
+            "medium",
+            "high"
+          ]
+        }
+      }
+    },
+    "resource": {
+      "type": "object",
+      "properties": {
+        "types": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "classification": {
+          "type": "string",
+          "description": "One of ['public', 'internal', 'confidential', 'restricted', 'regulated', 'secret']; anything else is treated as 'unknown' (never safe).",
+          "examples": [
+            "public",
+            "internal",
+            "confidential",
+            "restricted",
+            "regulated",
+            "secret"
+          ]
+        },
+        "count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10000000
+        }
+      }
+    },
+    "destination": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "One of ['none', 'internal', 'internal_model', 'approved_vendor', 'external_domain', 'external_ai_provider', 'beneficiary', 'external_identity', 'partner', 'production_env']; anything else is treated as 'unknown' (never safe).",
+          "examples": [
+            "none",
+            "internal",
+            "internal_model",
+            "approved_vendor",
+            "external_domain",
+            "external_ai_provider",
+            "beneficiary",
+            "external_identity",
+            "partner",
+            "production_env"
+          ]
+        },
+        "trust": {
+          "type": "string",
+          "description": "One of ['trusted', 'approved', 'unverified', 'blocked']; anything else is treated as 'unknown' (never safe).",
+          "examples": [
+            "trusted",
+            "approved",
+            "unverified",
+            "blocked"
+          ]
+        },
+        "domain_hash": {
+          "type": "string",
+          "pattern": "^([0-9a-f]{16})?$"
+        }
+      }
+    },
+    "environment": {
+      "type": "string",
+      "description": "One of ['none', 'dev', 'staging', 'production']; anything else is treated as 'unknown' (never safe).",
+      "examples": [
+        "none",
+        "dev",
+        "staging",
+        "production"
+      ]
+    },
+    "device_posture": {
+      "type": "string",
+      "description": "One of ['managed', 'unmanaged']; anything else is treated as 'unknown' (never safe).",
+      "examples": [
+        "managed",
+        "unmanaged"
+      ]
+    },
+    "business_context": {
+      "type": "object",
+      "properties": {
+        "amount_usd": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10000000000.0
+        },
+        "change_window": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "ticket": {
+          "type": "boolean"
+        }
+      }
+    },
+    "requested_intent": {
+      "type": "string",
+      "maxLength": 500,
+      "description": "Untrusted, agent-supplied text. Not an input to the edge risk model."
+    },
+    "edge_model_version": {
+      "type": "string"
+    },
+    "model_features_version": {
+      "type": "string"
+    }
+  }
+}

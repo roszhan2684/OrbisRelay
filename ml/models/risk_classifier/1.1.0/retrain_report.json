@@ -1,0 +1,414 @@
+{
+  "candidate": "orbis-edge-risk@1.1.0",
+  "trained_at": "2026-10-06T07:42:17Z",
+  "dataset": "northstar-actions@1.1.0",
+  "status": "candidate \u2014 awaiting release gates; never auto-promoted",
+  "drift_windows": [
+    {
+      "days": [
+        0,
+        6
+      ],
+      "n": 8887,
+      "level": "ok",
+      "max_feature_psi": 0.018789998930546073,
+      "prediction_psi": 0.005909441163042407,
+      "ood_rate": 0.0013502869359738945,
+      "top_features": [
+        {
+          "feature": "resource_log",
+          "psi": 0.018789998930546073,
+          "ref_mean": 0.12009436054238605,
+          "cur_mean": 0.10872615715169957
+        },
+        {
+          "feature": "off_hours",
+          "psi": 0.018476969609885728,
+          "ref_mean": 0.2723426153582252,
+          "cur_mean": 0.3347586362101947
+        },
+        {
+          "feature": "x_sensitive_untrusted",
+          "psi": 0.0165817764853114,
+          "ref_mean": 0.02538738635713877,
+          "cur_mean": 0.04939799707437831
+        },
+        {
+          "feature": "x_sensitive_external",
+          "psi": 0.015969776819396393,
+          "ref_mean": 0.07884956258219453,
+          "cur_mean": 0.11612467649375492
+        }
+      ],
+      "false_escalation_rate_on_window": 0.0014776505356483192
+    },
+    {
+      "days": [
+        1,
+        7
+      ],
+      "n": 8873,
+      "level": "ok",
+      "max_feature_psi": 0.018042359982381555,
+      "prediction_psi": 0.0051636207767888805,
+      "ood_rate": 0.0015778203538825651,
+      "top_features": [
+        {
+          "feature": "x_sensitive_external",
+          "psi": 0.018042359982381555,
+          "ref_mean": 0.07884956258219453,
+          "cur_mean": 0.11867463090273865
+        },
+        {
+          "feature": "resource_log",
+          "psi": 0.016948494839776326,
+          "ref_mean": 0.12009436054238605,
+          "cur_mean": 0.10865287302483677
+        },
+        {
+          "feature": "x_sensitive_untrusted",
+          "psi": 0.01694787750333713,
+          "ref_mean": 0.02538738635713877,
+          "cur_mean": 0.0497013411473008
+        },
+        {
+          "feature": "off_hours",
+          "psi": 0.015947257976405817,
+          "ref_mean": 0.2723426153582252,
+          "cur_mean": 0.3302152597768511
+        }
+      ],
+      "false_escalation_rate_on_window": 0.0013485350006129705
+    },
+    {
+      "days": [
+        2,
+        8
+      ],
+      "n": 9043,
+      "level": "ok",
+      "max_feature_psi": 0.04334012569175858,
+      "prediction_psi": 0.010475693508347364,
+      "ood_rate": 0.0013269932544509565,
+      "top_features": [
+        {
+          "feature": "x_sensitive_untrusted",
+          "psi": 0.04334012569175858,
+          "ref_mean": 0.02538738635713877,
+          "cur_mean": 0.06767665597699879
+        },
+        {
+          "feature": "x_sensitive_external",
+          "psi": 0.03291564478891367,
+          "ref_mean": 0.07884956258219453,
+          "cur_mean": 0.1342474842419551
+        },
+        {
+          "feature": "resource_log",
+          "psi": 0.021475582747793785,
+          "ref_mean": 0.12009436054238605,
+          "cur_mean": 0.1076721820290574
+        },
+        {
+          "feature": "off_hours",
+          "psi": 0.015292221249979046,
+          "ref_mean": 0.2723426153582252,
+          "cur_mean": 0.328983744332633
+        }
+      ],
+      "false_escalation_rate_on_window": 0.0009782342871117633
+    },
+    {
+      "days": [
+        3,
+        9
+      ],
+      "n": 9123,
+      "level": "ok",
+      "max_feature_psi": 0.05347324214517237,
+      "prediction_psi": 0.016420753564736715,
+      "ood_rate": 0.0014249698564068837,
+      "top_features": [
+        {
+          "feature": "x_sensitive_untrusted",
+          "psi": 0.05347324214517237,
+          "ref_mean": 0.02538738635713877,
+          "cur_mean": 0.07344075413789324
+        },
+        {
+          "feature": "x_sensitive_external",
+          "psi": 0.03815101933265525,
+          "ref_mean": 0.07884956258219453,
+          "cur_mean": 0.13898936753260988
+        },
+        {
+          "feature": "resource_log",
+          "psi": 0.027643327904887757,
+          "ref_mean": 0.12009436054238605,
+          "cur_mean": 0.10667331956328086
+        },
+        {
+          "feature": "off_hours",
+          "psi": 0.01585588486586418,
+          "ref_mean": 0.2723426153582252,
+          "cur_mean": 0.33004494135700974
+        }
+      ],
+      "false_escalation_rate_on_window": 0.000857843137254902
+    },
+    {
+      "days": [
+        4,
+        10
+      ],
+      "n": 9023,
+      "level": "ok",
+      "max_feature_psi": 0.05866230596053067,
+      "prediction_psi": 0.018125645838953625,
+      "ood_rate": 0.0012191067272525767,
+      "top_features": [
+        {
+          "feature": "x_sensitive_untrusted",
+          "psi": 0.05866230596053067,
+          "ref_mean": 0.02538738635713877,
+          "cur_mean": 0.07624958439543389
+        },
+        {
+          "feature": "x_sensitive_external",
+          "psi": 0.03851699587778463,
+          "ref_mean": 0.07884956258219453,
+          "cur_mean": 0.1393106505596808
+        },
+        {
+          "feature": "resource_log",
+          "psi": 0.025945200507763347,
+          "ref_mean": 0.12009436054238605,
+          "cur_mean": 0.10738260442174549
+        },
+        {
+          "feature": "off_hours",
+          "psi": 0.014235321457149522,
+          "ref_mean": 0.2723426153582252,
+          "cur_mean": 0.32694225867228194
+        }
+      ],
+      "false_escalation_rate_on_window": 0.0007458975634012929
+    },
+    {
+      "days": [
+        5,
+        11
+      ],
+      "n": 8886,
+      "level": "ok",
+      "max_feature_psi": 0.035341901307059144,
+      "prediction_psi": 0.011220489112454103,
+      "ood_rate": 0.001012829169480081,
+      "top_features": [
+        {
+          "feature": "x_sensitive_untrusted",
+          "psi": 0.035341901307059144,
+          "ref_mean": 0.02538738635713877,
+          "cur_mean": 0.06279540850776502
+        },
+        {
+          "feature": "x_sensitive_external",
+          "psi": 0.025154627915079802,
+          "ref_mean": 0.07884956258219453,
+          "cur_mean": 0.12660364618501013
+        },
+        {
+          "feature": "resource_log",
+          "psi": 0.024442813127421005,
+          "ref_mean": 0.12009436054238605,
+          "cur_mean": 0.1081199008849658
+        },
+        {
+          "feature": "off_hours",
+          "psi": 0.015748779026179875,
+          "ref_mean": 0.2723426153582252,
+          "cur_mean": 0.3298446995273464
+        }
+      ],
+      "false_escalation_rate_on_window": 0.0007485963817841547
+    },
+    {
+      "days": [
+        6,
+        12
+      ],
+      "n": 8790,
+      "level": "ok",
+      "max_feature_psi": 0.03338852431365789,
+      "prediction_psi": 0.009583069508455045,
+      "ood_rate": 0.0006825938566552901,
+      "top_features": [
+        {
+          "feature": "x_sensitive_untrusted",
+          "psi": 0.03338852431365789,
+          "ref_mean": 0.02538738635713877,
+          "cur_mean": 0.06154721274175199
+        },
+        {
+          "feature": "resource_log",
+          "psi": 0.024634457948053218,
+          "ref_mean": 0.12009436054238605,
+          "cur_mean": 0.10829734714177021
+        },
+        {
+          "feature": "x_sensitive_external",
+          "psi": 0.024520428948830074,
+          "ref_mean": 0.07884956258219453,
+          "cur_mean": 0.12593856655290103
+        },
+        {
+          "feature": "off_hours",
+          "psi": 0.01207302968525576,
+          "ref_mean": 0.2723426153582252,
+          "cur_mean": 0.3225255972696246
+        }
+      ],
+      "false_escalation_rate_on_window": 0.0007520681875156681
+    },
+    {
+      "days": [
+        7,
+        13
+      ],
+      "n": 8879,
+      "level": "ok",
+      "max_feature_psi": 0.038126736281073714,
+      "prediction_psi": 0.01032201082124411,
+      "ood_rate": 0.00045050118256560425,
+      "top_features": [
+        {
+          "feature": "x_sensitive_untrusted",
+          "psi": 0.038126736281073714,
+          "ref_mean": 0.02538738635713877,
+          "cur_mean": 0.06453429440252281
+        },
+        {
+          "feature": "resource_log",
+          "psi": 0.026870669841288154,
+          "ref_mean": 0.12009436054238605,
+          "cur_mean": 0.10662500161189313
+        },
+        {
+          "feature": "x_sensitive_external",
+          "psi": 0.02612160635599543,
+          "ref_mean": 0.07884956258219453,
+          "cur_mean": 0.1276044599617074
+        },
+        {
+          "feature": "off_hours",
+          "psi": 0.01546784656051461,
+          "ref_mean": 0.2723426153582252,
+          "cur_mean": 0.3293163644554567
+        }
+      ],
+      "false_escalation_rate_on_window": 0.0009950248756218905
+    }
+  ],
+  "trigger": {
+    "sustained_windows": 0,
+    "sustained_required": 2,
+    "labelled_outcomes": 1399,
+    "labels_required": 200,
+    "product_change": true,
+    "propose_candidate_retraining": true,
+    "auto_promote": false,
+    "reason": "known change: red-team finding on 1.0.0: an agent-asserted ticket flag hides large refunds (adversarial_report.json)"
+  },
+  "review_queue": {
+    "uncertain": 230,
+    "policy_model_disagreement": 194,
+    "novel_combination": 1,
+    "high_impact_escalation": 183,
+    "queued": 3634,
+    "reviewed": 400,
+    "budget": 400
+  },
+  "human_decision_proxies": 999,
+  "comparison": {
+    "candidate": "orbis-edge-risk@1.1.0",
+    "production": "orbis-edge-risk@1.0.0",
+    "test": {
+      "mean_cost": {
+        "production": 0.07319000367511944,
+        "candidate": 0.07475192943770673
+      },
+      "macro_f1": {
+        "production": 0.9284409471351406,
+        "candidate": 0.9163240167976682
+      },
+      "high_risk_escalation_recall": {
+        "production": 0.9117647058823529,
+        "candidate": 0.9117647058823529
+      },
+      "risky_escalation_recall": {
+        "production": 0.9795454545454545,
+        "candidate": 0.9795454545454545
+      },
+      "false_escalation_rate": {
+        "production": 0.0023990403838464614,
+        "candidate": 0.005197920831667333
+      },
+      "safe_precision": {
+        "production": 0.9981996399279855,
+        "candidate": 0.9981945837512538
+      },
+      "ece": {
+        "production": 0.01461657100499755,
+        "candidate": 0.011641751722346933
+      }
+    },
+    "gold": {
+      "high_risk_escalation_recall": {
+        "production": 1.0,
+        "candidate": 1.0
+      },
+      "risky_escalation_recall": {
+        "production": 1.0,
+        "candidate": 0.9666666666666667
+      },
+      "hard_negative_false_positive_rate": {
+        "production": 0.0,
+        "candidate": 0.0
+      }
+    },
+    "window_holdout": {
+      "mean_cost": {
+        "production": 0.130419921875,
+        "candidate": 0.010668945312499999
+      },
+      "macro_f1": {
+        "production": 0.8947017334313909,
+        "candidate": 0.9116042185070885
+      },
+      "high_risk_escalation_recall": {
+        "production": 0.8850574712643678,
+        "candidate": 1.0
+      },
+      "risky_escalation_recall": {
+        "production": 0.9546666666666667,
+        "candidate": 1.0
+      },
+      "false_escalation_rate": {
+        "production": 0.0016124697661918839,
+        "candidate": 0.002149959688255845
+      },
+      "safe_precision": {
+        "production": 0.9954448017148981,
+        "candidate": 1.0
+      },
+      "ece": {
+        "production": 0.020650946762004456,
+        "candidate": 0.005415367431443174
+      }
+    },
+    "note": "window_holdout = every event from window days 10-13 (never reviewed or trained on); ground truth is available only because the window is synthetic."
+  },
+  "duration_seconds": 8.56,
+  "mlflow_run_id": "de8ec85f37cc4c83bf7e4134bd4f7bbe",
+  "why": "drift \u2260 automatic retraining \u2260 automatic deployment: drift proposes, humans label, the pipeline builds a candidate, release gates decide eligibility, and an authorised human promotes."
+}

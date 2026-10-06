@@ -34,6 +34,29 @@ export function decisionResponse(db: DB, action: ActionRecord, approval?: Approv
     receipt_verification_url: action.receipt_id ? `/api/v1/receipts/${action.receipt_id}/verify` : null,
     latency_ms: action.latency_ms,
     idempotent_replay: replay,
+    ml: mlView(db, action),
+  };
+}
+
+/** Advisory ML evidence on the decision response — never an authorization by itself. */
+export function mlView(db: DB, action: ActionRecord) {
+  const p = action.prediction_id ? db.ml.predictions.find((x) => x.id === action.prediction_id) : undefined;
+  if (!p) return null;
+  return {
+    prediction_id: p.id,
+    source: p.source,
+    model: p.model_version ? `orbis-edge-risk@${p.model_version}` : null,
+    feature_schema: p.feature_schema,
+    class: p.class,
+    risk: p.risk === null ? null : Math.round(p.risk * 10_000) / 10_000,
+    abstain: p.abstain,
+    reasons: p.reasons,
+    explanation: p.explanation,
+    anomaly: p.anomaly.sufficient ? Math.round(p.anomaly.score * 1000) / 1000 : null,
+    deterministic_status: p.deterministic_status,
+    fusion: p.fusion,
+    fallback: p.fallback ?? null,
+    local: p.local ?? null,
   };
 }
 

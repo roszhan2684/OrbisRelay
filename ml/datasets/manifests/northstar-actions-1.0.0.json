@@ -1,0 +1,150 @@
+{
+  "actors": 49,
+  "class_distribution": {
+    "excluded": {
+      "high_risk": 63,
+      "safe_normal": 5419,
+      "safe_unusual": 266,
+      "suspicious_review": 456
+    },
+    "test": {
+      "high_risk": 102,
+      "safe_normal": 4749,
+      "safe_unusual": 253,
+      "suspicious_review": 338
+    },
+    "train": {
+      "high_risk": 247,
+      "safe_normal": 15517,
+      "safe_unusual": 815,
+      "suspicious_review": 910
+    },
+    "val": {
+      "high_risk": 78,
+      "safe_normal": 3667,
+      "safe_unusual": 221,
+      "suspicious_review": 173
+    }
+  },
+  "creation_commit": "4e3533e404816e2f28f8171e882f0763e56f2614",
+  "difficulty_breakdown": {
+    "adversarial": 848,
+    "easy": 31414,
+    "hard_negative": 1012
+  },
+  "feature_schema": "edge-features/1",
+  "files": {
+    "anomaly.npy": {
+      "bytes": 266320,
+      "sha256": "3a9f2bd0d2a243cb7053acd457269f7502d4844242b96ffa72db2f06e231aca8"
+    },
+    "events.jsonl": {
+      "bytes": 24625882,
+      "sha256": "ead0195b966611d61b61beecc2ed332365fbcf4483b042eb0c21881a6dc3801c"
+    },
+    "features.npy": {
+      "bytes": 22626448,
+      "sha256": "b743557d3d2b77d79e59d898ecf0640a517274476e7ebdfe705c0a8d8370e63b"
+    },
+    "gold.json": {
+      "bytes": 2199119,
+      "sha256": "95bc55dfcd628ef200c36a4d9c0f8672fd666b353f0e294b9cd0e35eec03a960"
+    },
+    "gold_features.npy": {
+      "bytes": 63368,
+      "sha256": "b7d1ca539914d8ae21d2199452a10ee82249c91ea0af89ed7d858698123a28f9"
+    },
+    "labels.jsonl": {
+      "bytes": 16165968,
+      "sha256": "8d8924e60057c48a231625c868b87d621290109819d69b017d725b79b78767d6"
+    }
+  },
+  "generation_config_hash": "ecc09905e525af45e3a121c0d80f2be6a1d87c1a8d8769ab6b4b5b73d0ec4435",
+  "generator": "orbis_ml.generator",
+  "gold": {
+    "content_sha256": "95bc55dfcd628ef200c36a4d9c0f8672fd666b353f0e294b9cd0e35eec03a960",
+    "distribution": {
+      "high_risk": 32,
+      "safe_normal": 22,
+      "safe_unusual": 8,
+      "suspicious_review": 31
+    },
+    "gated": 90,
+    "known_limitations": 3,
+    "scenarios": 93
+  },
+  "label_noise": 0.01,
+  "label_schema": "event-label/1",
+  "label_state_breakdown": {
+    "synthetic": 32998,
+    "weak_label": 276
+  },
+  "leakage_checks": {
+    "duplicate_event_ids_across_splits": 0,
+    "gold_actor_overlap": 0,
+    "held_out_actor_rows_in_train_or_val": 0,
+    "label_fields_in_features": "none \u2014 features read only the event; labels live in a separate file",
+    "result": "pass",
+    "test_only_variant_rows_in_train_or_val": 0,
+    "train_test_day_overlap": 0
+  },
+  "name": "northstar-actions",
+  "numpy": "2.4.6",
+  "privacy_review": {
+    "content_fields": "none \u2014 events carry metadata, counts, enums and 16-hex destination hashes only",
+    "distinct_intent_texts": 2,
+    "pii": "none \u2014 all actors, domains and amounts are synthetic (Northstar Cloud is fictional)",
+    "raw_destinations_found": 0,
+    "result": "pass"
+  },
+  "python": "3.11.0",
+  "row_count": 33274,
+  "scenario_families": {
+    "adversarial": 824,
+    "hard_negative": 1012,
+    "high_risk": 481,
+    "normal": 29719,
+    "suspicious": 1238
+  },
+  "scenario_templates": 73,
+  "schema_version": "endpoint-event/1",
+  "seed": 20261005,
+  "source_breakdown": {
+    "synthetic": 33274
+  },
+  "split_counts": {
+    "excluded": 6204,
+    "test": 5442,
+    "train": 17489,
+    "val": 4139
+  },
+  "split_rule": {
+    "held_out_actors": [
+      "procurement-agent-3",
+      "support-copilot-4",
+      "ci-deployer-3",
+      "sales-agent-3",
+      "ops-agent-3",
+      "engineer.harper",
+      "finance-analyst.cam",
+      "sales-rep.devon"
+    ],
+    "test_days": [
+      23,
+      27
+    ],
+    "test_only": [
+      "template_variant>=2",
+      "disguised_classification"
+    ],
+    "train_days": [
+      0,
+      17
+    ],
+    "val_days": [
+      18,
+      22
+    ]
+  },
+  "version": "1.0.0"
+}

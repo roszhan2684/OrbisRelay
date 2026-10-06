@@ -1,0 +1,16 @@
+{
+  "model": "orbis-edge-risk@1.1.0",
+  "dataset_verification": {
+    "dataset": "northstar-actions@1.1.0",
+    "files_checked": 5,
+    "mismatches": [],
+    "passed": true
+  },
+  "retrained_metric_deltas": {
+    "weights": 0.0
+  },
+  "tolerance": 1e-06,
+  "weights_bit_identical": true,
+  "passed": true,
+  "note": "Retrained from the candidate dataset files recorded in the manifest; deterministic training."
+}

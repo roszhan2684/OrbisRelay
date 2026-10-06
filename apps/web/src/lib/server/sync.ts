@@ -16,7 +16,7 @@ import type { OpEnvelope } from "./ops";
 export const syncEnabled = () => !!process.env.BLOB_READ_WRITE_TOKEN;
 
 // Namespaced per environment so local and preview runs never touch the production demo log.
-const ROOT = `orbis-relay/${process.env.VERCEL_ENV ?? "local"}/v1`;
+const ROOT = `orbis-relay/${process.env.VERCEL_ENV ?? "local"}/v2`;
 const EPOCH_TTL_MS = 20 * 3_600_000;
 const PULL_INTERVAL_MS = 350;
 const EPOCH_CHECK_MS = 10_000;

@@ -1,0 +1,137 @@
+{
+  "model": "orbis-edge-risk@1.1.0",
+  "reference": "portable float64 forward pass (orbis_ml.models.portable_logits)",
+  "parity": {
+    "coreml-fp32": {
+      "cases": 450,
+      "max_abs_logit_delta": 4.186397813299436e-06,
+      "max_abs_probability_delta": 5.068862913293337e-07,
+      "class_agreement": 1.0,
+      "test_split_class_agreement": 1.0,
+      "tolerance": 0.0001,
+      "passed": true
+    },
+    "coreml-fp16": {
+      "cases": 450,
+      "max_abs_logit_delta": 0.041360263037940825,
+      "max_abs_probability_delta": 0.003080986651796236,
+      "class_agreement": 1.0,
+      "test_split_class_agreement": 0.9998162440279309,
+      "tolerance": 0.005,
+      "passed": true
+    },
+    "coreml-int8": {
+      "cases": 450,
+      "max_abs_logit_delta": 0.22303461876518416,
+      "max_abs_probability_delta": 0.023582754345278456,
+      "class_agreement": 0.9977777777777778,
+      "test_split_class_agreement": 0.9996324880558618,
+      "tolerance": 0.02,
+      "passed": false
+    },
+    "onnx-fp32": {
+      "cases": 450,
+      "max_abs_logit_delta": 3.756590405856741e-06,
+      "max_abs_probability_delta": 4.5154766281640946e-07,
+      "class_agreement": 1.0,
+      "test_split_class_agreement": 1.0,
+      "tolerance": 0.0001,
+      "passed": true
+    },
+    "onnx-int8": {
+      "cases": 450,
+      "max_abs_logit_delta": 0.4421495225282204,
+      "max_abs_probability_delta": 0.04788683967589619,
+      "class_agreement": 0.9955555555555555,
+      "test_split_class_agreement": 0.9996324880558618,
+      "tolerance": 0.02,
+      "passed": false
+    }
+  },
+  "fixture": "fixtures/parity/edge-risk-1.1.0.json",
+  "portable_json_bytes": 106597,
+  "quantization": {
+    "coreml-fp32": {
+      "artifact_bytes": 16682,
+      "artifact_sha256": "be825d404724d19c9f932a31d451d978cb4b18770ad5ea5a966fa6fec175e0f3",
+      "delta_mean_cost": 0.0,
+      "delta_macro_f1": 0.0,
+      "delta_risky_escalation_recall": 0.0,
+      "delta_high_risk_escalation_recall": 0.0,
+      "delta_false_escalation_rate": 0.0,
+      "delta_ece": -6.611089051200558e-09,
+      "delta_brier": -2.772805637873965e-09
+    },
+    "coreml-fp16": {
+      "artifact_bytes": 10844,
+      "artifact_sha256": "4b0006973e8263ae02c3ff0f0df31e7230c594ffef8540804deaa1b323259ec7",
+      "delta_mean_cost": -3.675119441381991e-05,
+      "delta_macro_f1": 0.0004591606165722517,
+      "delta_risky_escalation_recall": 0.0,
+      "delta_high_risk_escalation_recall": 0.0,
+      "delta_false_escalation_rate": 0.0,
+      "delta_ece": -4.170680707472202e-05,
+      "delta_brier": -4.10252450421672e-06
+    },
+    "coreml-int8": {
+      "artifact_bytes": 7855,
+      "artifact_sha256": "30071e58ca5bde0bea3ef7fb242b87d6dfca6e67a88942b2695df4b30a1b3b55",
+      "delta_mean_cost": -0.0001286291804483558,
+      "delta_macro_f1": 0.0020005706942615165,
+      "delta_risky_escalation_recall": 0.0,
+      "delta_high_risk_escalation_recall": 0.0,
+      "delta_false_escalation_rate": 0.0,
+      "delta_ece": 0.0003304284251345081,
+      "delta_brier": -2.3917515005023038e-05
+    },
+    "onnx-fp32": {
+      "artifact_bytes": 13832,
+      "artifact_sha256": "5ed7e888a0919a3b6cce4bd6e33ab647bc27bc9e5647de3419c3d0baf927ad47",
+      "delta_mean_cost": 0.0,
+      "delta_macro_f1": 0.0,
+      "delta_risky_escalation_recall": 0.0,
+      "delta_high_risk_escalation_recall": 0.0,
+      "delta_false_escalation_rate": 0.0,
+      "delta_ece": -9.464890756566424e-09,
+      "delta_brier": -5.136457627286095e-09
+    },
+    "onnx-int8": {
+      "artifact_bytes": 5988,
+      "artifact_sha256": "8e1a819c664cd0dc40887a3dcbf70576978dd7183fbcd1a9153352fad9e7b691",
+      "delta_mean_cost": 0.0,
+      "delta_macro_f1": 0.0008443740498366159,
+      "delta_risky_escalation_recall": 0.0,
+      "delta_high_risk_escalation_recall": 0.0,
+      "delta_false_escalation_rate": 0.0,
+      "delta_ece": 0.0003137151036613911,
+      "delta_brier": 0.0003386685498610528
+    }
+  },
+  "reference_test_metrics": {
+    "mean_cost": 0.07475192943770673,
+    "macro_f1": 0.9163240167976682,
+    "risky_escalation_recall": 0.9795454545454545,
+    "high_risk_escalation_recall": 0.9117647058823529,
+    "false_escalation_rate": 0.005197920831667333,
+    "ece": 0.011641751722346931,
+    "brier": 0.03384231537117219
+  },
+  "distributables": {
+    "OrbisEdgeRisk-fp16.mlpackage.zip": {
+      "bytes": 8298,
+      "sha256": "213a14fbf0f3ec78fbbd9396eea8c35bb51a6a9f31979b9b31c9cb18b317a073"
+    },
+    "OrbisEdgeRisk-fp32.mlpackage.zip": {
+      "bytes": 14341,
+      "sha256": "b507fce41a662e3a42eb03966df622d5ab6571789dd1babd5ca6f0ed9be13fce"
+    },
+    "OrbisEdgeRisk-int8.mlpackage.zip": {
+      "bytes": 5477,
+      "sha256": "f4de10ed6e0862cc55e311ede40a1082d01d57e492c153472038c486707dbddc"
+    }
+  },
+  "notes": [
+    "Latency, memory and CPU are measured on-device by the Swift benchmark harness (apps/macos-endpoint), not here.",
+    "INT8 is weight-only linear quantization (activations stay FP16/FP32); for a ~3k-parameter model the size win is small and inference is memory-trivial either way."
+  ]
+}

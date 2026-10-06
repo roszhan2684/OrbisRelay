@@ -1,0 +1,5774 @@
+{
+  "model": "logreg-C1",
+  "policy": {
+    "temperature": 0.498909,
+    "tau_high": 0.78,
+    "tau_review": 0.56,
+    "abstain_entropy": 0.9,
+    "schema": "orbis-decision-policy/1",
+    "version": "1.0.0",
+    "unknown_fields_index": 75,
+    "high_impact": {
+      "any_feature_set": [
+        5,
+        6,
+        7,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20
+      ],
+      "any_feature_set_names": [
+        "action_type=external_send",
+        "action_type=file_upload",
+        "action_type=clipboard_export",
+        "action_type=privilege_grant",
+        "action_type=payment",
+        "action_type=refund",
+        "action_type=production_deploy",
+        "action_type=secrets_access",
+        "action_type=model_provider_send",
+        "action_type=bulk_download",
+        "action_type=destructive_delete",
+        "action_type=config_change",
+        "action_type=physical_operation",
+        "action_type=unknown"
+      ],
+      "class_rank_index": 76,
+      "class_rank_min": 0.5,
+      "resource_log_index": 60,
+      "resource_log_min": 0.28844503230257873
+    },
+    "classes": [
+      "safe_normal",
+      "safe_unusual",
+      "suspicious_review",
+      "high_risk"
+    ],
+    "description": "Calibration + decision policy (the part of the model that turns logits into an edge risk signal)."
+  },
+  "val": {
+    "n": 4139,
+    "confusion_matrix": [
+      [
+        3559,
+        93,
+        14,
+        1
+      ],
+      [
+        58,
+        161,
+        2,
+        0
+      ],
+      [
+        0,
+        0,
+        170,
+        3
+      ],
+      [
+        0,
+        0,
+        0,
+        78
+      ]
+    ],
+    "labels": [
+      "safe_normal",
+      "safe_unusual",
+      "suspicious_review",
+      "high_risk"
+    ],
+    "per_class": {
+      "safe_normal": {
+        "precision": 0.9839646115565386,
+        "recall": 0.970548131988001,
+        "f1": 0.9772103239978034,
+        "support": 3667
+      },
+      "safe_unusual": {
+        "precision": 0.6338582677165354,
+        "recall": 0.7285067873303167,
+        "f1": 0.6778947368421053,
+        "support": 221
+      },
+      "suspicious_review": {
+        "precision": 0.9139784946236559,
+        "recall": 0.9826589595375722,
+        "f1": 0.9470752089136489,
+        "support": 173
+      },
+      "high_risk": {
+        "precision": 0.9512195121951219,
+        "recall": 1.0,
+        "f1": 0.975,
+        "support": 78
+      }
+    },
+    "macro_f1": 0.8942950674383895,
+    "weighted_f1": 0.9599272785900247,
+    "accuracy": 0.9586856728678425,
+    "high_risk_escalation_recall": 1.0,
+    "high_risk_strict_recall": 1.0,
+    "risky_escalation_recall": 1.0,
+    "safe_precision": 1.0,
+    "false_escalation_rate": 0.004372427983539095,
+    "false_allow_rate": 0.0,
+    "mean_cost": 0.015970041072722877,
+    "total_cost": 66.1,
+    "ece": 0.028781719298524626,
+    "brier": 0.07458920622806542,
+    "risky_pr_auc": 0.9913081842119928,
+    "risky_roc_auc": 0.9994835472923123,
+    "high_risk_pr_auc": 0.9995251661918327,
+    "per_class_pr_auc": {
+      "safe_normal": 0.9869447804749111,
+      "safe_unusual": 0.7477603483349211,
+      "suspicious_review": 0.9755820575172444,
+      "high_risk": 0.9995251661918327
+    },
+    "reliability_risky": [
+      {
+        "bin": [
+          0.0,
+          0.1
+        ],
+        "mean_predicted": 0.0010581987145096788,
+        "observed": 0.0,
+        "n": 3853
+      },
+      {
+        "bin": [
+          0.1,
+          0.2
+        ],
+        "mean_predicted": 0.14204967276176705,
+        "observed": 0.0,
+        "n": 8
+      },
+      {
+        "bin": [
+          0.2,
+          0.30000000000000004
+        ],
+        "mean_predicted": 0.24969758930698893,
+        "observed": 0.0,
+        "n": 2
+      },
+      {
+        "bin": [
+          0.30000000000000004,
+          0.4
+        ],
+        "mean_predicted": 0.34743459096098644,
+        "observed": 0.0,
+        "n": 4
+      },
+      {
+        "bin": [
+          0.4,
+          0.5
+        ],
+        "mean_predicted": 0.4606402267835332,
+        "observed": 0.0,
+        "n": 3
+      },
+      {
+        "bin": [
+          0.5,
+          0.6000000000000001
+        ],
+        "mean_predicted": 0.5501027893621042,
+        "observed": 0.0,
+        "n": 1
+      },
+      {
+        "bin": [
+          0.6000000000000001,
+          0.7000000000000001
+        ],
+        "mean_predicted": 0.654571525501653,
+        "observed": 0.0,
+        "n": 3
+      },
+      {
+        "bin": [
+          0.8,
+          0.9
+        ],
+        "mean_predicted": 0.844931488180363,
+        "observed": 1.0,
+        "n": 1
+      },
+      {
+        "bin": [
+          0.9,
+          1.0
+        ],
+        "mean_predicted": 0.9988512196394967,
+        "observed": 0.946969696969697,
+        "n": 264
+      }
+    ],
+    "abstention_rate": 0.001449625513409036,
+    "guard_escalations": 0
+  },
+  "test": {
+    "n": 5442,
+    "confusion_matrix": [
+      [
+        4644,
+        102,
+        3,
+        0
+      ],
+      [
+        59,
+        177,
+        17,
+        0
+      ],
+      [
+        0,
+        0,
+        336,
+        2
+      ],
+      [
+        0,
+        9,
+        9,
+        84
+      ]
+    ],
+    "labels": [
+      "safe_normal",
+      "safe_unusual",
+      "suspicious_review",
+      "high_risk"
+    ],
+    "per_class": {
+      "safe_normal": {
+        "precision": 0.9874548160748459,
+        "recall": 0.9778900821225521,
+        "f1": 0.9826491747778249,
+        "support": 4749
+      },
+      "safe_unusual": {
+        "precision": 0.6145833333333334,
+        "recall": 0.6996047430830039,
+        "f1": 0.6543438077634011,
+        "support": 253
+      },
+      "suspicious_review": {
+        "precision": 0.9205479452054794,
+        "recall": 0.9940828402366864,
+        "f1": 0.9559032716927454,
+        "support": 338
+      },
+      "high_risk": {
+        "precision": 0.9767441860465116,
+        "recall": 0.8235294117647058,
+        "f1": 0.8936170212765957,
+        "support": 102
+      }
+    },
+    "macro_f1": 0.8716283188776417,
+    "weighted_f1": 0.9640562580643864,
+    "accuracy": 0.9630650496141124,
+    "high_risk_escalation_recall": 0.9117647058823529,
+    "high_risk_strict_recall": 0.8235294117647058,
+    "risky_escalation_recall": 0.9795454545454545,
+    "safe_precision": 0.9981967541574834,
+    "false_escalation_rate": 0.003998400639744102,
+    "false_allow_rate": 0.020454545454545454,
+    "mean_cost": 0.08257993384785006,
+    "total_cost": 449.40000000000003,
+    "ece": 0.035980740657385026,
+    "brier": 0.06890130829193598,
+    "risky_pr_auc": 0.9798892392533618,
+    "risky_roc_auc": 0.9909545272799971,
+    "high_risk_pr_auc": 0.9071134216413296,
+    "per_class_pr_auc": {
+      "safe_normal": 0.9890731268054845,
+      "safe_unusual": 0.6161375116715251,
+      "suspicious_review": 0.9891232234424793,
+      "high_risk": 0.9071134216413296
+    },
+    "reliability_risky": [
+      {
+        "bin": [
+          0.0,
+          0.1
+        ],
+        "mean_predicted": 0.0009917472006689694,
+        "observed": 0.0018086816720257234,
+        "n": 4976
+      },
+      {
+        "bin": [
+          0.1,
+          0.2
+        ],
+        "mean_predicted": 0.1483828365287748,
+        "observed": 0.0,
+        "n": 6
+      },
+      {
+        "bin": [
+          0.2,
+          0.30000000000000004
+        ],
+        "mean_predicted": 0.22427320000923037,
+        "observed": 0.0,
+        "n": 3
+      },
+      {
+        "bin": [
+          0.30000000000000004,
+          0.4
+        ],
+        "mean_predicted": 0.32763867172322225,
+        "observed": 0.0,
+        "n": 2
+      },
+      {
+        "bin": [
+          0.4,
+          0.5
+        ],
+        "mean_predicted": 0.4443139033749375,
+        "observed": 0.0,
+        "n": 2
+      },
+      {
+        "bin": [
+          0.5,
+          0.6000000000000001
+        ],
+        "mean_predicted": 0.5363206554516434,
+        "observed": 0.0,
+        "n": 3
+      },
+      {
+        "bin": [
+          0.6000000000000001,
+          0.7000000000000001
+        ],
+        "mean_predicted": 0.6428568603740741,
+        "observed": 0.0,
+        "n": 2
+      },
+      {
+        "bin": [
+          0.7000000000000001,
+          0.8
+        ],
+        "mean_predicted": 0.7290552621467453,
+        "observed": 0.0,
+        "n": 2
+      },
+      {
+        "bin": [
+          0.8,
+          0.9
+        ],
+        "mean_predicted": 0.828967054395173,
+        "observed": 0.0,
+        "n": 2
+      },
+      {
+        "bin": [
+          0.9,
+          1.0
+        ],
+        "mean_predicted": 0.9985963991064505,
+        "observed": 0.9707207207207207,
+        "n": 444
+      }
+    ],
+    "abstention_rate": 0.001470047776552738,
+    "guard_escalations": 0
+  },
+  "slices": {
+    "actor_type=human": {
+      "n": 1564,
+      "risky": 90,
+      "risky_escalation_recall": 0.9222222222222223,
+      "false_escalation_rate": 0.0013568521031207597,
+      "mean_cost": 0.19168797953964195,
+      "accuracy": 0.9584398976982097
+    },
+    "actor_type=agent": {
+      "n": 3176,
+      "risky": 293,
+      "risky_escalation_recall": 0.9931740614334471,
+      "false_escalation_rate": 0.006243496357960458,
+      "mean_cost": 0.045717884130982364,
+      "accuracy": 0.9622166246851386
+    },
+    "actor_type=service": {
+      "n": 78,
+      "risky": 3,
+      "risky_escalation_recall": 1.0,
+      "false_escalation_rate": 0.0,
+      "mean_cost": 0.0,
+      "accuracy": 1.0
+    },
+    "actor_type=automation": {
+      "n": 624,
+      "risky": 54,
+      "risky_escalation_recall": 1.0,
+      "false_escalation_rate": 0.0,
+      "mean_cost": 0.007051282051282052,
+      "accuracy": 0.9743589743589743
+    },
+    "action=external_send": {
+      "n": 1357,
+      "risky": 183,
+      "risky_escalation_recall": 0.9508196721311475,
+      "false_escalation_rate": 0.004258943781942078,
+      "mean_cost": 0.28025055268975685,
+      "accuracy": 0.941783345615328
+    },
+    "action=model_provider_send": {
+      "n": 182,
+      "risky": 33,
+      "risky_escalation_recall": 1.0,
+      "false_escalation_rate": 0.0,
+      "mean_cost": 0.15384615384615385,
+      "accuracy": 0.9395604395604396
+    },
+    "action=file_upload": {
+      "n": 129,
+      "risky": 9,
+      "risky_escalation_recall": 1.0,
+      "false_escalation_rate": 0.0,
+      "mean_cost": 0.0,
+      "accuracy": 1.0
+    },
+    "action=bulk_download": {
+      "n": 223,
+      "risky": 14,
+      "risky_escalation_recall": 1.0,
+      "false_escalation_rate": 0.0,
+      "mean_cost": 0.011210762331838564,
+      "accuracy": 0.9506726457399103
+    },
+    "action=payment": {
+      "n": 137,
+      "risky": 41,
+      "risky_escalation_recall": 1.0,
+      "false_escalation_rate": 0.0,
+      "mean_cost": 0.0036496350364963502,
+      "accuracy": 0.9927007299270073
+    },
+    "action=refund": {
+      "n": 528,
+      "risky": 14,
+      "risky_escalation_recall": 1.0,
+      "false_escalation_rate": 0.0019455252918287938,
+      "mean_cost": 0.012121212121212121,
+      "accuracy": 0.9753787878787878
+    },
+    "action=privilege_grant": {
+      "n": 125,
+      "risky": 6,
+      "risky_escalation_recall": 1.0,
+      "false_escalation_rate": 0.0,
+      "mean_cost": 0.004,
+      "accuracy": 0.992
+    },
+    "action=production_deploy": {
+      "n": 128,
+      "risky": 9,
+      "risky_escalation_recall": 1.0,
+      "false_escalation_rate": 0.0,
+      "mean_cost": 0.0,
+      "accuracy": 1.0
+    },
+    "action=destructive_delete": {
+      "n": 42,
+      "risky": 11,
+      "risky_escalation_recall": 1.0,
+      "false_escalation_rate": 0.0,
+      "mean_cost": 0.0,
+      "accuracy": 1.0
+    },
+    "action=secrets_access": {
+      "n": 63,
+      "risky": 6,
+      "risky_escalation_recall": 1.0,
+      "false_escalation_rate": 0.03508771929824561,
+      "mean_cost": 0.05873015873015873,
+      "accuracy": 0.8571428571428571
+    },
+    "action=database_query": {
+      "n": 892,
+      "risky": 93,
+      "risky_escalation_recall": 1.0,
+      "false_escalation_rate": 0.015018773466833541,
+      "mean_cost": 0.019506726457399103,
+      "accuracy": 0.9428251121076233
+    },
+    "action=tool_invoke": {
+      "n": 1376,
+      "risky": 0,
+      "risky_escalation_recall": null,
+      "false_escalation_rate": 0.0,
+      "mean_cost": 0.006686046511627908,
+      "accuracy": 0.9840116279069767
+    },
+    "sensitivity=public_internal": {
+      "n": 3934,
+      "risky": 83,
+      "risky_escalation_recall": 0.891566265060241,
+      "false_escalation_rate": 0.0012983640612827837,
+      "mean_cost": 0.10137264870360956,
+      "accuracy": 0.9659379766141332
+    },
+    "sensitivity=confidential_plus": {
+      "n": 1508,
+      "risky": 357,
+      "risky_escalation_recall": 1.0,
+      "false_escalation_rate": 0.013032145960034752,
+      "mean_cost": 0.03355437665782494,
+      "accuracy": 0.9555702917771883
+    },
+    "destination_trust=trusted": {
+      "n": 1481,
+      "risky": 36,
+      "risky_escalation_recall": 1.0,
+      "false_escalation_rate": 0.0006920415224913495,
+      "mean_cost": 0.007697501688048616,
+      "accuracy": 0.9804186360567184
+    },
+    "destination_trust=approved": {
+      "n": 742,
+      "risky": 5,
+      "risky_escalation_recall": 1.0,
+      "false_escalation_rate": 0.0,
+      "mean_cost": 0.006738544474393531,
+      "accuracy": 0.9824797843665768
+    },
+    "destination_trust=unverified": {
+      "n": 877,
+      "risky": 268,
+      "risky_escalation_recall": 0.9664179104477612,
+      "false_escalation_rate": 0.008210180623973728,
+      "mean_cost": 0.45929304446978336,
+      "accuracy": 0.9133409350057012
+    },
+    "destination=first_seen": {
+      "n": 1001,
+      "risky": 125,
+      "risky_escalation_recall": 0.928,
+      "false_escalation_rate": 0.005707762557077625,
+      "mean_cost": 0.3771228771228771,
+      "accuracy": 0.932067932067932
+    },
+    "destination=known": {
+      "n": 2112,
+      "risky": 197,
+      "risky_escalation_recall": 1.0,
+      "false_escalation_rate": 0.0005221932114882506,
+      "mean_cost": 0.019744318181818182,
+      "accuracy": 0.9763257575757576
+    },
+    "time=business_hours": {
+      "n": 3435,
+      "risky": 95,
+      "risky_escalation_recall": 0.968421052631579,
+      "false_escalation_rate": 0.005389221556886228,
+      "mean_cost": 0.0455604075691412,
+      "accuracy": 0.9743813682678312
+    },
+    "time=off_hours": {
+      "n": 2007,
+      "risky": 345,
+      "risky_escalation_recall": 0.9826086956521739,
+      "false_escalation_rate": 0.0012033694344163659,
+      "mean_cost": 0.14593921275535626,
+      "accuracy": 0.9436970602889886
+    },
+    "activity=low": {
+      "n": 2228,
+      "risky": 140,
+      "risky_escalation_recall": 0.9571428571428572,
+      "false_escalation_rate": 0.0004789272030651341,
+      "mean_cost": 0.13366247755834829,
+      "accuracy": 0.9443447037701975
+    },
+    "activity=high": {
+      "n": 190,
+      "risky": 119,
+      "risky_escalation_recall": 1.0,
+      "false_escalation_rate": 0.014084507042253521,
+      "mean_cost": 0.007368421052631579,
+      "accuracy": 0.9842105263157894
+    },
+    "provider=external_ai": {
+      "n": 23,
+      "risky": 23,
+      "risky_escalation_recall": 1.0,
+      "false_escalation_rate": null,
+      "mean_cost": 1.173913043478261,
+      "accuracy": 0.6086956521739131
+    },
+    "provider=internal_model": {
+      "n": 159,
+      "risky": 10,
+      "risky_escalation_recall": 1.0,
+      "false_escalation_rate": 0.0,
+      "mean_cost": 0.006289308176100629,
+      "accuracy": 0.9874213836477987
+    },
+    "difficulty=hard_negative": {
+      "n": 143,
+      "risky": 0,
+      "risky_escalation_recall": null,
+      "false_escalation_rate": 0.0,
+      "mean_cost": 0.04405594405594405,
+      "accuracy": 0.8741258741258742
+    },
+    "difficulty=adversarial": {
+      "n": 203,
+      "risky": 188,
+      "risky_escalation_recall": 0.9521276595744681,
+      "false_escalation_rate": 0.8,
+      "mean_cost": 1.8078817733990147,
+      "accuracy": 0.8866995073891626
+    },
+    "ood=unknown_fields": {
+      "n": 8,
+      "risky": 8,
+      "risky_escalation_recall": 1.0,
+      "false_escalation_rate": null,
+      "mean_cost": 0.0,
+      "accuracy": 1.0
+    },
+    "actor=held_out_instance": {
+      "n": 1173,
+      "risky": 82,
+      "risky_escalation_recall": 0.9634146341463414,
+      "false_escalation_rate": 0.0036663611365719525,
+      "mean_cost": 0.11585677749360612,
+      "accuracy": 0.9667519181585678
+    },
+    "template=unseen_variant": {
+      "n": 23,
+      "risky": 23,
+      "risky_escalation_recall": 1.0,
+      "false_escalation_rate": null,
+      "mean_cost": 1.173913043478261,
+      "accuracy": 0.6086956521739131
+    }
+  },
+  "threshold_sweep": {
+    "fixed_tau_high": [
+      {
+        "tau_review": 0.04,
+        "tau_high": 0.78,
+        "mean_cost": 0.08281881661153988,
+        "risky_escalation_recall": 0.9818181818181818,
+        "high_risk_escalation_recall": 0.9215686274509803,
+        "false_escalation_rate": 0.012395041983206718,
+        "confusion": [
+          [
+            4609,
+            101,
+            39,
+            0
+          ],
+          [
+            58,
+            172,
+            23,
+            0
+          ],
+          [
+            0,
+            0,
+            336,
+            2
+          ],
+          [
+            0,
+            8,
+            10,
+            84
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.06,
+        "tau_high": 0.78,
+        "mean_cost": 0.08000735023888277,
+        "risky_escalation_recall": 0.9818181818181818,
+        "high_risk_escalation_recall": 0.9215686274509803,
+        "false_escalation_rate": 0.009196321471411436,
+        "confusion": [
+          [
+            4623,
+            102,
+            24,
+            0
+          ],
+          [
+            58,
+            173,
+            22,
+            0
+          ],
+          [
+            0,
+            0,
+            336,
+            2
+          ],
+          [
+            0,
+            8,
+            10,
+            84
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.08,
+        "tau_high": 0.78,
+        "mean_cost": 0.07881293642043367,
+        "risky_escalation_recall": 0.9818181818181818,
+        "high_risk_escalation_recall": 0.9215686274509803,
+        "false_escalation_rate": 0.007796881247501,
+        "confusion": [
+          [
+            4629,
+            102,
+            18,
+            0
+          ],
+          [
+            58,
+            174,
+            21,
+            0
+          ],
+          [
+            0,
+            0,
+            336,
+            2
+          ],
+          [
+            0,
+            8,
+            10,
+            84
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.1,
+        "tau_high": 0.78,
+        "mean_cost": 0.08487688349871371,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.0069972011195521796,
+        "confusion": [
+          [
+            4633,
+            102,
+            14,
+            0
+          ],
+          [
+            58,
+            174,
+            21,
+            0
+          ],
+          [
+            0,
+            0,
+            336,
+            2
+          ],
+          [
+            0,
+            9,
+            9,
+            84
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.12,
+        "tau_high": 0.78,
+        "mean_cost": 0.08450937155457552,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.006597361055577769,
+        "confusion": [
+          [
+            4635,
+            102,
+            12,
+            0
+          ],
+          [
+            58,
+            174,
+            21,
+            0
+          ],
+          [
+            0,
+            0,
+            336,
+            2
+          ],
+          [
+            0,
+            9,
+            9,
+            84
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.14,
+        "tau_high": 0.78,
+        "mean_cost": 0.08450937155457552,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.006597361055577769,
+        "confusion": [
+          [
+            4635,
+            102,
+            12,
+            0
+          ],
+          [
+            58,
+            174,
+            21,
+            0
+          ],
+          [
+            0,
+            0,
+            336,
+            2
+          ],
+          [
+            0,
+            9,
+            9,
+            84
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.16,
+        "tau_high": 0.78,
+        "mean_cost": 0.08414185961043734,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.006197520991603359,
+        "confusion": [
+          [
+            4637,
+            102,
+            10,
+            0
+          ],
+          [
+            58,
+            174,
+            21,
+            0
+          ],
+          [
+            0,
+            0,
+            336,
+            2
+          ],
+          [
+            0,
+            9,
+            9,
+            84
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.18,
+        "tau_high": 0.78,
+        "mean_cost": 0.08414185961043734,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.006197520991603359,
+        "confusion": [
+          [
+            4637,
+            102,
+            10,
+            0
+          ],
+          [
+            58,
+            174,
+            21,
+            0
+          ],
+          [
+            0,
+            0,
+            336,
+            2
+          ],
+          [
+            0,
+            9,
+            9,
+            84
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.2,
+        "tau_high": 0.78,
+        "mean_cost": 0.08395810363836825,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.005797680927628949,
+        "confusion": [
+          [
+            4638,
+            102,
+            9,
+            0
+          ],
+          [
+            59,
+            174,
+            20,
+            0
+          ],
+          [
+            0,
+            0,
+            336,
+            2
+          ],
+          [
+            0,
+            9,
+            9,
+            84
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.22,
+        "tau_high": 0.78,
+        "mean_cost": 0.08377434766629917,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.005597760895641743,
+        "confusion": [
+          [
+            4639,
+            102,
+            8,
+            0
+          ],
+          [
+            59,
+            174,
+            20,
+            0
+          ],
+          [
+            0,
+            0,
+            336,
+            2
+          ],
+          [
+            0,
+            9,
+            9,
+            84
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.24,
+        "tau_high": 0.78,
+        "mean_cost": 0.08349871370819552,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.005197920831667333,
+        "confusion": [
+          [
+            4640,
+            102,
+            7,
+            0
+          ],
+          [
+            59,
+            175,
+            19,
+            0
+          ],
+          [
+            0,
+            0,
+            336,
+            2
+          ],
+          [
+            0,
+            9,
+            9,
+            84
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.26,
+        "tau_high": 0.78,
+        "mean_cost": 0.08349871370819552,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.005197920831667333,
+        "confusion": [
+          [
+            4640,
+            102,
+            7,
+            0
+          ],
+          [
+            59,
+            175,
+            19,
+            0
+          ],
+          [
+            0,
+            0,
+            336,
+            2
+          ],
+          [
+            0,
+            9,
+            9,
+            84
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.28,
+        "tau_high": 0.78,
+        "mean_cost": 0.08349871370819552,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.005197920831667333,
+        "confusion": [
+          [
+            4640,
+            102,
+            7,
+            0
+          ],
+          [
+            59,
+            175,
+            19,
+            0
+          ],
+          [
+            0,
+            0,
+            336,
+            2
+          ],
+          [
+            0,
+            9,
+            9,
+            84
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.3,
+        "tau_high": 0.78,
+        "mean_cost": 0.08349871370819552,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.005197920831667333,
+        "confusion": [
+          [
+            4640,
+            102,
+            7,
+            0
+          ],
+          [
+            59,
+            175,
+            19,
+            0
+          ],
+          [
+            0,
+            0,
+            336,
+            2
+          ],
+          [
+            0,
+            9,
+            9,
+            84
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.32,
+        "tau_high": 0.78,
+        "mean_cost": 0.08331495773612643,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.004998000799680128,
+        "confusion": [
+          [
+            4641,
+            102,
+            6,
+            0
+          ],
+          [
+            59,
+            175,
+            19,
+            0
+          ],
+          [
+            0,
+            0,
+            336,
+            2
+          ],
+          [
+            0,
+            9,
+            9,
+            84
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.34,
+        "tau_high": 0.78,
+        "mean_cost": 0.08331495773612643,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.004998000799680128,
+        "confusion": [
+          [
+            4641,
+            102,
+            6,
+            0
+          ],
+          [
+            59,
+            175,
+            19,
+            0
+          ],
+          [
+            0,
+            0,
+            336,
+            2
+          ],
+          [
+            0,
+            9,
+            9,
+            84
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.36,
+        "tau_high": 0.78,
+        "mean_cost": 0.08322307975009188,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.004798080767692923,
+        "confusion": [
+          [
+            4641,
+            102,
+            6,
+            0
+          ],
+          [
+            59,
+            176,
+            18,
+            0
+          ],
+          [
+            0,
+            0,
+            336,
+            2
+          ],
+          [
+            0,
+            9,
+            9,
+            84
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.38,
+        "tau_high": 0.78,
+        "mean_cost": 0.08322307975009188,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.004798080767692923,
+        "confusion": [
+          [
+            4641,
+            102,
+            6,
+            0
+          ],
+          [
+            59,
+            176,
+            18,
+            0
+          ],
+          [
+            0,
+            0,
+            336,
+            2
+          ],
+          [
+            0,
+            9,
+            9,
+            84
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.4,
+        "tau_high": 0.78,
+        "mean_cost": 0.08322307975009188,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.004798080767692923,
+        "confusion": [
+          [
+            4641,
+            102,
+            6,
+            0
+          ],
+          [
+            59,
+            176,
+            18,
+            0
+          ],
+          [
+            0,
+            0,
+            336,
+            2
+          ],
+          [
+            0,
+            9,
+            9,
+            84
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.42,
+        "tau_high": 0.78,
+        "mean_cost": 0.08322307975009188,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.004798080767692923,
+        "confusion": [
+          [
+            4641,
+            102,
+            6,
+            0
+          ],
+          [
+            59,
+            176,
+            18,
+            0
+          ],
+          [
+            0,
+            0,
+            336,
+            2
+          ],
+          [
+            0,
+            9,
+            9,
+            84
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.44,
+        "tau_high": 0.78,
+        "mean_cost": 0.0830393237780228,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.004598160735705718,
+        "confusion": [
+          [
+            4642,
+            102,
+            5,
+            0
+          ],
+          [
+            59,
+            176,
+            18,
+            0
+          ],
+          [
+            0,
+            0,
+            336,
+            2
+          ],
+          [
+            0,
+            9,
+            9,
+            84
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.46,
+        "tau_high": 0.78,
+        "mean_cost": 0.08294744579198825,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.004398240703718513,
+        "confusion": [
+          [
+            4642,
+            102,
+            5,
+            0
+          ],
+          [
+            59,
+            177,
+            17,
+            0
+          ],
+          [
+            0,
+            0,
+            336,
+            2
+          ],
+          [
+            0,
+            9,
+            9,
+            84
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.48,
+        "tau_high": 0.78,
+        "mean_cost": 0.08294744579198825,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.004398240703718513,
+        "confusion": [
+          [
+            4642,
+            102,
+            5,
+            0
+          ],
+          [
+            59,
+            177,
+            17,
+            0
+          ],
+          [
+            0,
+            0,
+            336,
+            2
+          ],
+          [
+            0,
+            9,
+            9,
+            84
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.5,
+        "tau_high": 0.78,
+        "mean_cost": 0.08294744579198825,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.004398240703718513,
+        "confusion": [
+          [
+            4642,
+            102,
+            5,
+            0
+          ],
+          [
+            59,
+            177,
+            17,
+            0
+          ],
+          [
+            0,
+            0,
+            336,
+            2
+          ],
+          [
+            0,
+            9,
+            9,
+            84
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.52,
+        "tau_high": 0.78,
+        "mean_cost": 0.08276368981991915,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.004198320671731308,
+        "confusion": [
+          [
+            4643,
+            102,
+            4,
+            0
+          ],
+          [
+            59,
+            177,
+            17,
+            0
+          ],
+          [
+            0,
+            0,
+            336,
+            2
+          ],
+          [
+            0,
+            9,
+            9,
+            84
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.54,
+        "tau_high": 0.78,
+        "mean_cost": 0.08257993384785006,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.003998400639744102,
+        "confusion": [
+          [
+            4644,
+            102,
+            3,
+            0
+          ],
+          [
+            59,
+            177,
+            17,
+            0
+          ],
+          [
+            0,
+            0,
+            336,
+            2
+          ],
+          [
+            0,
+            9,
+            9,
+            84
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.56,
+        "tau_high": 0.78,
+        "mean_cost": 0.08257993384785006,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.003998400639744102,
+        "confusion": [
+          [
+            4644,
+            102,
+            3,
+            0
+          ],
+          [
+            59,
+            177,
+            17,
+            0
+          ],
+          [
+            0,
+            0,
+            336,
+            2
+          ],
+          [
+            0,
+            9,
+            9,
+            84
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.58,
+        "tau_high": 0.78,
+        "mean_cost": 0.08239617787578096,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.0037984806077568972,
+        "confusion": [
+          [
+            4645,
+            102,
+            2,
+            0
+          ],
+          [
+            59,
+            177,
+            17,
+            0
+          ],
+          [
+            0,
+            0,
+            336,
+            2
+          ],
+          [
+            0,
+            9,
+            9,
+            84
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.6,
+        "tau_high": 0.78,
+        "mean_cost": 0.08239617787578096,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.0037984806077568972,
+        "confusion": [
+          [
+            4645,
+            102,
+            2,
+            0
+          ],
+          [
+            59,
+            177,
+            17,
+            0
+          ],
+          [
+            0,
+            0,
+            336,
+            2
+          ],
+          [
+            0,
+            9,
+            9,
+            84
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.62,
+        "tau_high": 0.78,
+        "mean_cost": 0.08239617787578096,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.0037984806077568972,
+        "confusion": [
+          [
+            4645,
+            102,
+            2,
+            0
+          ],
+          [
+            59,
+            177,
+            17,
+            0
+          ],
+          [
+            0,
+            0,
+            336,
+            2
+          ],
+          [
+            0,
+            9,
+            9,
+            84
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.64,
+        "tau_high": 0.78,
+        "mean_cost": 0.08230429988974643,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.003598560575769692,
+        "confusion": [
+          [
+            4645,
+            102,
+            2,
+            0
+          ],
+          [
+            59,
+            178,
+            16,
+            0
+          ],
+          [
+            0,
+            0,
+            336,
+            2
+          ],
+          [
+            0,
+            9,
+            9,
+            84
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.66,
+        "tau_high": 0.78,
+        "mean_cost": 0.08230429988974643,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.003598560575769692,
+        "confusion": [
+          [
+            4645,
+            102,
+            2,
+            0
+          ],
+          [
+            59,
+            178,
+            16,
+            0
+          ],
+          [
+            0,
+            0,
+            336,
+            2
+          ],
+          [
+            0,
+            9,
+            9,
+            84
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.68,
+        "tau_high": 0.78,
+        "mean_cost": 0.08212054391767733,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.003398640543782487,
+        "confusion": [
+          [
+            4646,
+            102,
+            1,
+            0
+          ],
+          [
+            59,
+            178,
+            16,
+            0
+          ],
+          [
+            0,
+            0,
+            336,
+            2
+          ],
+          [
+            0,
+            9,
+            9,
+            84
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.7,
+        "tau_high": 0.78,
+        "mean_cost": 0.08212054391767733,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.003398640543782487,
+        "confusion": [
+          [
+            4646,
+            102,
+            1,
+            0
+          ],
+          [
+            59,
+            178,
+            16,
+            0
+          ],
+          [
+            0,
+            0,
+            336,
+            2
+          ],
+          [
+            0,
+            9,
+            9,
+            84
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.72,
+        "tau_high": 0.78,
+        "mean_cost": 0.08193678794560824,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.003198720511795282,
+        "confusion": [
+          [
+            4647,
+            102,
+            0,
+            0
+          ],
+          [
+            59,
+            178,
+            16,
+            0
+          ],
+          [
+            0,
+            0,
+            336,
+            2
+          ],
+          [
+            0,
+            9,
+            9,
+            84
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.74,
+        "tau_high": 0.78,
+        "mean_cost": 0.08193678794560824,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.003198720511795282,
+        "confusion": [
+          [
+            4647,
+            102,
+            0,
+            0
+          ],
+          [
+            59,
+            178,
+            16,
+            0
+          ],
+          [
+            0,
+            0,
+            336,
+            2
+          ],
+          [
+            0,
+            9,
+            9,
+            84
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.76,
+        "tau_high": 0.78,
+        "mean_cost": 0.08184490995957369,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.0029988004798080768,
+        "confusion": [
+          [
+            4647,
+            102,
+            0,
+            0
+          ],
+          [
+            59,
+            179,
+            15,
+            0
+          ],
+          [
+            0,
+            0,
+            336,
+            2
+          ],
+          [
+            0,
+            9,
+            9,
+            84
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.78,
+        "tau_high": 0.78,
+        "mean_cost": 0.08184490995957369,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.0029988004798080768,
+        "confusion": [
+          [
+            4647,
+            102,
+            0,
+            0
+          ],
+          [
+            59,
+            179,
+            15,
+            0
+          ],
+          [
+            0,
+            0,
+            336,
+            2
+          ],
+          [
+            0,
+            9,
+            9,
+            84
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.8,
+        "tau_high": 0.78,
+        "mean_cost": 0.08184490995957369,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.0029988004798080768,
+        "confusion": [
+          [
+            4647,
+            102,
+            0,
+            0
+          ],
+          [
+            59,
+            179,
+            15,
+            0
+          ],
+          [
+            0,
+            0,
+            336,
+            2
+          ],
+          [
+            0,
+            9,
+            9,
+            84
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.82,
+        "tau_high": 0.78,
+        "mean_cost": 0.08175303197353914,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.0027988804478208716,
+        "confusion": [
+          [
+            4647,
+            102,
+            0,
+            0
+          ],
+          [
+            59,
+            180,
+            14,
+            0
+          ],
+          [
+            0,
+            0,
+            336,
+            2
+          ],
+          [
+            0,
+            9,
+            9,
+            84
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.84,
+        "tau_high": 0.78,
+        "mean_cost": 0.08175303197353914,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.0027988804478208716,
+        "confusion": [
+          [
+            4647,
+            102,
+            0,
+            0
+          ],
+          [
+            59,
+            180,
+            14,
+            0
+          ],
+          [
+            0,
+            0,
+            336,
+            2
+          ],
+          [
+            0,
+            9,
+            9,
+            84
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.86,
+        "tau_high": 0.78,
+        "mean_cost": 0.0816611539875046,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.0025989604158336665,
+        "confusion": [
+          [
+            4647,
+            102,
+            0,
+            0
+          ],
+          [
+            59,
+            181,
+            13,
+            0
+          ],
+          [
+            0,
+            0,
+            336,
+            2
+          ],
+          [
+            0,
+            9,
+            9,
+            84
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.88,
+        "tau_high": 0.78,
+        "mean_cost": 0.0816611539875046,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.0025989604158336665,
+        "confusion": [
+          [
+            4647,
+            102,
+            0,
+            0
+          ],
+          [
+            59,
+            181,
+            13,
+            0
+          ],
+          [
+            0,
+            0,
+            336,
+            2
+          ],
+          [
+            0,
+            9,
+            9,
+            84
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.9,
+        "tau_high": 0.78,
+        "mean_cost": 0.0816611539875046,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.0025989604158336665,
+        "confusion": [
+          [
+            4647,
+            102,
+            0,
+            0
+          ],
+          [
+            59,
+            181,
+            13,
+            0
+          ],
+          [
+            0,
+            0,
+            336,
+            2
+          ],
+          [
+            0,
+            9,
+            9,
+            84
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.92,
+        "tau_high": 0.78,
+        "mean_cost": 0.08313120176405733,
+        "risky_escalation_recall": 0.9772727272727273,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.0025989604158336665,
+        "confusion": [
+          [
+            4647,
+            102,
+            0,
+            0
+          ],
+          [
+            59,
+            181,
+            13,
+            0
+          ],
+          [
+            0,
+            1,
+            335,
+            2
+          ],
+          [
+            0,
+            9,
+            9,
+            84
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.94,
+        "tau_high": 0.78,
+        "mean_cost": 0.0830393237780228,
+        "risky_escalation_recall": 0.9772727272727273,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.0023990403838464614,
+        "confusion": [
+          [
+            4647,
+            102,
+            0,
+            0
+          ],
+          [
+            59,
+            182,
+            12,
+            0
+          ],
+          [
+            0,
+            1,
+            335,
+            2
+          ],
+          [
+            0,
+            9,
+            9,
+            84
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.96,
+        "tau_high": 0.78,
+        "mean_cost": 0.08450937155457552,
+        "risky_escalation_recall": 0.975,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.0023990403838464614,
+        "confusion": [
+          [
+            4647,
+            102,
+            0,
+            0
+          ],
+          [
+            59,
+            182,
+            12,
+            0
+          ],
+          [
+            0,
+            2,
+            334,
+            2
+          ],
+          [
+            0,
+            9,
+            9,
+            84
+          ]
+        ]
+      }
+    ],
+    "fixed_tau_review": [
+      {
+        "tau_review": 0.56,
+        "tau_high": 0.04,
+        "mean_cost": 0.08065049614112459,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.004998000799680128,
+        "confusion": [
+          [
+            4640,
+            102,
+            1,
+            6
+          ],
+          [
+            58,
+            177,
+            17,
+            1
+          ],
+          [
+            0,
+            0,
+            326,
+            12
+          ],
+          [
+            0,
+            9,
+            0,
+            93
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.56,
+        "tau_high": 0.06,
+        "mean_cost": 0.08055861815509005,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.004998000799680128,
+        "confusion": [
+          [
+            4640,
+            102,
+            1,
+            6
+          ],
+          [
+            58,
+            177,
+            17,
+            1
+          ],
+          [
+            0,
+            0,
+            327,
+            11
+          ],
+          [
+            0,
+            9,
+            0,
+            93
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.56,
+        "tau_high": 0.08,
+        "mean_cost": 0.08019110621095187,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.004798080767692923,
+        "confusion": [
+          [
+            4641,
+            102,
+            1,
+            5
+          ],
+          [
+            58,
+            177,
+            17,
+            1
+          ],
+          [
+            0,
+            0,
+            327,
+            11
+          ],
+          [
+            0,
+            9,
+            0,
+            93
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.56,
+        "tau_high": 0.1,
+        "mean_cost": 0.08009922822491732,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.004798080767692923,
+        "confusion": [
+          [
+            4641,
+            102,
+            1,
+            5
+          ],
+          [
+            58,
+            177,
+            17,
+            1
+          ],
+          [
+            0,
+            0,
+            328,
+            10
+          ],
+          [
+            0,
+            9,
+            0,
+            93
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.56,
+        "tau_high": 0.12,
+        "mean_cost": 0.08009922822491732,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.004798080767692923,
+        "confusion": [
+          [
+            4641,
+            102,
+            1,
+            5
+          ],
+          [
+            58,
+            177,
+            17,
+            1
+          ],
+          [
+            0,
+            0,
+            328,
+            10
+          ],
+          [
+            0,
+            9,
+            0,
+            93
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.56,
+        "tau_high": 0.14,
+        "mean_cost": 0.07982359426681368,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.004798080767692923,
+        "confusion": [
+          [
+            4641,
+            102,
+            1,
+            5
+          ],
+          [
+            58,
+            177,
+            17,
+            1
+          ],
+          [
+            0,
+            0,
+            331,
+            7
+          ],
+          [
+            0,
+            9,
+            0,
+            93
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.56,
+        "tau_high": 0.16,
+        "mean_cost": 0.0794560823226755,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.004598160735705718,
+        "confusion": [
+          [
+            4642,
+            102,
+            1,
+            4
+          ],
+          [
+            58,
+            177,
+            17,
+            1
+          ],
+          [
+            0,
+            0,
+            331,
+            7
+          ],
+          [
+            0,
+            9,
+            0,
+            93
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.56,
+        "tau_high": 0.18,
+        "mean_cost": 0.0794560823226755,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.004598160735705718,
+        "confusion": [
+          [
+            4642,
+            102,
+            1,
+            4
+          ],
+          [
+            58,
+            177,
+            17,
+            1
+          ],
+          [
+            0,
+            0,
+            331,
+            7
+          ],
+          [
+            0,
+            9,
+            0,
+            93
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.56,
+        "tau_high": 0.2,
+        "mean_cost": 0.07908857037853731,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.004398240703718513,
+        "confusion": [
+          [
+            4642,
+            102,
+            1,
+            4
+          ],
+          [
+            59,
+            177,
+            17,
+            0
+          ],
+          [
+            0,
+            0,
+            332,
+            6
+          ],
+          [
+            0,
+            9,
+            0,
+            93
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.56,
+        "tau_high": 0.22,
+        "mean_cost": 0.07908857037853731,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.004398240703718513,
+        "confusion": [
+          [
+            4642,
+            102,
+            1,
+            4
+          ],
+          [
+            59,
+            177,
+            17,
+            0
+          ],
+          [
+            0,
+            0,
+            332,
+            6
+          ],
+          [
+            0,
+            9,
+            0,
+            93
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.56,
+        "tau_high": 0.24,
+        "mean_cost": 0.07908857037853731,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.004398240703718513,
+        "confusion": [
+          [
+            4642,
+            102,
+            1,
+            4
+          ],
+          [
+            59,
+            177,
+            17,
+            0
+          ],
+          [
+            0,
+            0,
+            332,
+            6
+          ],
+          [
+            0,
+            9,
+            0,
+            93
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.56,
+        "tau_high": 0.26,
+        "mean_cost": 0.07908857037853731,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.004398240703718513,
+        "confusion": [
+          [
+            4642,
+            102,
+            1,
+            4
+          ],
+          [
+            59,
+            177,
+            17,
+            0
+          ],
+          [
+            0,
+            0,
+            332,
+            6
+          ],
+          [
+            0,
+            9,
+            0,
+            93
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.56,
+        "tau_high": 0.28,
+        "mean_cost": 0.07908857037853731,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.004398240703718513,
+        "confusion": [
+          [
+            4642,
+            102,
+            1,
+            4
+          ],
+          [
+            59,
+            177,
+            17,
+            0
+          ],
+          [
+            0,
+            0,
+            332,
+            6
+          ],
+          [
+            0,
+            9,
+            0,
+            93
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.56,
+        "tau_high": 0.3,
+        "mean_cost": 0.07908857037853731,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.004398240703718513,
+        "confusion": [
+          [
+            4642,
+            102,
+            1,
+            4
+          ],
+          [
+            59,
+            177,
+            17,
+            0
+          ],
+          [
+            0,
+            0,
+            332,
+            6
+          ],
+          [
+            0,
+            9,
+            0,
+            93
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.56,
+        "tau_high": 0.32,
+        "mean_cost": 0.07872105843439912,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.004198320671731308,
+        "confusion": [
+          [
+            4643,
+            102,
+            1,
+            3
+          ],
+          [
+            59,
+            177,
+            17,
+            0
+          ],
+          [
+            0,
+            0,
+            332,
+            6
+          ],
+          [
+            0,
+            9,
+            0,
+            93
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.56,
+        "tau_high": 0.34,
+        "mean_cost": 0.0792723263506064,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.004198320671731308,
+        "confusion": [
+          [
+            4643,
+            102,
+            1,
+            3
+          ],
+          [
+            59,
+            177,
+            17,
+            0
+          ],
+          [
+            0,
+            0,
+            332,
+            6
+          ],
+          [
+            0,
+            9,
+            1,
+            92
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.56,
+        "tau_high": 0.36,
+        "mean_cost": 0.0792723263506064,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.004198320671731308,
+        "confusion": [
+          [
+            4643,
+            102,
+            1,
+            3
+          ],
+          [
+            59,
+            177,
+            17,
+            0
+          ],
+          [
+            0,
+            0,
+            332,
+            6
+          ],
+          [
+            0,
+            9,
+            1,
+            92
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.56,
+        "tau_high": 0.38,
+        "mean_cost": 0.07982359426681368,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.004198320671731308,
+        "confusion": [
+          [
+            4643,
+            102,
+            1,
+            3
+          ],
+          [
+            59,
+            177,
+            17,
+            0
+          ],
+          [
+            0,
+            0,
+            332,
+            6
+          ],
+          [
+            0,
+            9,
+            2,
+            91
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.56,
+        "tau_high": 0.4,
+        "mean_cost": 0.07982359426681368,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.004198320671731308,
+        "confusion": [
+          [
+            4643,
+            102,
+            1,
+            3
+          ],
+          [
+            59,
+            177,
+            17,
+            0
+          ],
+          [
+            0,
+            0,
+            332,
+            6
+          ],
+          [
+            0,
+            9,
+            2,
+            91
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.56,
+        "tau_high": 0.42,
+        "mean_cost": 0.08092613009922824,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.004198320671731308,
+        "confusion": [
+          [
+            4643,
+            102,
+            1,
+            3
+          ],
+          [
+            59,
+            177,
+            17,
+            0
+          ],
+          [
+            0,
+            0,
+            332,
+            6
+          ],
+          [
+            0,
+            9,
+            4,
+            89
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.56,
+        "tau_high": 0.44,
+        "mean_cost": 0.08092613009922824,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.004198320671731308,
+        "confusion": [
+          [
+            4643,
+            102,
+            1,
+            3
+          ],
+          [
+            59,
+            177,
+            17,
+            0
+          ],
+          [
+            0,
+            0,
+            332,
+            6
+          ],
+          [
+            0,
+            9,
+            4,
+            89
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.56,
+        "tau_high": 0.46,
+        "mean_cost": 0.08092613009922824,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.004198320671731308,
+        "confusion": [
+          [
+            4643,
+            102,
+            1,
+            3
+          ],
+          [
+            59,
+            177,
+            17,
+            0
+          ],
+          [
+            0,
+            0,
+            332,
+            6
+          ],
+          [
+            0,
+            9,
+            4,
+            89
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.56,
+        "tau_high": 0.48,
+        "mean_cost": 0.0814773980154355,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.004198320671731308,
+        "confusion": [
+          [
+            4643,
+            102,
+            1,
+            3
+          ],
+          [
+            59,
+            177,
+            17,
+            0
+          ],
+          [
+            0,
+            0,
+            332,
+            6
+          ],
+          [
+            0,
+            9,
+            5,
+            88
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.56,
+        "tau_high": 0.5,
+        "mean_cost": 0.0814773980154355,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.004198320671731308,
+        "confusion": [
+          [
+            4643,
+            102,
+            1,
+            3
+          ],
+          [
+            59,
+            177,
+            17,
+            0
+          ],
+          [
+            0,
+            0,
+            332,
+            6
+          ],
+          [
+            0,
+            9,
+            5,
+            88
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.56,
+        "tau_high": 0.52,
+        "mean_cost": 0.0814773980154355,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.004198320671731308,
+        "confusion": [
+          [
+            4643,
+            102,
+            1,
+            3
+          ],
+          [
+            59,
+            177,
+            17,
+            0
+          ],
+          [
+            0,
+            0,
+            332,
+            6
+          ],
+          [
+            0,
+            9,
+            5,
+            88
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.56,
+        "tau_high": 0.54,
+        "mean_cost": 0.0816611539875046,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.003998400639744102,
+        "confusion": [
+          [
+            4644,
+            102,
+            1,
+            2
+          ],
+          [
+            59,
+            177,
+            17,
+            0
+          ],
+          [
+            0,
+            0,
+            332,
+            6
+          ],
+          [
+            0,
+            9,
+            6,
+            87
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.56,
+        "tau_high": 0.56,
+        "mean_cost": 0.0816611539875046,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.003998400639744102,
+        "confusion": [
+          [
+            4644,
+            102,
+            1,
+            2
+          ],
+          [
+            59,
+            177,
+            17,
+            0
+          ],
+          [
+            0,
+            0,
+            332,
+            6
+          ],
+          [
+            0,
+            9,
+            6,
+            87
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.56,
+        "tau_high": 0.58,
+        "mean_cost": 0.08202866593164279,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.003998400639744102,
+        "confusion": [
+          [
+            4644,
+            102,
+            2,
+            1
+          ],
+          [
+            59,
+            177,
+            17,
+            0
+          ],
+          [
+            0,
+            0,
+            332,
+            6
+          ],
+          [
+            0,
+            9,
+            7,
+            86
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.56,
+        "tau_high": 0.6,
+        "mean_cost": 0.08193678794560826,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.003998400639744102,
+        "confusion": [
+          [
+            4644,
+            102,
+            2,
+            1
+          ],
+          [
+            59,
+            177,
+            17,
+            0
+          ],
+          [
+            0,
+            0,
+            333,
+            5
+          ],
+          [
+            0,
+            9,
+            7,
+            86
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.56,
+        "tau_high": 0.62,
+        "mean_cost": 0.08248805586181551,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.003998400639744102,
+        "confusion": [
+          [
+            4644,
+            102,
+            2,
+            1
+          ],
+          [
+            59,
+            177,
+            17,
+            0
+          ],
+          [
+            0,
+            0,
+            333,
+            5
+          ],
+          [
+            0,
+            9,
+            8,
+            85
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.56,
+        "tau_high": 0.64,
+        "mean_cost": 0.08248805586181551,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.003998400639744102,
+        "confusion": [
+          [
+            4644,
+            102,
+            2,
+            1
+          ],
+          [
+            59,
+            177,
+            17,
+            0
+          ],
+          [
+            0,
+            0,
+            333,
+            5
+          ],
+          [
+            0,
+            9,
+            8,
+            85
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.56,
+        "tau_high": 0.66,
+        "mean_cost": 0.0830393237780228,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.003998400639744102,
+        "confusion": [
+          [
+            4644,
+            102,
+            2,
+            1
+          ],
+          [
+            59,
+            177,
+            17,
+            0
+          ],
+          [
+            0,
+            0,
+            333,
+            5
+          ],
+          [
+            0,
+            9,
+            9,
+            84
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.56,
+        "tau_high": 0.68,
+        "mean_cost": 0.08294744579198825,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.003998400639744102,
+        "confusion": [
+          [
+            4644,
+            102,
+            2,
+            1
+          ],
+          [
+            59,
+            177,
+            17,
+            0
+          ],
+          [
+            0,
+            0,
+            334,
+            4
+          ],
+          [
+            0,
+            9,
+            9,
+            84
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.56,
+        "tau_high": 0.7,
+        "mean_cost": 0.08294744579198825,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.003998400639744102,
+        "confusion": [
+          [
+            4644,
+            102,
+            2,
+            1
+          ],
+          [
+            59,
+            177,
+            17,
+            0
+          ],
+          [
+            0,
+            0,
+            334,
+            4
+          ],
+          [
+            0,
+            9,
+            9,
+            84
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.56,
+        "tau_high": 0.72,
+        "mean_cost": 0.08276368981991915,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.003998400639744102,
+        "confusion": [
+          [
+            4644,
+            102,
+            3,
+            0
+          ],
+          [
+            59,
+            177,
+            17,
+            0
+          ],
+          [
+            0,
+            0,
+            334,
+            4
+          ],
+          [
+            0,
+            9,
+            9,
+            84
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.56,
+        "tau_high": 0.74,
+        "mean_cost": 0.08276368981991915,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.003998400639744102,
+        "confusion": [
+          [
+            4644,
+            102,
+            3,
+            0
+          ],
+          [
+            59,
+            177,
+            17,
+            0
+          ],
+          [
+            0,
+            0,
+            334,
+            4
+          ],
+          [
+            0,
+            9,
+            9,
+            84
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.56,
+        "tau_high": 0.76,
+        "mean_cost": 0.08257993384785006,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.003998400639744102,
+        "confusion": [
+          [
+            4644,
+            102,
+            3,
+            0
+          ],
+          [
+            59,
+            177,
+            17,
+            0
+          ],
+          [
+            0,
+            0,
+            336,
+            2
+          ],
+          [
+            0,
+            9,
+            9,
+            84
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.56,
+        "tau_high": 0.78,
+        "mean_cost": 0.08257993384785006,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.003998400639744102,
+        "confusion": [
+          [
+            4644,
+            102,
+            3,
+            0
+          ],
+          [
+            59,
+            177,
+            17,
+            0
+          ],
+          [
+            0,
+            0,
+            336,
+            2
+          ],
+          [
+            0,
+            9,
+            9,
+            84
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.56,
+        "tau_high": 0.8,
+        "mean_cost": 0.08257993384785006,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.003998400639744102,
+        "confusion": [
+          [
+            4644,
+            102,
+            3,
+            0
+          ],
+          [
+            59,
+            177,
+            17,
+            0
+          ],
+          [
+            0,
+            0,
+            336,
+            2
+          ],
+          [
+            0,
+            9,
+            9,
+            84
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.56,
+        "tau_high": 0.82,
+        "mean_cost": 0.08257993384785006,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.003998400639744102,
+        "confusion": [
+          [
+            4644,
+            102,
+            3,
+            0
+          ],
+          [
+            59,
+            177,
+            17,
+            0
+          ],
+          [
+            0,
+            0,
+            336,
+            2
+          ],
+          [
+            0,
+            9,
+            9,
+            84
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.56,
+        "tau_high": 0.84,
+        "mean_cost": 0.08257993384785006,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.003998400639744102,
+        "confusion": [
+          [
+            4644,
+            102,
+            3,
+            0
+          ],
+          [
+            59,
+            177,
+            17,
+            0
+          ],
+          [
+            0,
+            0,
+            336,
+            2
+          ],
+          [
+            0,
+            9,
+            9,
+            84
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.56,
+        "tau_high": 0.86,
+        "mean_cost": 0.08257993384785006,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.003998400639744102,
+        "confusion": [
+          [
+            4644,
+            102,
+            3,
+            0
+          ],
+          [
+            59,
+            177,
+            17,
+            0
+          ],
+          [
+            0,
+            0,
+            336,
+            2
+          ],
+          [
+            0,
+            9,
+            9,
+            84
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.56,
+        "tau_high": 0.88,
+        "mean_cost": 0.08313120176405733,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.003998400639744102,
+        "confusion": [
+          [
+            4644,
+            102,
+            3,
+            0
+          ],
+          [
+            59,
+            177,
+            17,
+            0
+          ],
+          [
+            0,
+            0,
+            336,
+            2
+          ],
+          [
+            0,
+            9,
+            10,
+            83
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.56,
+        "tau_high": 0.9,
+        "mean_cost": 0.08313120176405733,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.003998400639744102,
+        "confusion": [
+          [
+            4644,
+            102,
+            3,
+            0
+          ],
+          [
+            59,
+            177,
+            17,
+            0
+          ],
+          [
+            0,
+            0,
+            336,
+            2
+          ],
+          [
+            0,
+            9,
+            10,
+            83
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.56,
+        "tau_high": 0.92,
+        "mean_cost": 0.08368246968026462,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.003998400639744102,
+        "confusion": [
+          [
+            4644,
+            102,
+            3,
+            0
+          ],
+          [
+            59,
+            177,
+            17,
+            0
+          ],
+          [
+            0,
+            0,
+            336,
+            2
+          ],
+          [
+            0,
+            9,
+            11,
+            82
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.56,
+        "tau_high": 0.94,
+        "mean_cost": 0.08478500551267917,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.003998400639744102,
+        "confusion": [
+          [
+            4644,
+            102,
+            3,
+            0
+          ],
+          [
+            59,
+            177,
+            17,
+            0
+          ],
+          [
+            0,
+            0,
+            336,
+            2
+          ],
+          [
+            0,
+            9,
+            13,
+            80
+          ]
+        ]
+      },
+      {
+        "tau_review": 0.56,
+        "tau_high": 0.96,
+        "mean_cost": 0.08515251745681736,
+        "risky_escalation_recall": 0.9795454545454545,
+        "high_risk_escalation_recall": 0.9117647058823529,
+        "false_escalation_rate": 0.003998400639744102,
+        "confusion": [
+          [
+            4644,
+            102,
+            3,
+            0
+          ],
+          [
+            59,
+            177,
+            17,
+            0
+          ],
+          [
+            0,
+            0,
+            338,
+            0
+          ],
+          [
+            0,
+            9,
+            14,
+            79
+          ]
+        ]
+      }
+    ]
+  },
+  "templates": {
+    "access_jit": {
+      "n": 75,
+      "label": "safe_normal",
+      "family": "normal",
+      "escalated": 0.0
+    },
+    "admin_config": {
+      "n": 33,
+      "label": "safe_unusual",
+      "family": "normal",
+      "escalated": 0.0
+    },
+    "admin_grant": {
+      "n": 34,
+      "label": "safe_normal",
+      "family": "normal",
+      "escalated": 0.0
+    },
+    "admin_lookup": {
+      "n": 39,
+      "label": "safe_normal",
+      "family": "normal",
+      "escalated": 0.0
+    },
+    "ap_known_vendor": {
+      "n": 96,
+      "label": "safe_normal",
+      "family": "normal",
+      "escalated": 0.0
+    },
+    "bulk_customer_export": {
+      "n": 11,
+      "label": "high_risk",
+      "family": "high_risk",
+      "escalated": 1.0
+    },
+    "campaign_send": {
+      "n": 101,
+      "label": "safe_normal",
+      "family": "normal",
+      "escalated": 0.0
+    },
+    "confidential_to_approved_vendor": {
+      "n": 17,
+      "label": "safe_normal",
+      "family": "hard_negative",
+      "escalated": 0.0
+    },
+    "confidential_to_new_approved_ai": {
+      "n": 5,
+      "label": "suspicious_review",
+      "family": "suspicious",
+      "escalated": 1.0
+    },
+    "confidential_to_unapproved_ai": {
+      "n": 7,
+      "label": "high_risk",
+      "family": "high_risk",
+      "escalated": 1.0
+    },
+    "deploy_outside_window": {
+      "n": 9,
+      "label": "suspicious_review",
+      "family": "suspicious",
+      "escalated": 1.0
+    },
+    "deploy_prod_window": {
+      "n": 110,
+      "label": "safe_normal",
+      "family": "normal",
+      "escalated": 0.0
+    },
+    "deploy_staging": {
+      "n": 112,
+      "label": "safe_normal",
+      "family": "normal",
+      "escalated": 0.0
+    },
+    "destructive_prod": {
+      "n": 5,
+      "label": "high_risk",
+      "family": "high_risk",
+      "escalated": 1.0
+    },
+    "destructive_prod_ticketed": {
+      "n": 6,
+      "label": "suspicious_review",
+      "family": "suspicious",
+      "escalated": 1.0
+    },
+    "disable_security_controls": {
+      "n": 12,
+      "label": "high_risk",
+      "family": "high_risk",
+      "escalated": 1.0
+    },
+    "disguised_classification": {
+      "n": 9,
+      "label": "high_risk",
+      "family": "adversarial",
+      "escalated": 0.0
+    },
+    "eng_clipboard": {
+      "n": 59,
+      "label": "safe_normal",
+      "family": "normal",
+      "escalated": 0.0
+    },
+    "eng_external_public": {
+      "n": 12,
+      "label": "safe_unusual",
+      "family": "normal",
+      "escalated": 0.0
+    },
+    "eng_kubectl": {
+      "n": 147,
+      "label": "safe_normal",
+      "family": "normal",
+      "escalated": 0.0
+    },
+    "eng_logs": {
+      "n": 80,
+      "label": "safe_normal",
+      "family": "normal",
+      "escalated": 0.0
+    },
+    "eng_query": {
+      "n": 228,
+      "label": "safe_unusual",
+      "family": "normal",
+      "escalated": 0.0
+    },
+    "eng_secret_read": {
+      "n": 47,
+      "label": "safe_normal",
+      "family": "normal",
+      "escalated": 0.0425531914893617
+    },
+    "eng_unregistered_tool": {
+      "n": 53,
+      "label": "safe_normal",
+      "family": "normal",
+      "escalated": 0.0
+    },
+    "eng_upload": {
+      "n": 44,
+      "label": "safe_normal",
+      "family": "normal",
+      "escalated": 0.0
+    },
+    "enterprise_refund_ticketed": {
+      "n": 14,
+      "label": "safe_unusual",
+      "family": "hard_negative",
+      "escalated": 0.0
+    },
+    "export_nightly": {
+      "n": 71,
+      "label": "safe_normal",
+      "family": "normal",
+      "escalated": 0.0
+    },
+    "external_identity_grant": {
+      "n": 6,
+      "label": "high_risk",
+      "family": "high_risk",
+      "escalated": 1.0
+    },
+    "facility_read": {
+      "n": 259,
+      "label": "safe_normal",
+      "family": "normal",
+      "escalated": 0.0
+    },
+    "facility_stop": {
+      "n": 2,
+      "label": "suspicious_review",
+      "family": "suspicious",
+      "escalated": 1.0
+    },
+    "fin_auditor_share": {
+      "n": 33,
+      "label": "safe_normal",
+      "family": "normal",
+      "escalated": 0.0
+    },
+    "fin_export": {
+      "n": 50,
+      "label": "safe_normal",
+      "family": "normal",
+      "escalated": 0.0
+    },
+    "fin_report": {
+      "n": 112,
+      "label": "safe_normal",
+      "family": "normal",
+      "escalated": 0.0
+    },
+    "gradual_export_ramp": {
+      "n": 30,
+      "label": "safe_unusual",
+      "family": "normal",
+      "escalated": 1.0
+    },
+    "growth_outreach": {
+      "n": 113,
+      "label": "safe_normal",
+      "family": "normal",
+      "escalated": 0.0
+    },
+    "incident_runbook_burst": {
+      "n": 54,
+      "label": "safe_unusual",
+      "family": "hard_negative",
+      "escalated": 0.0
+    },
+    "just_under_threshold_payments": {
+      "n": 25,
+      "label": "suspicious_review",
+      "family": "adversarial",
+      "escalated": 1.0
+    },
+    "known_destination_new_tool": {
+      "n": 10,
+      "label": "suspicious_review",
+      "family": "adversarial",
+      "escalated": 1.0
+    },
+    "large_partner_release": {
+      "n": 8,
+      "label": "safe_unusual",
+      "family": "hard_negative",
+      "escalated": 0.0
+    },
+    "lead_lookup": {
+      "n": 46,
+      "label": "safe_normal",
+      "family": "normal",
+      "escalated": 0.0
+    },
+    "lead_refund": {
+      "n": 58,
+      "label": "safe_normal",
+      "family": "normal",
+      "escalated": 0.0
+    },
+    "masked_fields_ood": {
+      "n": 11,
+      "label": "safe_unusual",
+      "family": "adversarial",
+      "escalated": 0.7272727272727273
+    },
+    "oncall_deploy_in_window": {
+      "n": 9,
+      "label": "safe_normal",
+      "family": "hard_negative",
+      "escalated": 0.0
+    },
+    "oncall_secret_read": {
+      "n": 10,
+      "label": "safe_normal",
+      "family": "hard_negative",
+      "escalated": 0.0
+    },
+    "ops_cleanup_staging": {
+      "n": 31,
+      "label": "safe_normal",
+      "family": "normal",
+      "escalated": 0.0
+    },
+    "ops_config": {
+      "n": 147,
+      "label": "safe_normal",
+      "family": "normal",
+      "escalated": 0.0
+    },
+    "ops_runbook": {
+      "n": 522,
+      "label": "safe_normal",
+      "family": "normal",
+      "escalated": 0.0
+    },
+    "ops_unregistered_tool": {
+      "n": 60,
+      "label": "safe_normal",
+      "family": "normal",
+      "escalated": 0.0
+    },
+    "outbound_burst": {
+      "n": 63,
+      "label": "safe_unusual",
+      "family": "suspicious",
+      "escalated": 0.8888888888888888
+    },
+    "payment_unseen_beneficiary": {
+      "n": 16,
+      "label": "high_risk",
+      "family": "high_risk",
+      "escalated": 1.0
+    },
+    "privesc_then_export": {
+      "n": 20,
+      "label": "safe_unusual",
+      "family": "suspicious",
+      "escalated": 0.5
+    },
+    "procurement_private_llm": {
+      "n": 149,
+      "label": "safe_normal",
+      "family": "normal",
+      "escalated": 0.0
+    },
+    "procurement_search": {
+      "n": 179,
+      "label": "safe_normal",
+      "family": "normal",
+      "escalated": 0.0
+    },
+    "procurement_unregistered_tool": {
+      "n": 12,
+      "label": "safe_normal",
+      "family": "normal",
+      "escalated": 0.0
+    },
+    "procurement_vendor_email": {
+      "n": 42,
+      "label": "safe_normal",
+      "family": "normal",
+      "escalated": 0.0
+    },
+    "public_doc_new_vendor": {
+      "n": 23,
+      "label": "safe_unusual",
+      "family": "hard_negative",
+      "escalated": 0.0
+    },
+    "quarter_end_export": {
+      "n": 8,
+      "label": "safe_unusual",
+      "family": "hard_negative",
+      "escalated": 0.0
+    },
+    "queue_breach": {
+      "n": 75,
+      "label": "suspicious_review",
+      "family": "suspicious",
+      "escalated": 1.0
+    },
+    "records_release": {
+      "n": 55,
+      "label": "safe_normal",
+      "family": "normal",
+      "escalated": 0.0
+    },
+    "refund_extreme": {
+      "n": 6,
+      "label": "high_risk",
+      "family": "high_risk",
+      "escalated": 1.0
+    },
+    "refund_spike": {
+      "n": 8,
+      "label": "suspicious_review",
+      "family": "suspicious",
+      "escalated": 1.0
+    },
+    "rep_crm": {
+      "n": 71,
+      "label": "safe_normal",
+      "family": "normal",
+      "escalated": 0.0
+    },
+    "rep_email": {
+      "n": 191,
+      "label": "safe_normal",
+      "family": "normal",
+      "escalated": 0.0
+    },
+    "rep_share_deck": {
+      "n": 43,
+      "label": "safe_normal",
+      "family": "normal",
+      "escalated": 0.0
+    },
+    "rep_unregistered_tool": {
+      "n": 40,
+      "label": "safe_normal",
+      "family": "normal",
+      "escalated": 0.0
+    },
+    "restricted_to_unapproved_ai_new_tool": {
+      "n": 11,
+      "label": "high_risk",
+      "family": "high_risk",
+      "escalated": 1.0
+    },
+    "sales_crm": {
+      "n": 49,
+      "label": "safe_normal",
+      "family": "normal",
+      "escalated": 0.0
+    },
+    "sales_outreach": {
+      "n": 175,
+      "label": "safe_normal",
+      "family": "normal",
+      "escalated": 0.0
+    },
+    "secret_egress": {
+      "n": 12,
+      "label": "high_risk",
+      "family": "high_risk",
+      "escalated": 1.0
+    },
+    "split_exfiltration": {
+      "n": 118,
+      "label": "suspicious_review",
+      "family": "adversarial",
+      "escalated": 1.0
+    },
+    "support_lookup": {
+      "n": 217,
+      "label": "safe_normal",
+      "family": "normal",
+      "escalated": 0.0
+    },
+    "support_refund_small": {
+      "n": 442,
+      "label": "safe_normal",
+      "family": "normal",
+      "escalated": 0.0022624434389140274
+    },
+    "support_reply": {
+      "n": 385,
+      "label": "safe_normal",
+      "family": "normal",
+      "escalated": 0.0
+    }
+  },
+  "gold": {
+    "n": 90,
+    "high_risk_escalation_recall": 1.0,
+    "high_risk_strict_recall": 0.9666666666666667,
+    "risky_escalation_recall": 1.0,
+    "safe_precision": 1.0,
+    "false_escalation_rate": 0.0,
+    "hard_negative_false_positive_rate": 0.0,
+    "known_limitations": [
+      {
+        "id": "g-k01",
+        "title": "Secret material mislabelled 'internal' \u2192 unverified domain",
+        "expect": "high_risk",
+        "predicted": "safe_unusual",
+        "risk": 0.0004,
+        "p_high": 0.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": false,
+        "exact": false,
+        "tags": [
+          "adversarial"
+        ],
+        "known_limitation": true
+      },
+      {
+        "id": "g-k02",
+        "title": "Customer records mislabelled 'public', 50 rows \u2192 unverified",
+        "expect": "high_risk",
+        "predicted": "safe_unusual",
+        "risk": 0.0,
+        "p_high": 0.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": false,
+        "exact": false,
+        "tags": [
+          "adversarial"
+        ],
+        "known_limitation": true
+      },
+      {
+        "id": "g-k03",
+        "title": "Slow ramp: +10%/day export volume never trips the baseline",
+        "expect": "suspicious_review",
+        "predicted": "safe_unusual",
+        "risk": 0.0001,
+        "p_high": 0.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": false,
+        "exact": false,
+        "tags": [
+          "adversarial"
+        ],
+        "known_limitation": true
+      }
+    ],
+    "failures": [],
+    "scenarios": [
+      {
+        "id": "g-h01",
+        "title": "Hero: 4 confidential contracts \u2192 unapproved AI provider",
+        "expect": "high_risk",
+        "predicted": "high_risk",
+        "risk": 1.0,
+        "p_high": 1.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [
+          "hero"
+        ],
+        "known_limitation": false
+      },
+      {
+        "id": "g-h02",
+        "title": "2 restricted docs \u2192 unapproved AI provider",
+        "expect": "high_risk",
+        "predicted": "high_risk",
+        "risk": 1.0,
+        "p_high": 1.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-h03",
+        "title": "12 confidential docs \u2192 unapproved AI provider",
+        "expect": "high_risk",
+        "predicted": "high_risk",
+        "risk": 1.0,
+        "p_high": 1.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-h04",
+        "title": "Secret-bearing file \u2192 unverified domain (agent)",
+        "expect": "high_risk",
+        "predicted": "high_risk",
+        "risk": 1.0,
+        "p_high": 1.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-h05",
+        "title": "Engineer uploads secret to unverified share",
+        "expect": "high_risk",
+        "predicted": "high_risk",
+        "risk": 1.0,
+        "p_high": 1.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-h06",
+        "title": "Engineer pastes secret into blocked paste site",
+        "expect": "high_risk",
+        "predicted": "high_risk",
+        "risk": 0.9868,
+        "p_high": 0.9867,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-h07",
+        "title": "Ops agent emails a secret externally",
+        "expect": "high_risk",
+        "predicted": "high_risk",
+        "risk": 1.0,
+        "p_high": 1.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-h08",
+        "title": "Warehouse export of 50k restricted rows to external bucket",
+        "expect": "high_risk",
+        "predicted": "high_risk",
+        "risk": 1.0,
+        "p_high": 1.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-h09",
+        "title": "Engineer exports 12k regulated records externally",
+        "expect": "high_risk",
+        "predicted": "high_risk",
+        "risk": 1.0,
+        "p_high": 1.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-h10",
+        "title": "Finance analyst exports 200k restricted rows externally",
+        "expect": "high_risk",
+        "predicted": "high_risk",
+        "risk": 1.0,
+        "p_high": 1.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-h11",
+        "title": "Admin role granted to unverified external identity",
+        "expect": "high_risk",
+        "predicted": "high_risk",
+        "risk": 1.0,
+        "p_high": 1.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-h12",
+        "title": "External identity grant, ticketed, in window",
+        "expect": "high_risk",
+        "predicted": "high_risk",
+        "risk": 1.0,
+        "p_high": 1.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-h13",
+        "title": "Ops agent drops production tables, no ticket",
+        "expect": "high_risk",
+        "predicted": "high_risk",
+        "risk": 1.0,
+        "p_high": 0.999,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-h14",
+        "title": "Engineer drops production table, no ticket",
+        "expect": "high_risk",
+        "predicted": "high_risk",
+        "risk": 1.0,
+        "p_high": 0.9993,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-h15",
+        "title": "$150k payment to never-seen beneficiary",
+        "expect": "high_risk",
+        "predicted": "high_risk",
+        "risk": 1.0,
+        "p_high": 0.9949,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-h16",
+        "title": "$40k payment to never-seen beneficiary",
+        "expect": "high_risk",
+        "predicted": "high_risk",
+        "risk": 1.0,
+        "p_high": 0.9729,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-h17",
+        "title": "Agent reads security signing keys with a new tool",
+        "expect": "high_risk",
+        "predicted": "high_risk",
+        "risk": 1.0,
+        "p_high": 1.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-h18",
+        "title": "Agent disables EDR in production",
+        "expect": "high_risk",
+        "predicted": "high_risk",
+        "risk": 1.0,
+        "p_high": 1.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-h19",
+        "title": "$60k refund",
+        "expect": "high_risk",
+        "predicted": "high_risk",
+        "risk": 0.9438,
+        "p_high": 0.8842,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-h20",
+        "title": "Self-elevation then 10k restricted rows to external share",
+        "expect": "high_risk",
+        "predicted": "high_risk",
+        "risk": 1.0,
+        "p_high": 1.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-h21",
+        "title": "Restricted docs \u2192 unapproved AI via new chat tool",
+        "expect": "high_risk",
+        "predicted": "high_risk",
+        "risk": 1.0,
+        "p_high": 0.9996,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-h22",
+        "title": "Confidential docs \u2192 blocked domain",
+        "expect": "high_risk",
+        "predicted": "suspicious_review",
+        "risk": 1.0,
+        "p_high": 0.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": false,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-h23",
+        "title": "Sales agent sends 2,000 restricted records externally",
+        "expect": "high_risk",
+        "predicted": "high_risk",
+        "risk": 1.0,
+        "p_high": 0.9619,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-h24",
+        "title": "Ops agent exports 30k regulated rows externally",
+        "expect": "high_risk",
+        "predicted": "high_risk",
+        "risk": 1.0,
+        "p_high": 1.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-h25",
+        "title": "Secret upload at 3am",
+        "expect": "high_risk",
+        "predicted": "high_risk",
+        "risk": 1.0,
+        "p_high": 1.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-h26",
+        "title": "$250k payment to unseen beneficiary on Saturday",
+        "expect": "high_risk",
+        "predicted": "high_risk",
+        "risk": 1.0,
+        "p_high": 0.9996,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-h27",
+        "title": "External identity grant on Saturday night",
+        "expect": "high_risk",
+        "predicted": "high_risk",
+        "risk": 1.0,
+        "p_high": 1.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-h28",
+        "title": "$30k refund at 2am",
+        "expect": "high_risk",
+        "predicted": "high_risk",
+        "risk": 0.9998,
+        "p_high": 0.9803,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-h29",
+        "title": "Confidential contracts \u2192 unapproved AI at 11pm",
+        "expect": "high_risk",
+        "predicted": "high_risk",
+        "risk": 1.0,
+        "p_high": 1.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-h30",
+        "title": "Growth agent emails a secret",
+        "expect": "high_risk",
+        "predicted": "high_risk",
+        "risk": 1.0,
+        "p_high": 1.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-s01",
+        "title": "Support agent exports contacts outside its queue",
+        "expect": "suspicious_review",
+        "predicted": "suspicious_review",
+        "risk": 0.9998,
+        "p_high": 0.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-s02",
+        "title": "Third out-of-queue bulk view in 10 minutes",
+        "expect": "suspicious_review",
+        "predicted": "suspicious_review",
+        "risk": 0.9999,
+        "p_high": 0.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-s03",
+        "title": "Confidential docs \u2192 approved external AI, first time",
+        "expect": "suspicious_review",
+        "predicted": "suspicious_review",
+        "risk": 0.9136,
+        "p_high": 0.0951,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-s04",
+        "title": "Production deploy at 2am, no window, no ticket",
+        "expect": "suspicious_review",
+        "predicted": "suspicious_review",
+        "risk": 1.0,
+        "p_high": 0.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-s05",
+        "title": "Production deploy outside window, ticketed",
+        "expect": "suspicious_review",
+        "predicted": "suspicious_review",
+        "risk": 0.916,
+        "p_high": 0.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-s06",
+        "title": "$8,000 refund without ticket",
+        "expect": "suspicious_review",
+        "predicted": "suspicious_review",
+        "risk": 0.6792,
+        "p_high": 0.3582,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-s07",
+        "title": "$15,000 refund without ticket",
+        "expect": "suspicious_review",
+        "predicted": "suspicious_review",
+        "risk": 0.7773,
+        "p_high": 0.5557,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-s08",
+        "title": "Self-elevation then 5k restricted rows internally",
+        "expect": "suspicious_review",
+        "predicted": "suspicious_review",
+        "risk": 0.9999,
+        "p_high": 0.0388,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-s09",
+        "title": "Analyst self-elevates then pulls 20k restricted rows",
+        "expect": "suspicious_review",
+        "predicted": "suspicious_review",
+        "risk": 0.9999,
+        "p_high": 0.0612,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-s10",
+        "title": "Ticketed production table drop outside window",
+        "expect": "suspicious_review",
+        "predicted": "suspicious_review",
+        "risk": 1.0,
+        "p_high": 0.1355,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-s11",
+        "title": "Facility AI stops a chiller line",
+        "expect": "suspicious_review",
+        "predicted": "suspicious_review",
+        "risk": 0.9999,
+        "p_high": 0.0004,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-s12",
+        "title": "10th outbound send in 5 minutes to new domains",
+        "expect": "suspicious_review",
+        "predicted": "suspicious_review",
+        "risk": 0.9985,
+        "p_high": 0.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-s13",
+        "title": "20th outbound send in 10 minutes (growth agent)",
+        "expect": "suspicious_review",
+        "predicted": "suspicious_review",
+        "risk": 0.9999,
+        "p_high": 0.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-s14",
+        "title": "Split exfiltration: 10th small confidential send to one new domain",
+        "expect": "suspicious_review",
+        "predicted": "suspicious_review",
+        "risk": 1.0,
+        "p_high": 0.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [
+          "adversarial"
+        ],
+        "known_limitation": false
+      },
+      {
+        "id": "g-s15",
+        "title": "Split exfiltration: 6th send (engineer)",
+        "expect": "suspicious_review",
+        "predicted": "suspicious_review",
+        "risk": 1.0,
+        "p_high": 0.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [
+          "adversarial"
+        ],
+        "known_limitation": false
+      },
+      {
+        "id": "g-s16",
+        "title": "Third $9,800 payment to new beneficiary today",
+        "expect": "suspicious_review",
+        "predicted": "suspicious_review",
+        "risk": 0.9994,
+        "p_high": 0.0005,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [
+          "adversarial"
+        ],
+        "known_limitation": false
+      },
+      {
+        "id": "g-s17",
+        "title": "Single $9,950 payment to new beneficiary",
+        "expect": "suspicious_review",
+        "predicted": "high_risk",
+        "risk": 0.9998,
+        "p_high": 0.8591,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": false,
+        "tags": [
+          "adversarial"
+        ],
+        "known_limitation": false
+      },
+      {
+        "id": "g-s18",
+        "title": "Restricted docs to known private LLM via new batch-export tool",
+        "expect": "suspicious_review",
+        "predicted": "suspicious_review",
+        "risk": 0.9991,
+        "p_high": 0.0002,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [
+          "adversarial"
+        ],
+        "known_limitation": false
+      },
+      {
+        "id": "g-s19",
+        "title": "Restricted docs to known private LLM via embed-all tool",
+        "expect": "suspicious_review",
+        "predicted": "suspicious_review",
+        "risk": 0.9983,
+        "p_high": 0.0001,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [
+          "adversarial"
+        ],
+        "known_limitation": false
+      },
+      {
+        "id": "g-s20",
+        "title": "Masked fields: unknown class bulk pull to unknown destination",
+        "expect": "suspicious_review",
+        "predicted": "suspicious_review",
+        "risk": 0.7118,
+        "p_high": 0.0404,
+        "abstain": true,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [
+          "ood"
+        ],
+        "known_limitation": false
+      },
+      {
+        "id": "g-s21",
+        "title": "Masked fields: unknown action type",
+        "expect": "suspicious_review",
+        "predicted": "suspicious_review",
+        "risk": 1.0,
+        "p_high": 0.0007,
+        "abstain": true,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [
+          "ood"
+        ],
+        "known_limitation": false
+      },
+      {
+        "id": "g-s22",
+        "title": "Restricted record pull 32\u00d7 the agent's normal volume",
+        "expect": "suspicious_review",
+        "predicted": "suspicious_review",
+        "risk": 0.9891,
+        "p_high": 0.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-s23",
+        "title": "Sales rep sends confidential pricing to unverified domain",
+        "expect": "suspicious_review",
+        "predicted": "suspicious_review",
+        "risk": 0.997,
+        "p_high": 0.0001,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-s24",
+        "title": "Engineer uploads 3 confidential docs to unverified share",
+        "expect": "suspicious_review",
+        "predicted": "high_risk",
+        "risk": 0.9998,
+        "p_high": 0.9791,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": false,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-s25",
+        "title": "Analyst shares confidential docs with non-auditor domain",
+        "expect": "suspicious_review",
+        "predicted": "high_risk",
+        "risk": 0.9997,
+        "p_high": 0.9957,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": false,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-s26",
+        "title": "Production config change outside window, no ticket",
+        "expect": "suspicious_review",
+        "predicted": "high_risk",
+        "risk": 0.9985,
+        "p_high": 0.9985,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": false,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-s27",
+        "title": "Admin grant in production with no window or ticket",
+        "expect": "suspicious_review",
+        "predicted": "high_risk",
+        "risk": 0.9933,
+        "p_high": 0.9136,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": false,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-s28",
+        "title": "JIT grant at 1am without ticket",
+        "expect": "suspicious_review",
+        "predicted": "suspicious_review",
+        "risk": 0.9989,
+        "p_high": 0.0328,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-s29",
+        "title": "Bulk view of 300 restricted customers",
+        "expect": "suspicious_review",
+        "predicted": "suspicious_review",
+        "risk": 0.9997,
+        "p_high": 0.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-s30",
+        "title": "Production deploy outside window on Saturday",
+        "expect": "suspicious_review",
+        "predicted": "suspicious_review",
+        "risk": 1.0,
+        "p_high": 0.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-n01",
+        "title": "Confidential docs to approved vendor, ticketed",
+        "expect": "safe_normal",
+        "predicted": "safe_normal",
+        "risk": 0.0,
+        "p_high": 0.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [
+          "hard_negative"
+        ],
+        "known_limitation": false
+      },
+      {
+        "id": "g-n02",
+        "title": "Analyst shares confidential docs with auditor",
+        "expect": "safe_normal",
+        "predicted": "safe_normal",
+        "risk": 0.0,
+        "p_high": 0.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [
+          "hard_negative"
+        ],
+        "known_limitation": false
+      },
+      {
+        "id": "g-n03",
+        "title": "Nightly 4,000-row confidential export to sandbox",
+        "expect": "safe_normal",
+        "predicted": "safe_unusual",
+        "risk": 0.0001,
+        "p_high": 0.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [
+          "hard_negative"
+        ],
+        "known_limitation": false
+      },
+      {
+        "id": "g-n04",
+        "title": "Quarter-end 40k-row export, ticketed",
+        "expect": "safe_unusual",
+        "predicted": "safe_unusual",
+        "risk": 0.0,
+        "p_high": 0.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [
+          "hard_negative"
+        ],
+        "known_limitation": false
+      },
+      {
+        "id": "g-n05",
+        "title": "On-call production deploy at 11pm inside window",
+        "expect": "safe_normal",
+        "predicted": "safe_normal",
+        "risk": 0.0054,
+        "p_high": 0.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [
+          "hard_negative"
+        ],
+        "known_limitation": false
+      },
+      {
+        "id": "g-n06",
+        "title": "Public doc to a brand-new vendor (Demo A)",
+        "expect": "safe_unusual",
+        "predicted": "safe_normal",
+        "risk": 0.0,
+        "p_high": 0.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [
+          "hard_negative",
+          "demo_a"
+        ],
+        "known_limitation": false
+      },
+      {
+        "id": "g-n07",
+        "title": "Engineer emails public spec to new vendor",
+        "expect": "safe_unusual",
+        "predicted": "safe_unusual",
+        "risk": 0.0,
+        "p_high": 0.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [
+          "hard_negative"
+        ],
+        "known_limitation": false
+      },
+      {
+        "id": "g-n08",
+        "title": "Support lead refunds $9,000 with ticket",
+        "expect": "safe_unusual",
+        "predicted": "safe_unusual",
+        "risk": 0.0,
+        "p_high": 0.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [
+          "hard_negative"
+        ],
+        "known_limitation": false
+      },
+      {
+        "id": "g-n09",
+        "title": "Copilot refunds $4,000 on enterprise ticket",
+        "expect": "safe_unusual",
+        "predicted": "safe_normal",
+        "risk": 0.0,
+        "p_high": 0.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [
+          "hard_negative"
+        ],
+        "known_limitation": false
+      },
+      {
+        "id": "g-n10",
+        "title": "Incident: 20th runbook step in 10 minutes",
+        "expect": "safe_unusual",
+        "predicted": "safe_unusual",
+        "risk": 0.0,
+        "p_high": 0.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [
+          "hard_negative"
+        ],
+        "known_limitation": false
+      },
+      {
+        "id": "g-n11",
+        "title": "Engineer reads a production secret with ticket",
+        "expect": "safe_normal",
+        "predicted": "safe_normal",
+        "risk": 0.0,
+        "p_high": 0.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [
+          "hard_negative"
+        ],
+        "known_limitation": false
+      },
+      {
+        "id": "g-n12",
+        "title": "On-call engineer reads secret at 2am with ticket",
+        "expect": "safe_unusual",
+        "predicted": "safe_unusual",
+        "risk": 0.0,
+        "p_high": 0.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [
+          "hard_negative"
+        ],
+        "known_limitation": false
+      },
+      {
+        "id": "g-n13",
+        "title": "Records exchange releases 1,500 to approved partner",
+        "expect": "safe_unusual",
+        "predicted": "safe_unusual",
+        "risk": 0.0,
+        "p_high": 0.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [
+          "hard_negative"
+        ],
+        "known_limitation": false
+      },
+      {
+        "id": "g-n14",
+        "title": "Confidential contracts to private LLM",
+        "expect": "safe_normal",
+        "predicted": "safe_normal",
+        "risk": 0.0,
+        "p_high": 0.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [
+          "hard_negative",
+          "hero_redirect"
+        ],
+        "known_limitation": false
+      },
+      {
+        "id": "g-n15",
+        "title": "Campaign bot sends 15k public emails via ESP",
+        "expect": "safe_normal",
+        "predicted": "safe_normal",
+        "risk": 0.0,
+        "p_high": 0.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-n16",
+        "title": "Growth agent emails 200 prospects",
+        "expect": "safe_normal",
+        "predicted": "safe_normal",
+        "risk": 0.0,
+        "p_high": 0.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-n17",
+        "title": "Sales agent emails a new prospect",
+        "expect": "safe_normal",
+        "predicted": "safe_normal",
+        "risk": 0.0,
+        "p_high": 0.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-n18",
+        "title": "JIT grant in window with ticket",
+        "expect": "safe_normal",
+        "predicted": "safe_normal",
+        "risk": 0.0,
+        "p_high": 0.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-n19",
+        "title": "$3,000 payment to known vendor",
+        "expect": "safe_normal",
+        "predicted": "safe_normal",
+        "risk": 0.0001,
+        "p_high": 0.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-n20",
+        "title": "$20,000 payment to known approved vendor",
+        "expect": "safe_normal",
+        "predicted": "safe_normal",
+        "risk": 0.0001,
+        "p_high": 0.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [
+          "hard_negative"
+        ],
+        "known_limitation": false
+      },
+      {
+        "id": "g-n21",
+        "title": "Ticketed staging cleanup",
+        "expect": "safe_normal",
+        "predicted": "safe_normal",
+        "risk": 0.0,
+        "p_high": 0.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [
+          "hard_negative"
+        ],
+        "known_limitation": false
+      },
+      {
+        "id": "g-n22",
+        "title": "Admin grant in window with ticket",
+        "expect": "safe_normal",
+        "predicted": "safe_normal",
+        "risk": 0.0,
+        "p_high": 0.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-n23",
+        "title": "Engineer fetches 30 internal log bundles",
+        "expect": "safe_normal",
+        "predicted": "safe_normal",
+        "risk": 0.0,
+        "p_high": 0.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-n24",
+        "title": "Support reply to a new customer",
+        "expect": "safe_normal",
+        "predicted": "safe_normal",
+        "risk": 0.0,
+        "p_high": 0.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-n25",
+        "title": "Analyst exports 600 confidential rows internally",
+        "expect": "safe_normal",
+        "predicted": "safe_normal",
+        "risk": 0.0,
+        "p_high": 0.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-n26",
+        "title": "Engineer queries 150 production rows",
+        "expect": "safe_normal",
+        "predicted": "safe_normal",
+        "risk": 0.0,
+        "p_high": 0.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-n27",
+        "title": "Facility telemetry read",
+        "expect": "safe_normal",
+        "predicted": "safe_normal",
+        "risk": 0.0,
+        "p_high": 0.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-n28",
+        "title": "Routine regulated release of 100 records",
+        "expect": "safe_normal",
+        "predicted": "safe_normal",
+        "risk": 0.0,
+        "p_high": 0.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-n29",
+        "title": "Sales rep shares public deck with new prospect",
+        "expect": "safe_normal",
+        "predicted": "safe_normal",
+        "risk": 0.0,
+        "p_high": 0.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-n30",
+        "title": "Staging deploy at night",
+        "expect": "safe_normal",
+        "predicted": "safe_normal",
+        "risk": 0.0,
+        "p_high": 0.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": true,
+        "exact": true,
+        "tags": [],
+        "known_limitation": false
+      },
+      {
+        "id": "g-k01",
+        "title": "Secret material mislabelled 'internal' \u2192 unverified domain",
+        "expect": "high_risk",
+        "predicted": "safe_unusual",
+        "risk": 0.0004,
+        "p_high": 0.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": false,
+        "exact": false,
+        "tags": [
+          "adversarial"
+        ],
+        "known_limitation": true
+      },
+      {
+        "id": "g-k02",
+        "title": "Customer records mislabelled 'public', 50 rows \u2192 unverified",
+        "expect": "high_risk",
+        "predicted": "safe_unusual",
+        "risk": 0.0,
+        "p_high": 0.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": false,
+        "exact": false,
+        "tags": [
+          "adversarial"
+        ],
+        "known_limitation": true
+      },
+      {
+        "id": "g-k03",
+        "title": "Slow ramp: +10%/day export volume never trips the baseline",
+        "expect": "suspicious_review",
+        "predicted": "safe_unusual",
+        "risk": 0.0001,
+        "p_high": 0.0,
+        "abstain": false,
+        "guarded": false,
+        "correct_escalation": false,
+        "exact": false,
+        "tags": [
+          "adversarial"
+        ],
+        "known_limitation": true
+      }
+    ]
+  },
+  "calibration_comparison": {
+    "none": {
+      "ece": 0.10882167228296902,
+      "brier": 0.1039747596262375
+    },
+    "temperature": {
+      "T": 0.498909,
+      "ece": 0.035980740657385026,
+      "brier": 0.06890130829193598
+    },
+    "isotonic_ovr": {
+      "ece": 0.001614493181456228,
+      "brier": 0.04674688470299617,
+      "note": "4 monotone maps + renormalisation; not portable to the edge without a lookup table"
+    }
+  },
+  "model_info": {
+    "name": "logreg-C1",
+    "family": "logreg",
+    "params": {
+      "C": 1.0
+    },
+    "fit_seconds": 0.113,
+    "portable": true,
+    "n_params": 344,
+    "portable_bytes": 6844,
+    "conversion": "Core ML (MIL) + ONNX from portable weights"
+  },
+  "model_version": "0.9.0",
+  "dataset": "northstar-actions@1.0.0",
+  "artifact_sha256": {
+    "model.json": "887221f79a095dc73a6dbb22d9cb52d34f5254686eb95602cfbca29eb3a32790",
+    "decision_policy.json": "fee06d0d60126b70b9b2905a64e23a86743c699dc817fd1acd6be452a5344402"
+  }
+}

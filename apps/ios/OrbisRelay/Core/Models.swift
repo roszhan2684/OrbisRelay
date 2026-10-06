@@ -130,8 +130,45 @@ struct Approval: Codable, Hashable, Sendable, Identifiable {
     var canRespond: Bool?
     var receiptId: String?
     var responses: [ResponseRecord]?
+    /// Edge-risk evidence (advisory). Absent when the model was not consulted.
+    var ml: ApprovalML?
 
     func isExpired(at now: Date = .now) -> Bool { expiresAt <= now }
+}
+
+struct ApprovalML: Codable, Hashable, Sendable {
+    struct Reason: Codable, Hashable, Sendable { let code: String; let label: String }
+    let source: String
+    let modelVersion: String
+    let runtime: String
+    let `class`: String
+    let risk: Double
+    let abstain: Bool
+    let reasons: [Reason]
+    let explanation: String
+    let anomaly: Double?
+    let anomalyTop: [String]
+    let baseline: String
+    let fusionRule: String
+    let modelHealth: String
+
+    var classLabel: String {
+        switch self.class {
+        case "high_risk": "High risk"
+        case "suspicious_review": "Suspicious"
+        case "safe_unusual": "Unusual"
+        default: "Routine"
+        }
+    }
+    var sourceLabel: String {
+        switch source {
+        case "local": "On-device · \(runtime)"
+        case "local+cloud": "Endpoint (\(runtime)) + gateway"
+        default: "Gateway scorer"
+        }
+    }
+    /// Model only ever raises; the approval card states which side asked for the human.
+    var escalatedByModel: Bool { fusionRule == "model_escalated_to_approval" || fusionRule == "abstain_high_impact_escalated" }
 }
 
 struct Page<T: Decodable & Sendable>: Decodable, Sendable { let data: [T] }

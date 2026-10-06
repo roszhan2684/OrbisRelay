@@ -21,3 +21,19 @@ Scope: multi-tenant authorization/approval SaaS — gateway API, console, Orbis 
 | Malicious / oversized JSON | 64 KB body limit, schema validation with typed errors, field length caps | `http.ts` | — |
 | Queue retry duplicates | Idempotent preflight + outcome endpoints | API smoke test | Real webhook retries need dedupe keys on the consumer side (header provided) |
 | AI enrichment altering policy semantics | No model in the enforcement path; Protect models are advisory and explained | `policy-core` has no model calls | — |
+
+## v2 — Endpoint intelligence threats (blueprint §23–24)
+
+| Threat | Mitigation | Test |
+|---|---|---|
+| Forged / tampered model manifest | Ed25519 over exact payload bytes, pinned key id | `testTamperedPayloadIsRejected`, `testUnknownOrWrongKeyIsRejected`, console tamper button |
+| Replay / downgrade to a vulnerable model | Monotonic `manifest_seq`; rollback is a *new* higher-seq manifest | `testReplayAndDowngradeAreRejected` |
+| Corrupted or swapped artifact | sha256 in the signed payload; smoke test before activation | `testCorruptArtifactIsNeverActivated`, `testSmokeTestRejectsWrongModel` |
+| Stale / incompatible model | `expires_at`, feature schema, minimum app version; endpoint falls back to policy | `testExpiredIncompatibleAndTooNewAreRejected`, `testKillSwitchAndStaleModelFallBack` |
+| Compromised endpoint submitting "safe" signals | Gateway recomputes a cloud score; more severe signal wins; model can only raise | `fusion.test.ts` (combineSignals) |
+| Fabricated telemetry | Telemetry bodies limited to whitelisted summary fields; endpoint id bound to the owning integration | `events/batch` route validation |
+| Prompt injection via action text | Intent text is not a model input | adversarial suite: *malicious instruction inside intent text* |
+| Feature manipulation (asserted ticket, misstated class) | Deterministic thresholds remain authoritative; documented limitations; 1.1.0 trained on the red-team finding | adversarial suite |
+| Training-data poisoning via feedback | Proxies down-weighted; feedback never applied online; gold-set gate on every candidate | adversarial suite: *feedback poisoning* |
+| OOD / unknown enums treated as safe | Explicit `unknown` buckets, abstain, high-impact unknowns escalate | adversarial OOD cases, `testUnknownEnumsAbstainAndEscalateHighImpact` |
+| Unauthorised model promotion | Admin role + passkey step-up + passing gate report; audit-chained | `promote` route, `ml_promote` op |

@@ -3,6 +3,7 @@ import { validateCallbackUrl, ApiError, type PreflightResult } from "@/lib/serve
 import { execute } from "@/lib/server/ops";
 import { handle, json, parseEnvelope, readJson } from "@/lib/server/http";
 import { decisionResponse } from "@/lib/server/present";
+import { parseEndpointSignal } from "@/lib/server/ml";
 
 /** POST /v1/decisions/preflight — evaluate a proposed action before it executes. */
 export const POST = handle(async (req: Request) => {
@@ -15,6 +16,7 @@ export const POST = handle(async (req: Request) => {
   }
   const idem = req.headers.get("idempotency-key");
   if (idem && !body.request_id) envelope.request_id = idem.slice(0, 128);
-  const { action, approval, idempotent_replay } = await execute<PreflightResult>(db, { kind: "preflight", integration_id: integration.id, envelope });
+  const endpoint = parseEndpointSignal(body.endpoint_signal);
+  const { action, approval, idempotent_replay } = await execute<PreflightResult>(db, { kind: "preflight", integration_id: integration.id, envelope, endpoint });
   return json(decisionResponse(db, action, approval, idempotent_replay), { status: idempotent_replay ? 200 : 201 });
 });

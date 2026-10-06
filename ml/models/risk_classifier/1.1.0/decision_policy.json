@@ -1,0 +1,55 @@
+{
+  "temperature": 0.771857,
+  "tau_high": 0.06,
+  "tau_review": 0.04,
+  "abstain_entropy": 0.9,
+  "schema": "orbis-decision-policy/1",
+  "version": "1.1.0+cal1",
+  "unknown_fields_index": 75,
+  "high_impact": {
+    "any_feature_set": [
+      5,
+      6,
+      7,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20
+    ],
+    "any_feature_set_names": [
+      "action_type=external_send",
+      "action_type=file_upload",
+      "action_type=clipboard_export",
+      "action_type=privilege_grant",
+      "action_type=payment",
+      "action_type=refund",
+      "action_type=production_deploy",
+      "action_type=secrets_access",
+      "action_type=model_provider_send",
+      "action_type=bulk_download",
+      "action_type=destructive_delete",
+      "action_type=config_change",
+      "action_type=physical_operation",
+      "action_type=unknown"
+    ],
+    "class_rank_index": 76,
+    "class_rank_min": 0.5,
+    "resource_log_index": 60,
+    "resource_log_min": 0.28844503230257873
+  },
+  "classes": [
+    "safe_normal",
+    "safe_unusual",
+    "suspicious_review",
+    "high_risk"
+  ],
+  "description": "Calibration + decision policy (the part of the model that turns logits into an edge risk signal).",
+  "model_version": "1.1.0"
+}

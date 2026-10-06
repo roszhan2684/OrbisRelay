@@ -1,0 +1,37 @@
+{
+  "model": "orbis-edge-risk@1.0.0",
+  "dataset_verification": {
+    "dataset": "northstar-actions@1.0.0",
+    "files_checked": 6,
+    "mismatches": [],
+    "passed": true
+  },
+  "retrained_metric_deltas": {
+    "mean_cost": 0.0,
+    "macro_f1": 0.0,
+    "high_risk_escalation_recall": 0.0,
+    "risky_escalation_recall": 0.0,
+    "false_escalation_rate": 0.0,
+    "ece": 0.0,
+    "brier": 0.0,
+    "gold.risky_escalation_recall": 0.0
+  },
+  "tolerance": 1e-06,
+  "temperature": {
+    "stored": 0.912089,
+    "reproduced": 0.912089
+  },
+  "thresholds": {
+    "stored": [
+      0.88,
+      0.24
+    ],
+    "reproduced": [
+      0.88,
+      0.24
+    ]
+  },
+  "weights_bit_identical": true,
+  "passed": true,
+  "note": "Deterministic: PCG64-seeded generator, torch.use_deterministic_algorithms(True), single thread, float64."
+}

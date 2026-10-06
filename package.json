@@ -1,7 +1,7 @@
 {
   "name": "orbis-relay",
   "private": true,
-  "version": "0.1.0",
+  "version": "2.0.0",
   "description": "Orbis Relay \u2014 human trust infrastructure for autonomous software",
   "scripts": {
     "dev": "pnpm --filter web dev",
@@ -15,7 +15,14 @@
     "ml:train": "python3 ml/phishing_url/train.py && python3 ml/message_scam/train.py",
     "contracts": "node --experimental-strip-types --no-warnings scripts/export-contracts.mjs",
     "video": "cd video/brag-output/composition && npx hyperframes render --quality delivery --output ../brag.mp4",
-    "demo:reset": "rm -f apps/web/.data/store.json"
+    "demo:reset": "rm -f apps/web/.data/store.json",
+    "ml": "cd ml && .venv/bin/python -m orbis_ml",
+    "ml:pipeline": "ml/pipeline.sh",
+    "ml:gates": "cd ml && .venv/bin/python -m orbis_ml gates --version 1.0.0 --baseline 0.9.0",
+    "endpoint:test": "cd apps/macos-endpoint && swift test",
+    "endpoint:build": "cd apps/macos-endpoint && swift build -c release",
+    "endpoint:bench": "cd apps/macos-endpoint && swift build -c release && .build/release/orbis-endpoint bench --precision fp32 --compute cpu",
+    "cxx:test": "make -C packages/cxx-risk-core test sanitize"
   },
   "packageManager": "pnpm@11.4.0"
 }

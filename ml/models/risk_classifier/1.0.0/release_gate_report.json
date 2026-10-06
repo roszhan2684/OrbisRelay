@@ -1,0 +1,230 @@
+{
+  "model": "orbis-edge-risk@1.0.0",
+  "status": "pass",
+  "eligible_for": "candidate",
+  "baseline": "0.9.0",
+  "budgets": {
+    "gold_high_risk_escalation_recall": 0.97,
+    "gold_risky_escalation_recall": 0.94,
+    "test_safe_precision": 0.95,
+    "gold_hard_negative_fpr": 0.05,
+    "test_false_escalation_rate": 0.02,
+    "test_ece": 0.05,
+    "coreml_fp32_parity": 0.0001,
+    "p95_inference_ms": 20.0,
+    "p95_pipeline_ms": 20.0,
+    "peak_memory_mb": 75.0,
+    "model_artifact_kb": 5120,
+    "sustained_cpu_percent": 10.0,
+    "slice_regression": 0.02
+  },
+  "gates": [
+    {
+      "name": "schema_compatibility",
+      "passed": true,
+      "status": "pass",
+      "observed": {
+        "feature_schema": "edge-features/1",
+        "input_dim": 85
+      },
+      "threshold": {
+        "feature_schema": "edge-features/1",
+        "input_dim": 85
+      },
+      "source": "ml/models/risk_classifier/1.0.0/model.json"
+    },
+    {
+      "name": "reproducibility",
+      "passed": true,
+      "status": "pass",
+      "observed": {
+        "dataset_hashes": true,
+        "max_metric_delta": 0.0
+      },
+      "threshold": {
+        "tolerance": 1e-06
+      },
+      "source": "ml/models/risk_classifier/1.0.0/reproduce_report.json"
+    },
+    {
+      "name": "coreml_parity",
+      "passed": true,
+      "status": "pass",
+      "observed": {
+        "max_probability_delta": 4.3435278096470853e-07,
+        "class_agreement": 1.0
+      },
+      "threshold": {
+        "max_probability_delta": 0.0001
+      },
+      "source": "ml/models/risk_classifier/1.0.0/parity_report.json"
+    },
+    {
+      "name": "onnx_parity",
+      "passed": true,
+      "status": "pass",
+      "observed": {
+        "max_probability_delta": 4.783048013767832e-07
+      },
+      "threshold": {
+        "max_probability_delta": 0.0001
+      },
+      "source": "ml/models/risk_classifier/1.0.0/parity_report.json"
+    },
+    {
+      "name": "swift_feature_and_model_parity",
+      "passed": true,
+      "status": "pass",
+      "observed": "Executed 7 tests, with 0 failures (0 unexpected) in 0.441 (0.442) seconds",
+      "threshold": "all fixtures within 1e-9 (features) / 1e-4 (Core ML)",
+      "source": "apps/macos-endpoint ParityTests"
+    },
+    {
+      "name": "golden_scenarios_no_regression",
+      "passed": true,
+      "status": "pass",
+      "observed": {
+        "failures": [],
+        "gated": 90
+      },
+      "threshold": "0 failures",
+      "source": "ml/models/risk_classifier/1.0.0/evaluation_report.json"
+    },
+    {
+      "name": "gold_high_risk_escalation_recall",
+      "passed": true,
+      "status": "pass",
+      "observed": 1.0,
+      "threshold": ">= 0.97",
+      "source": "ml/models/risk_classifier/1.0.0/evaluation_report.json"
+    },
+    {
+      "name": "gold_suspicious_plus_high_recall",
+      "passed": true,
+      "status": "pass",
+      "observed": 1.0,
+      "threshold": ">= 0.94",
+      "source": "ml/models/risk_classifier/1.0.0/evaluation_report.json"
+    },
+    {
+      "name": "test_safe_action_precision",
+      "passed": true,
+      "status": "pass",
+      "observed": 0.9981996399279855,
+      "threshold": ">= 0.95",
+      "source": "ml/models/risk_classifier/1.0.0/evaluation_report.json"
+    },
+    {
+      "name": "gold_hard_negative_false_positive_rate",
+      "passed": true,
+      "status": "pass",
+      "observed": 0.0,
+      "threshold": "<= 0.05",
+      "source": "ml/models/risk_classifier/1.0.0/evaluation_report.json"
+    },
+    {
+      "name": "false_positive_budget",
+      "passed": true,
+      "status": "pass",
+      "observed": 0.0023990403838464614,
+      "threshold": "<= 0.02",
+      "source": "ml/models/risk_classifier/1.0.0/evaluation_report.json"
+    },
+    {
+      "name": "calibration_ece",
+      "passed": true,
+      "status": "pass",
+      "observed": 0.01461657100499755,
+      "threshold": "<= 0.05",
+      "source": "ml/models/risk_classifier/1.0.0/evaluation_report.json"
+    },
+    {
+      "name": "model_size",
+      "passed": true,
+      "status": "pass",
+      "observed": 16.3,
+      "threshold": "<= 5120 KB",
+      "source": "ml/models/risk_classifier/1.0.0/parity_report.json"
+    },
+    {
+      "name": "endpoint_latency_p95",
+      "passed": true,
+      "status": "pass",
+      "observed": {
+        "inference_p95_ms": 0.0573,
+        "pipeline_p95_ms": 0.063,
+        "device": "Apple M4 Pro"
+      },
+      "threshold": "<= 20.0 ms",
+      "source": "ml/benchmarks/results/orbis-edge-risk/1.0.0/Mac16,8-Apple-M4-Pro/2026-10-06T07-25-02Z-fp32-cpu_only.json"
+    },
+    {
+      "name": "endpoint_memory",
+      "passed": true,
+      "status": "pass",
+      "observed": {
+        "peak_footprint_mb": 20.95,
+        "model_load_delta_mb": 6.61
+      },
+      "threshold": "<= 75.0 MB (whole process)",
+      "source": "ml/benchmarks/results/orbis-edge-risk/1.0.0/Mac16,8-Apple-M4-Pro/2026-10-06T07-25-02Z-fp32-cpu_only.json"
+    },
+    {
+      "name": "energy_proxy_sustained_cpu",
+      "passed": true,
+      "status": "pass",
+      "observed": {
+        "cpu_percent_of_one_core": 2.524,
+        "seconds": 600,
+        "rate_eps": 50,
+        "cpu_ms_per_1k_inferences": 53.27
+      },
+      "threshold": "<= 10.0% of one core at 50 events/s",
+      "source": "ml/benchmarks/results/sustained/10min-50eps/2026-10-06T07-37-26Z-fp32-cpu_only.json",
+      "note": "PROXY \u2014 energy was not measured (needs powermetrics/Instruments on a physical session). CPU time is the reported stand-in."
+    },
+    {
+      "name": "adversarial_suite",
+      "passed": true,
+      "status": "pass",
+      "observed": {
+        "required": "12/12",
+        "documented_limitations": [
+          "disguised classification ('internal') emailed to a new domain",
+          "agent-asserted ticket flag on $40k+ refunds"
+        ]
+      },
+      "threshold": "all required cases pass",
+      "source": "ml/models/risk_classifier/1.0.0/adversarial_report.json"
+    },
+    {
+      "name": "protected_slice_regression",
+      "passed": true,
+      "status": "pass",
+      "observed": "none",
+      "threshold": "no protected slice worse than 2% vs 0.9.0",
+      "source": "ml/models/risk_classifier/0.9.0/evaluation_report.json"
+    },
+    {
+      "name": "model_card_complete",
+      "passed": true,
+      "status": "pass",
+      "observed": {
+        "missing_sections": []
+      },
+      "threshold": [
+        "Model details",
+        "Intended use",
+        "Out of scope",
+        "Training data",
+        "Evaluation",
+        "Calibration",
+        "Runtime",
+        "Known limitations",
+        "Lineage"
+      ],
+      "source": "ml/models/risk_classifier/1.0.0/MODEL_CARD.md"
+    }
+  ],
+  "promotion_rule": "Only the model control plane can mark a version deployable, and only when every gate passes. Passing gates never auto-promotes."
+}

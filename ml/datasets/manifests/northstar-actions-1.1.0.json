@@ -1,0 +1,82 @@
+{
+  "class_distribution_added": {
+    "high_risk": 17,
+    "safe_normal": 172,
+    "safe_unusual": 134,
+    "suspicious_review": 1076
+  },
+  "composition": {
+    "base_train_rows": 17489,
+    "feedback_rows": 0,
+    "holdout_days": [
+      10,
+      13
+    ],
+    "pool_days": [
+      0,
+      9
+    ],
+    "window_holdout_rows": 4096,
+    "window_pool_rows_unlabelled": 12271,
+    "window_rows_labelled": 1399
+  },
+  "creation_commit": "4e3533e404816e2f28f8171e882f0763e56f2614",
+  "feature_schema": "edge-features/1",
+  "files": {
+    "train_features.npy": {
+      "bytes": 12843968,
+      "sha256": "220d7956f7596a73af9fc5e1c6b3891d859be332b65781600980ad3f47f824af"
+    },
+    "train_labels.npy": {
+      "bytes": 151232,
+      "sha256": "62436e61ea1b4ba867c0f80e6b747374819f2a4f71c8fe942800a5e0494a8818"
+    },
+    "train_weights.npy": {
+      "bytes": 151232,
+      "sha256": "2ab5cc951f411ae2dd1406fa8d6b3538ec855774db4b6d98dc38e56b36ffdbfd"
+    },
+    "window_events.jsonl": {
+      "bytes": 13170634,
+      "sha256": "06a4effa78a93a03fc011afcc21c1e40920dc2ef097c439592705b6e6d5df214"
+    },
+    "window_labels_used.jsonl": {
+      "bytes": 808021,
+      "sha256": "ecd037f19b1510bbe22e4435f3515901be5b8e8602ee176504f47ed13b6d24c6"
+    }
+  },
+  "human_proxy_error_rate_simulated": 0.1,
+  "label_confidence_weights": {
+    "analyst_reviewed": 0.95,
+    "gold_confirmed": 1.0,
+    "human_decision_proxy": 0.5,
+    "synthetic": 1.0,
+    "weak_label": 0.3
+  },
+  "label_states": {
+    "analyst_reviewed": 400,
+    "human_decision_proxy": 999
+  },
+  "name": "northstar-actions",
+  "parent": "northstar-actions@1.0.0",
+  "review_queue": {
+    "budget": 400,
+    "high_impact_escalation": 183,
+    "novel_combination": 1,
+    "policy_model_disagreement": 194,
+    "queued": 3634,
+    "reviewed": 400,
+    "uncertain": 230
+  },
+  "schema_version": "endpoint-event/1",
+  "test_split": "unchanged immutable test + gold from northstar-actions@1.0.0",
+  "validation_split": "unchanged from northstar-actions@1.0.0 (threshold/calibration comparability)",
+  "version": "1.1.0",
+  "window": {
+    "days": 14,
+    "generator_config_hash": "da909b508caad5896dc1eb591e4f5854c7be41ebdd8b0683b8e07a26b9b1f4f6",
+    "regime": "q4_shift",
+    "rows": 17766,
+    "seed": 99,
+    "start": "2026-09-21T04:00:00.000Z"
+  }
+}

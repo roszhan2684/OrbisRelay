@@ -1,0 +1,89 @@
+{
+  "artifact_bytes" : 17002,
+  "burst100_ms" : {
+    "max" : 13.588625,
+    "mean" : 4.3510920799999973,
+    "p50" : 4.0142290000000003,
+    "p95" : 5.726008349999999,
+    "p99" : 8.848670330000024
+  },
+  "cold" : {
+    "compile_ms" : 24.299792,
+    "first_prediction_ms" : 2.341917,
+    "load_ms" : 18.265582999999999,
+    "total_ms" : 45.893416999999999
+  },
+  "compute_units" : "cpu_only",
+  "cpu_ms_per_1k_inferences" : 53.265540000000009,
+  "device" : {
+    "cores" : 12,
+    "cpu" : "Apple M4 Pro",
+    "model" : "Mac16,8",
+    "os" : "Version 26.6.2 (Build 25G83)"
+  },
+  "energy" : {
+    "measured" : false,
+    "note" : "Energy needs `sudo powermetrics` or Instruments on a physical session; reported proxy is cpu_ms_per_1k_inferences."
+  },
+  "failures" : 0,
+  "feature_extraction_us" : {
+    "max" : 1203.5419999999999,
+    "mean" : 14.105827820186615,
+    "n" : 1179,
+    "p50" : 12.666,
+    "p95" : 15.841299999999993,
+    "p99" : 26.212960000000052
+  },
+  "idle_cpu_percent" : 0.00058000000001001695,
+  "measured_at" : "2026-10-06T07:37:26Z",
+  "memory_mb" : {
+    "after_model_load" : 16.453697204589844,
+    "model_load_delta" : 6.6094894409179688,
+    "peak_footprint" : 22.766242980957031,
+    "peak_rss" : 33.203125,
+    "process_baseline" : 9.844207763671875
+  },
+  "model" : "orbis-edge-risk@1.0.0",
+  "pipeline_event_to_signal_us" : {
+    "max" : 748.79200000000003,
+    "mean" : 54.33488888888882,
+    "n" : 1179,
+    "p50" : 51.75,
+    "p95" : 64.254099999999994,
+    "p99" : 127.53302000000006
+  },
+  "portable_swift_batch1_us" : {
+    "max" : 200.625,
+    "mean" : 0.854884599999993,
+    "p50" : 0.83299999999999996,
+    "p95" : 0.91700000000000004,
+    "p99" : 1.0840000000000001
+  },
+  "precision" : "fp32",
+  "runtime" : "coreml-fp32",
+  "schema" : "orbis-benchmark\/1",
+  "sustained" : {
+    "cpu_percent" : 2.5239599920659828,
+    "events" : 30000,
+    "footprint_growth_mb" : 0.234375,
+    "pipeline_us" : {
+      "max" : 7485.0829999999996,
+      "mean" : 209.50600229999969,
+      "p50" : 197.625,
+      "p95" : 284.95800000000003,
+      "p99" : 436.006249999999
+    },
+    "seconds" : 600.01303695800004,
+    "target_rate_eps" : 50
+  },
+  "warm_batch1_us" : {
+    "max" : 1634.0830000000001,
+    "mean" : 41.839052100000337,
+    "n" : 50000,
+    "p50" : 38.415999999999997,
+    "p95" : 55.875,
+    "p99" : 98.083420000000089,
+    "throughput_per_s" : 23871.848271846291
+  },
+  "warm_cpu_percent_of_one_core" : 127.15468889979597
+}

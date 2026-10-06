@@ -1,0 +1,34 @@
+{
+  "positives": 311,
+  "negatives": 5002,
+  "definition": "positives = risky test events from behavioural templates (bursts, ramps, out-of-scope access, split exfiltration, amount outliers, structuring, post-elevation export); negatives = safe test events",
+  "robust_median_mad": {
+    "roc_auc": 0.8577970740964063,
+    "pr_auc": 0.5079950269025113,
+    "portable": true,
+    "state": "per-actor 200-sample rings"
+  },
+  "isolation_forest": {
+    "roc_auc": 0.9344750845642451,
+    "pr_auc": 0.5558864614104901,
+    "portable": false,
+    "note": "global model over the same behavioural features; no per-actor context"
+  },
+  "fusion": {
+    "model_a_only": {
+      "risky_escalation_recall": 0.9795454545454545,
+      "false_escalation_rate": 0.0023990403838464614,
+      "hard_negative_false_escalation_rate": 0.0,
+      "behavioural_recall": 1.0
+    },
+    "model_a_or_anomaly": {
+      "risky_escalation_recall": 0.9795454545454545,
+      "false_escalation_rate": 0.0029988004798080768,
+      "hard_negative_false_escalation_rate": 0.0,
+      "behavioural_recall": 1.0
+    },
+    "anomaly_threshold": 0.85,
+    "decision": "Anomaly is shown to reviewers and used for routing; it escalates on its own only for high-impact actions, and only if it adds recall without breaching the hard-negative FPR budget.",
+    "adopt_auto_escalation": false
+  }
+}

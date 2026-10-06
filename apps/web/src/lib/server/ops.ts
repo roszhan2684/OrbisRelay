@@ -1,7 +1,8 @@
 import "server-only";
 import type { PolicyRule } from "@orbis/policy-core";
 import type { ActionEnvelope } from "@orbis/policy-core";
-import type { ApiKey, DB, Device, OutcomeStatus, ProtectAnalysis } from "../domain";
+import type { ApiKey, DB, Device, EndpointRecord, MlLabel, ModelStatus, OutcomeStatus, ProtectAnalysis } from "../domain";
+import { bucketOf, ENDPOINT_APP_VERSION, promote, rollback, roleVersions, type EndpointSignalInput } from "./ml";
 import { hashJson, id, withSeededIds } from "./crypto";
 import { ApiError, cancelApproval, freezeActor, preflight, reportOutcome, respond, unfreezeActor, type RespondInput } from "./gateway";
 import { audit, emit, persist } from "./store";
@@ -11,7 +12,7 @@ import { audit, emit, persist } from "./store";
  * timestamps come from the op — so any instance replaying the shared op log reaches the same state.
  */
 export type Op =
-  | { kind: "preflight"; integration_id: string; envelope: ActionEnvelope; force?: { route: string; reason: string } }
+  | { kind: "preflight"; integration_id: string; envelope: ActionEnvelope; force?: { route: string; reason: string }; endpoint?: EndpointSignalInput }
   | { kind: "respond"; approval_id: string; user_id: string; input: RespondInput }
   | { kind: "cancel"; approval_id: string; integration_id: string }
   | { kind: "outcome"; action_id: string; integration_id: string; status: OutcomeStatus; detail?: string }
@@ -25,7 +26,13 @@ export type Op =
   | { kind: "key_revoke"; key_id: string; user_id: string }
   | { kind: "device_register"; user_id: string; device: Device }
   | { kind: "device_revoke"; device_id: string; user_id: string }
-  | { kind: "signin"; user_id: string };
+  | { kind: "signin"; user_id: string }
+  | { kind: "ml_promote"; version: string; to: ModelStatus; percent?: number; user_id: string; reason: string }
+  | { kind: "ml_rollback"; version: string; user_id: string; reason: string }
+  | { kind: "ml_review"; prediction_id: string; label: MlLabel; user_id: string; note?: string }
+  | { kind: "ml_settings"; user_id: string; mode?: "off" | "advisory" | "escalate"; kill_switch?: boolean }
+  | { kind: "endpoint_checkin"; integration_id: string; endpoint_id: string; meta?: { name?: string; os?: string; app_version?: string }; health?: Partial<EndpointRecord["health"]> & { active_model?: string | null; kill_switch?: boolean; stale_model?: boolean }; events?: { count: number; high_priority: number; dropped?: number }; drill?: boolean }
+  | { kind: "endpoint_activation"; integration_id: string; endpoint_id: string; version: string; activated: boolean; error?: string; compile_ms?: number };
 
 export interface OpEnvelope {
   id: string;
@@ -51,7 +58,14 @@ export function applyOp(db: DB, env: OpEnvelope): unknown {
     const op = env.op;
     switch (op.kind) {
       case "preflight":
-        return preflight(db, integrationOf(db, op.integration_id), op.envelope, { ...o, forceApproval: op.force });
+        return preflight(db, integrationOf(db, op.integration_id), op.envelope, { ...o, forceApproval: op.force, endpointSignal: op.endpoint });
+      case "ml_promote":
+      case "ml_rollback":
+      case "ml_review":
+      case "ml_settings":
+      case "endpoint_checkin":
+      case "endpoint_activation":
+        return applyMlOp(db, op, at);
       case "respond":
         return respond(db, op.approval_id, userOf(db, op.user_id), op.input, o);
       case "cancel":
@@ -153,6 +167,130 @@ function publishPolicy(db: DB, op: Extract<Op, { kind: "policy_publish" }>, at: 
   audit(db, { at: now, type: "policy.published", actor: { kind: "user", id: user.id, name: user.name }, target: { type: "policy", id: policy.id }, summary: `${policy.name} v${draft.version} published — ${draft.change_note}`, data: { second_approver: second?.name, checksum: draft.checksum } });
   emit({ type: "policy.published", policy_id: policy.id, version: draft.version });
   return { policy_id: policy.id, version: draft.version, checksum: draft.checksum };
+}
+
+// ---------------------------------------------------------------- ML control plane + endpoints
+
+const ML_ADMIN = ["owner", "admin", "policy_admin"];
+const LATENCY_BUDGET_MS = 20;
+
+type MlOp = Extract<Op, { kind: "ml_promote" | "ml_rollback" | "ml_review" | "ml_settings" | "endpoint_checkin" | "endpoint_activation" }>;
+
+function applyMlOp(db: DB, op: MlOp, at: Date): unknown {
+  const iso = at.toISOString();
+  switch (op.kind) {
+    case "ml_promote": {
+      const user = userOf(db, op.user_id);
+      if (!user.roles.some((r) => ML_ADMIN.includes(r))) throw new ApiError(403, "forbidden", "Model promotion requires an admin or policy admin.");
+      try {
+        const m = promote(db, op.version, op.to, op.percent, user, op.reason || `promoted to ${op.to}`, at);
+        audit(db, { at: iso, type: "ml.model_promoted", actor: { kind: "user", id: user.id, name: user.name }, target: { type: "model", id: `orbis-edge-risk@${op.version}` }, summary: `${user.name} moved orbis-edge-risk ${op.version} → ${op.to}${op.to === "canary" ? ` (${m.rollout_percent}%)` : ""}: ${op.reason || "no reason"}`, data: { manifest_seq: db.ml.manifest_seq } });
+        emit({ type: "ml.changed", kind: "promote", version: op.version });
+        return m;
+      } catch (e) {
+        const code = (e as Error).message;
+        if (code === "gates_not_passed") throw new ApiError(409, "release_gates_failed", `orbis-edge-risk ${op.version} has not passed every release gate; it cannot be deployed.`, "Fix the failing gates and register a new candidate.");
+        if (code === "not_forward") throw new ApiError(409, "invalid_transition", "Lifecycle only moves forward (candidate → shadow → canary → production); use rollback to go back.");
+        throw new ApiError(404, "not_found", "Unknown model version.");
+      }
+    }
+    case "ml_rollback": {
+      const user = userOf(db, op.user_id);
+      if (!user.roles.some((r) => ML_ADMIN.includes(r) || r === "responder")) throw new ApiError(403, "forbidden", "Rollback requires an admin, policy admin or responder.");
+      try {
+        const r = rollback(db, op.version, user, op.reason, at);
+        audit(db, { at: iso, type: "ml.model_rolled_back", actor: { kind: "user", id: user.id, name: user.name }, target: { type: "model", id: `orbis-edge-risk@${op.version}` }, summary: `orbis-edge-risk ${op.version} rolled back (${op.reason}); active production ${r.active ?? "none"}`, data: { manifest_seq: db.ml.manifest_seq } });
+        emit({ type: "ml.changed", kind: "rollback", version: op.version });
+        return r;
+      } catch {
+        throw new ApiError(409, "not_deployed", "Only a shadow, canary or production model can be rolled back.");
+      }
+    }
+    case "ml_review": {
+      const user = userOf(db, op.user_id);
+      if (!user.roles.some((r) => ["owner", "admin", "policy_admin", "auditor", "responder"].includes(r))) throw new ApiError(403, "forbidden", "Analyst review requires a security, policy or audit role.");
+      const p = db.ml.predictions.find((x) => x.id === op.prediction_id);
+      if (!p) throw new ApiError(404, "not_found", "Prediction not found.");
+      const fb = { id: id("fb"), prediction_id: p.id, action_id: p.action_id, label: op.label, label_state: "analyst_reviewed" as const, confidence: 0.95, source: "analyst" as const, reviewed_by: user.name, reviewed_at: iso, note: op.note?.slice(0, 300) };
+      db.ml.feedback.push(fb);
+      audit(db, { at: iso, type: "ml.label_reviewed", actor: { kind: "user", id: user.id, name: user.name }, target: { type: "prediction", id: p.id }, summary: `${user.name} labelled a ${p.class ?? "fallback"} prediction as ${op.label.replace("_", " ")} — enters the next dataset version, not the live model` });
+      emit({ type: "ml.changed", kind: "review" });
+      return fb;
+    }
+    case "ml_settings": {
+      const user = userOf(db, op.user_id);
+      if (!user.roles.some((r) => ML_ADMIN.includes(r) || (op.kill_switch === true && r === "responder"))) throw new ApiError(403, "forbidden", "Changing model escalation requires an admin.");
+      const changes: string[] = [];
+      if (op.mode && op.mode !== db.ml.fusion.mode) {
+        db.ml.fusion = { ...db.ml.fusion, mode: op.mode };
+        changes.push(`fusion mode → ${op.mode}`);
+      }
+      if (typeof op.kill_switch === "boolean" && op.kill_switch !== db.ml.kill_switch) {
+        db.ml.kill_switch = op.kill_switch;
+        db.ml.manifest_seq += 1;
+        changes.push(op.kill_switch ? "model kill switch ENGAGED (deterministic policy only)" : "model kill switch released");
+      }
+      if (changes.length) {
+        audit(db, { at: iso, type: "ml.settings_changed", actor: { kind: "user", id: user.id, name: user.name }, summary: `${user.name}: ${changes.join("; ")}` });
+        emit({ type: "ml.changed", kind: "settings" });
+      }
+      return { fusion: db.ml.fusion, kill_switch: db.ml.kill_switch };
+    }
+    case "endpoint_checkin": {
+      const integration = integrationOf(db, op.integration_id);
+      let ep = db.ml.endpoints.find((e) => e.id === op.endpoint_id);
+      if (!ep) {
+        ep = {
+          id: op.endpoint_id, name: op.meta?.name?.slice(0, 80) ?? op.endpoint_id, kind: "agent_host", os: op.meta?.os?.slice(0, 40) ?? "macOS", app_version: op.meta?.app_version?.slice(0, 20) ?? ENDPOINT_APP_VERSION,
+          owner: integration.name, integration_id: integration.id, bucket: bucketOf(op.endpoint_id), model_version: null, feature_schema: "edge-features/1", last_update_at: null, last_seen_at: iso, signature: "not_checked", state: "healthy",
+          health: { inference_p95_ms: 0, pipeline_p95_ms: 0, memory_mb: 0, cpu_percent: 0, queue_depth: 0, failures_24h: 0, fallbacks_24h: 0 }, telemetry: { events_24h: 0, high_priority_24h: 0, dropped_24h: 0 }, real: !op.drill,
+          note: op.drill ? undefined : "Registered by a real orbis-endpoint process.",
+        };
+        db.ml.endpoints.push(ep);
+        audit(db, { at: iso, type: "endpoint.registered", actor: { kind: "integration", id: integration.id, name: integration.name }, target: { type: "endpoint", id: ep.id }, summary: `Endpoint ${ep.name} registered (${ep.os}, app ${ep.app_version})` });
+      } else if (ep.integration_id && ep.integration_id !== integration.id && !op.drill) {
+        throw new ApiError(403, "endpoint_owned_elsewhere", "This endpoint id belongs to another integration.");
+      }
+      ep.last_seen_at = iso;
+      if (op.meta?.app_version) ep.app_version = op.meta.app_version.slice(0, 20);
+      if (op.health) {
+        const h = op.health;
+        for (const k of ["inference_p95_ms", "pipeline_p95_ms", "memory_mb", "cpu_percent", "queue_depth", "failures_24h", "fallbacks_24h"] as const) {
+          if (typeof h[k] === "number" && Number.isFinite(h[k])) ep.health[k] = Math.max(0, h[k]!);
+        }
+        if (h.active_model !== undefined) ep.model_version = h.active_model;
+        ep.state = ep.feature_schema !== "edge-features/1" ? "incompatible" : ep.health.failures_24h > 5 || ep.health.inference_p95_ms > LATENCY_BUDGET_MS ? "degraded" : h.stale_model ? "stale" : "healthy";
+      }
+      if (op.events) {
+        ep.telemetry.events_24h += Math.max(0, op.events.count | 0);
+        ep.telemetry.high_priority_24h += Math.max(0, op.events.high_priority | 0);
+        ep.telemetry.dropped_24h += Math.max(0, (op.events.dropped ?? 0) | 0);
+      }
+      // Automatic rollback (blueprint §17.4): a canary endpoint breaching the latency budget or failing inference.
+      const roles = roleVersions(db, at.getTime());
+      if (roles.canary && ep.model_version === roles.canary.version && (ep.health.inference_p95_ms > LATENCY_BUDGET_MS || ep.health.failures_24h > 5)) {
+        const reason = `automatic: ${ep.name} reported ${ep.health.inference_p95_ms > LATENCY_BUDGET_MS ? `p95 ${ep.health.inference_p95_ms.toFixed(1)} ms > ${LATENCY_BUDGET_MS} ms budget` : `${ep.health.failures_24h} inference failures`}`;
+        const r = rollback(db, roles.canary.version, { id: "system", name: "Health monitor" }, reason, at, true);
+        audit(db, { at: iso, type: "ml.model_rolled_back", actor: { kind: "system", id: "health-monitor", name: "Health monitor" }, target: { type: "model", id: `orbis-edge-risk@${roles.canary.version}` }, summary: `Automatic rollback of canary ${roles.canary.version}: ${reason.slice(11)}; production stays ${r.active}` });
+        emit({ type: "ml.changed", kind: "auto_rollback", version: roles.canary.version });
+        return { endpoint: ep, auto_rollback: r };
+      }
+      return { endpoint: ep };
+    }
+    case "endpoint_activation": {
+      const ep = db.ml.endpoints.find((e) => e.id === op.endpoint_id);
+      if (!ep) throw new ApiError(404, "unknown_endpoint", "Check in before reporting activations.");
+      db.ml.activations.push({ endpoint_id: ep.id, version: op.version, activated: op.activated, error: op.error?.slice(0, 300), at: iso, compile_ms: op.compile_ms });
+      if (op.activated) {
+        ep.model_version = op.version;
+        ep.last_update_at = iso;
+        ep.signature = "verified";
+      } else if (op.error?.includes("signature")) ep.signature = "failed";
+      audit(db, { at: iso, type: op.activated ? "endpoint.model_activated" : "endpoint.model_refused", actor: { kind: "integration", id: op.integration_id, name: ep.name }, target: { type: "endpoint", id: ep.id }, summary: op.activated ? `${ep.name} activated orbis-edge-risk ${op.version}` : `${ep.name} refused ${op.version}: ${op.error}` });
+      emit({ type: "ml.changed", kind: "activation", version: op.version });
+      return { endpoint: ep };
+    }
+  }
 }
 
 const BOOL_KEYS = ["policy_publish_requires_second_approver", "metadata_only_mode", "scim"] as const;

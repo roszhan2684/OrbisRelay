@@ -35,9 +35,18 @@ enum Fixtures {
             policy: PolicyRef(id: "pol_conf_external", name: "Confidential data egress", version: 17, ruleId: "ext_model_confidential", ruleName: "Confidential data → unapproved AI provider", reason: "Confidential data would leave the approved AI trust boundary."),
             actor: ActorRef(id: "procurement-agent", type: "agent", name: "Procurement Agent"),
             integration: IntegrationRef(id: "int_procurement", name: "Procurement Agent"),
-            parameters: parameters, quorumProgress: nil, canRespond: canRespond, receiptId: nil, responses: []
+            parameters: parameters, quorumProgress: nil, canRespond: canRespond, receiptId: nil, responses: [],
+            ml: id == "apr_hero000001" ? heroML : nil
         )
     }
+
+    /// Recorded from `orbis-endpoint replay fixtures/endpoint-events/hero.jsonl` (Swift + Core ML).
+    static let heroML = ApprovalML(
+        source: "local+cloud", modelVersion: "1.0.0", runtime: "coreml-fp32", class: "high_risk", risk: 1.0, abstain: false,
+        reasons: [.init(code: "sensitive_to_untrusted", label: "Sensitive data to an unverified destination"), .init(code: "first_destination", label: "Destination never used by this agent")],
+        explanation: "High risk because sensitive data is going to an unverified destination, and this agent has never used this destination before.",
+        anomaly: 0.33, anomalyTop: ["first_destination", "volume"], baseline: "Behaviour score 33% vs this agent's own history (first destination, volume)",
+        fusionRule: "deterministic_approval_wins", modelHealth: "procurement-agent host · healthy · p95 0.06 ms")
 
     static let refund = approval(
         id: "apr_refund00001", title: "Refund $8,500", expiresIn: 7 * 3600, stepUp: .none,

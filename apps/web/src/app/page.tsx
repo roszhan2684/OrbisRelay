@@ -43,6 +43,7 @@ import { Wordmark } from "@/components/logo";
 import { Button } from "@/components/ui";
 import urlCard from "@/lib/ml/cards/url.json";
 import msgCard from "@/lib/ml/cards/message.json";
+import registry from "@/lib/ml/edge/registry.json";
 
 export const dynamic = "force-dynamic";
 
@@ -81,6 +82,53 @@ const TIERS = [
   { name: "Business", price: "$3,500", note: "per month · mid-market", feats: ["SSO, advanced routing & quorum", "Analytics & retention controls", "250k+ decisions", "Priority support"], featured: true },
   { name: "Enterprise", price: "Custom", note: "Regulated & large orgs", feats: ["SCIM, custom region & retention", "Private networking", "Audit export packages", "Dedicated limits & SLA"] },
 ];
+
+function IntelligenceSection() {
+  const v = registry.versions.find((x) => x.version === "1.0.0")!;
+  const b = v.benchmark!;
+  const sus = registry.sustained!;
+  const gates = v.gates!.gates;
+  const stats = [
+    { k: `${(v.metrics.gold.risky_escalation_recall * 100).toFixed(0)}%`, l: "risky actions escalated on the hand-written gold set" },
+    { k: `${(v.metrics.test.false_escalation_rate * 100).toFixed(2)}%`, l: "safe actions sent to a human (held-out test)" },
+    { k: `${Math.round(b.warm_us.p95)} µs`, l: `p95 on-device inference · Core ML on ${b.device.cpu}` },
+    { k: `${gates.filter((g) => g.status === "pass").length}/${gates.length}`, l: "release gates passed before it could ship" },
+  ];
+  const steps = [
+    ["Dataset", "33k versioned events · held-out actors & days · immutable gold set"],
+    ["Train & select", "rules → logistic → trees → MLP, chosen on a security cost matrix"],
+    ["Gate", "recall, false-positive budget, calibration, parity, latency, adversarial"],
+    ["Ship to the Mac", "Ed25519-signed manifest → hash check → compile → atomic swap"],
+    ["Operate", "drift, review queue, retrain → candidate. Never auto-promotes"],
+  ];
+  return (
+    <Section id="intelligence" eyebrow="Endpoint intelligence · v2" title={<>A model that can ask for a human. <span className="font-serif font-normal italic">Never one that can approve.</span></>} lede="Orbis now runs its own trained risk model on the endpoint. It reads metadata only — destinations are hashed on the device — and adds a calibrated signal that can raise an action to review. Deterministic policy still decides.">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {stats.map((x) => (
+          <Reveal key={x.l}>
+            <div className="rounded-[20px] border border-line bg-surface p-5 shadow-card">
+              <div className="text-[34px] font-semibold tracking-[-0.03em] text-ink">{x.k}</div>
+              <p className="mt-1 text-[13.5px] leading-snug text-muted">{x.l}</p>
+            </div>
+          </Reveal>
+        ))}
+      </div>
+      <ol className="mt-6 grid gap-px overflow-hidden rounded-[20px] border border-line bg-line sm:grid-cols-2 lg:grid-cols-5">
+        {steps.map(([t, d], i) => (
+          <li key={t} className="bg-surface p-5">
+            <div className="font-mono text-[12px] text-cobalt">0{i + 1}</div>
+            <div className="mt-1 text-[15px] font-semibold text-ink">{t}</div>
+            <p className="mt-1 text-[13px] leading-snug text-muted">{d}</p>
+          </li>
+        ))}
+      </ol>
+      <div className="mt-6 flex flex-wrap items-center gap-3 text-[13.5px] text-muted">
+        <Button asChild variant="primary"><Link href="/console/intelligence">Open the model console <ArrowRight className="size-4" /></Link></Button>
+        <span>Measured, not promised: {sus.events.toLocaleString()} events over {Math.round(sus.seconds / 60)} minutes at {(sus.cpu_percent).toFixed(1)}% of one core. Synthetic training data — limitations are on the model card.</span>
+      </div>
+    </Section>
+  );
+}
 
 export default async function Home() {
   const db = await getDb();
@@ -336,6 +384,8 @@ else if (decision.requiresApproval()) {
       </Section>
 
       {/* Security */}
+      <IntelligenceSection />
+
       <Section id="security" dark eyebrow="Principles" title="Deterministic policy owns enforcement." lede="AI may summarize evidence, classify intent and recommend. It never silently overrides a hard deny, a threshold, a role requirement or a tenant control.">
         <div className="grid gap-px overflow-hidden rounded-[22px] border border-white/10 bg-white/10 sm:grid-cols-2 lg:grid-cols-4">
           {[
