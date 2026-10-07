@@ -9,7 +9,7 @@ import { audit, emit, persist } from "./store";
 
 /**
  * Every state change is an Op. Ops are applied deterministically — ids are derived from the op id and
- * timestamps come from the op — so any instance replaying the shared op log reaches the same state.
+ * timestamps come from the op — so replaying the same ops always reaches the same state.
  */
 export type Op =
   | { kind: "preflight"; integration_id: string; envelope: ActionEnvelope; force?: { route: string; reason: string }; endpoint?: EndpointSignalInput }
@@ -318,13 +318,10 @@ function patchSettings(db: DB, op: Extract<Op, { kind: "settings" }>, at: Date) 
   return { tenant: db.tenant, changed: changes };
 }
 
-/** Apply an op locally, then append it to the shared log so other instances replay it. */
+/** Apply an op and persist the store. */
 export async function execute<T = unknown>(db: DB, op: Op): Promise<T> {
-  const { recordOp, markApplied } = await import("./sync");
   const env: OpEnvelope = { id: id("op"), at: new Date().toISOString(), op };
-  const result = applyOp(db, env) as T; // throws on validation errors → nothing recorded
-  markApplied(env.id);
-  await recordOp(db, env);
+  const result = applyOp(db, env) as T; // throws on validation errors → nothing persisted
   persist();
   return result;
 }

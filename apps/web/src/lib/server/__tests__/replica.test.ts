@@ -5,7 +5,7 @@ import { tick } from "../gateway";
 import type { PreflightResult } from "../gateway";
 import { verifyAuditChain } from "../store";
 
-// Two serverless replicas: A executes ops live; B replays the same op log later. They must converge.
+// Ops are deterministic: replica A executes them live, B replays the same ops later, and they must converge.
 describe("op-log replication", () => {
   const anchor = new Date("2026-10-05T08:00:00Z");
   const a = buildSeed(anchor);

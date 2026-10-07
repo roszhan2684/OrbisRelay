@@ -180,18 +180,20 @@ CI (`.github/workflows/ci.yml`): web tests, typecheck, lint, build and SDK integ
 
 ## Deployment (Vercel)
 
-The demo runs on Vercel serverless functions, where requests can land on different instances. Three things keep every instance consistent without a database:
+The demo runs on Vercel serverless functions (Hobby plan, inside the free tier) with no database and no paid storage:
 
-1. **Deterministic seed.** The tenant is rebuilt from a seeded PRNG, seeded ids and an Ed25519 key derived from `ORBIS_SIGNING_SEED`, so every instance holds byte-identical data and any receipt verifies anywhere.
-2. **Shared op log.** Every mutation is an `Op` (`apps/web/src/lib/server/ops.ts`) applied with ids derived from the op and its recorded timestamp, then appended to a private **Vercel Blob** log (`sync.ts`). Before serving, an instance replays the ops it hasn't seen. A shared *epoch* pins the seed time; a demo reset starts a new epoch.
+1. **Deterministic seed.** The tenant is rebuilt from a seeded PRNG, seeded ids and an Ed25519 key derived from `ORBIS_SIGNING_SEED`, anchored to the hour, so every instance holds byte-identical data and any receipt verifies anywhere.
+2. **Deterministic ops.** Every mutation is an `Op` (`apps/web/src/lib/server/ops.ts`) applied with ids derived from the op and its timestamp, so replaying the same ops always reaches the same state. Live demo actions (approving, freezing, publishing a policy) stay in the memory of the instance that handled them.
 3. **Stateless sessions.** Console cookies and iOS tokens are HMAC-signed claims (`ORBIS_SESSION_SECRET`), so they verify on any instance.
 
-Tests cover both properties: two replicas replaying one log converge byte-for-byte (`replica.test.ts`), and two seeds with the same anchor are identical (`seed.test.ts`). Blob sync is **off by default** (it is opt-in with `ORBIS_BLOB_SYNC=1`): every pull is a metered Blob list, and the demo used up the Hobby allowance of 2,000 advanced operations a month within days. Without it each instance serves the deterministic hourly seed, so pages are identical everywhere; only live demo actions stay on the instance that handled them. Locally the single process is the source of truth and data persists to `apps/web/.data/`.
+Tests cover both properties: two replicas applying the same ops converge byte-for-byte (`replica.test.ts`), and two seeds with the same anchor are identical (`seed.test.ts`). Locally the single process is the source of truth and data persists to `apps/web/.data/`.
 
-Project settings: Root Directory `apps/web`, framework Next.js, region `iad1`, Fluid compute. Env: `ORBIS_SIGNING_SEED`, `ORBIS_SESSION_SECRET`, `BLOB_READ_WRITE_TOKEN` (from the connected Blob store), used only when `ORBIS_BLOB_SYNC=1`.
+An earlier version shared demo actions across instances through an op log in Vercel Blob. Each sync listed the log, a metered "advanced operation", and that used up the Hobby allowance (2,000 a month) within days, so it was removed.
+
+Project settings: Root Directory `apps/web`, framework Next.js, region `iad1`, Fluid compute. Env: `ORBIS_SIGNING_SEED`, `ORBIS_SESSION_SECRET`.
 
 ## What's simulated
-- Persistence is a deterministic seed plus a Blob op log (or a local JSON file), not PostgreSQL; expiry/escalation is computed on request, not by Temporal.
+- Persistence is a deterministic seed held in memory (a local JSON file in dev), not PostgreSQL; expiry/escalation is computed on request, not by Temporal.
 - Webhook deliveries are recorded, not sent. SSO is demo personas.
 - Web step-up is a simulated passkey prompt; iOS uses real LocalAuthentication.
 - All organizations, people, vendors and figures are fictional. “Orbis Relay” is a working name.
