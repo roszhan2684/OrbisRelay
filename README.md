@@ -6,7 +6,7 @@
 
 **Live demo → [orbis-relay.vercel.app](https://orbis-relay.vercel.app)** · [Console → Intelligence](https://orbis-relay.vercel.app/console/intelligence) · [Northstar demo app](https://orbis-relay.vercel.app/demo) · [Docs](https://orbis-relay.vercel.app/docs)
 
-![Launch film poster](apps/web/public/media/orbis-launch-poster.jpg)
+[![v2 launch film poster](apps/web/public/media/orbis-launch-v2-poster.jpg)](apps/web/public/media/orbis-launch-v2.mp4)
 
 ## v2 — Orbis Endpoint Intelligence
 
@@ -173,10 +173,10 @@ pnpm ml:gates       # release gates for orbis-edge-risk 1.0.0 (exit 1 on any fai
 pnpm typecheck && pnpm lint && pnpm build
 ```
 
-CI: `docs/ci/github-actions-ci.yml` runs all of the above, plus the reproducibility check and release gates on macOS. To enable it, copy the file to `.github/workflows/ci.yml`; pushing workflow files needs a token with the `workflow` scope (`gh auth refresh -s workflow`).
+CI (`.github/workflows/ci.yml`): web tests, typecheck, lint, build and SDK integration on Ubuntu; C++ parity with sanitizers; and on macOS the ML reproducibility check, conversion parity, adversarial suite and **release gates**, the Swift endpoint suite and the iOS suite.
 
 ## Launch film
-`apps/web/public/media/orbis-launch.mp4` (40 s, 1080p, Kokoro voiceover, beat-locked to the music bed) was made with Hyperframes from `video/brag-output/composition/index.html`. Re-render with `pnpm video`. The plan, brief and share copy are in `video/brag-output/`.
+`apps/web/public/media/orbis-launch-v2.mp4` (43.5 s, 1080p, Kokoro voiceover, beat-locked to the music bed, audio-reactive glow) covers v2: on-device scoring, the "model can only raise" rule, the iPhone edge-risk card and the release gate that blocked our own retrained model. It was made with Hyperframes from `video/brag-output-2026-10-06-084320/composition/index.html`; re-render with `pnpm video`. The original v1 film (`orbis-launch.mp4`, 40 s) is still published and re-renders with `pnpm video:v1`. Each film's plan, brief and share copy sit next to its composition.
 
 ## Deployment (Vercel)
 

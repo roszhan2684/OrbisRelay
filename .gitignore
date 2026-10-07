@@ -27,3 +27,9 @@ ml/datasets/data/
 ml/mlruns/
 apps/macos-endpoint/.build/
 packages/cxx-risk-core/build/
+# v2 launch film: renders, licensed music and review frames
+video/brag-output-2026-10-06-084320/brag.mp4
+video/brag-output-2026-10-06-084320/brag.jpg
+video/brag-output-2026-10-06-084320/composition/assets/music/
+video/brag-output-2026-10-06-084320/composition/snapshots/
+video/brag-output-2026-10-06-084320/composition/.hyperframes/

@@ -135,8 +135,10 @@ export default async function Home() {
   const a = computeAnalytics(db, 28);
   const heroAction = [...db.actions].reverse().find((x) => x.final_status === "approved_modified" && x.safe_alternative_applied === "redirect_internal_model" && x.receipt_id);
   const receipt = heroAction?.receipt_id ? latestReceipt(db, heroAction.receipt_id, db.tenant.id) : undefined;
-  const film = fs.existsSync(path.join(process.cwd(), "public/media/orbis-launch.mp4")) ? "/media/orbis-launch.mp4" : null;
-  const poster = fs.existsSync(path.join(process.cwd(), "public/media/orbis-launch-poster.jpg")) ? "/media/orbis-launch-poster.jpg" : null;
+  const media = (f: string) => (fs.existsSync(path.join(process.cwd(), "public/media", f)) ? `/media/${f}` : null);
+  const film = media("orbis-launch-v2.mp4") ?? media("orbis-launch.mp4");
+  const poster = film?.endsWith("-v2.mp4") ? media("orbis-launch-v2-poster.jpg") : media("orbis-launch-poster.jpg");
+  const v1Film = film?.endsWith("-v2.mp4") ? media("orbis-launch.mp4") : null;
 
   return (
     <div className="bg-page">
@@ -279,11 +281,16 @@ export default async function Home() {
         <div className="mx-auto max-w-[1100px] px-5 py-24 lg:py-28">
           <Reveal>
             <div className="text-center">
-              <div className="text-[12.5px] font-semibold uppercase tracking-[0.14em] text-[#8fa2ff]">The launch film</div>
-              <h2 className="mx-auto mt-3 max-w-[700px] text-[36px] font-semibold leading-[1.06] tracking-[-0.035em] sm:text-[44px]">Control without killing autonomy.</h2>
+              <div className="text-[12.5px] font-semibold uppercase tracking-[0.14em] text-[#8fa2ff]">The launch film · v2</div>
+              <h2 className="mx-auto mt-3 max-w-[700px] text-[36px] font-semibold leading-[1.06] tracking-[-0.035em] sm:text-[44px]">A model that can ask for a human.</h2>
             </div>
           </Reveal>
           <Reveal className="mt-10"><Film src={film} poster={poster} /></Reveal>
+          {v1Film && (
+            <p className="mt-6 text-center text-[13.5px] text-white/55">
+              Missed v1? <a href={v1Film} className="text-[#8fa2ff] underline-offset-4 hover:underline">Watch the original launch film</a> (40 s).
+            </p>
+          )}
         </div>
       </section>
 

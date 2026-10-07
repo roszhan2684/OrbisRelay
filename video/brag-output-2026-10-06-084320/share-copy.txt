@@ -1,0 +1,6 @@
+We put a risk model on the Mac that runs in about 40 µs and can only ever ask for a human. Never approve.
+
+Then our own retrained model failed 2 of its 19 release gates, so it stayed in the registry as a candidate. That's the feature.
+
+Orbis Relay v2 · Endpoint Intelligence
+→ orbis-relay.vercel.app
