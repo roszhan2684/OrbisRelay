@@ -8,7 +8,7 @@
     "start": "next start -p 4310",
     "lint": "eslint",
     "test": "vitest run",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "next typegen && tsc --noEmit"
   },
   "dependencies": {
     "@number-flow/react": "^0.6.2",

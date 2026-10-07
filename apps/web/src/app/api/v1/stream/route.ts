@@ -1,6 +1,7 @@
 import { requireUser } from "@/lib/server/auth";
 import { errorResponse } from "@/lib/server/http";
 import { getDb, subscribe } from "@/lib/server/store";
+import { syncConfigured } from "@/lib/server/sync";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 300;
@@ -26,8 +27,10 @@ export async function GET(req: Request) {
       send({ type: "hello" });
       const unsub = subscribe(send);
       const ping = setInterval(() => send({ type: "ping" }), 20_000);
-      // Serverless: replay ops written by other instances so this stream sees them too.
-      const sync = process.env.BLOB_READ_WRITE_TOKEN ? setInterval(() => void getDb().catch(() => {}), 2000) : null;
+      // Serverless: replay ops written by other instances so this stream sees them too. Each replay
+      // is a metered Blob list, and a tab can hold a stream open indefinitely, so keep this slow;
+      // requests already pull on their own.
+      const sync = syncConfigured() ? setInterval(() => void getDb().catch(() => {}), 10_000) : null;
       cleanup = () => {
         unsub();
         clearInterval(ping);

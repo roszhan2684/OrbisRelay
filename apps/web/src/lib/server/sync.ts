@@ -5,21 +5,36 @@ import type { DB } from "../domain";
 import type { OpEnvelope } from "./ops";
 
 /**
- * Cross-instance consistency for serverless deployments (enabled when BLOB_READ_WRITE_TOKEN is set).
+ * Cross-instance consistency for serverless deployments. Opt-in: set ORBIS_BLOB_SYNC=1 alongside
+ * BLOB_READ_WRITE_TOKEN. Off by default because every pull is a metered Blob list (an "advanced
+ * operation"), and a busy demo exhausts the Hobby allowance (2k/month) in hours.
  *
  * - An *epoch* pins the seed anchor, so every instance builds the identical deterministic tenant.
  * - Every mutation is appended to a private, append-only op log in Vercel Blob.
  * - Before serving, an instance replays ops it hasn't applied yet (same ids, same timestamps).
  *
  * Locally (no token) this is a no-op and the single process is the source of truth.
+ *
+ * Blob is a dependency, not a requirement: if it errors (quota exhausted, store suspended, outage)
+ * the breaker trips and the instance serves its deterministic local tenant until the cooldown ends.
  */
-export const syncEnabled = () => !!process.env.BLOB_READ_WRITE_TOKEN;
+const BREAKER_COOLDOWN_MS = 5 * 60_000;
+const breaker = globalThis as unknown as { __orbisBlobDownUntil?: number };
+
+export const syncConfigured = () => process.env.ORBIS_BLOB_SYNC === "1" && !!process.env.BLOB_READ_WRITE_TOKEN;
+export const syncEnabled = () => syncConfigured() && Date.now() >= (breaker.__orbisBlobDownUntil ?? 0);
+
+/** Stop using Blob for a while after a failure; logged once per trip. */
+export function tripBreaker(e: unknown) {
+  if (syncEnabled()) console.error(`[orbis] Blob sync unavailable, serving local demo state for ${BREAKER_COOLDOWN_MS / 60_000} min:`, (e as Error)?.message ?? e);
+  breaker.__orbisBlobDownUntil = Date.now() + BREAKER_COOLDOWN_MS;
+}
 
 // Namespaced per environment so local and preview runs never touch the production demo log.
 const ROOT = `orbis-relay/${process.env.VERCEL_ENV ?? "local"}/v2`;
 const EPOCH_TTL_MS = 20 * 3_600_000;
-const PULL_INTERVAL_MS = 350;
-const EPOCH_CHECK_MS = 10_000;
+const PULL_INTERVAL_MS = 2_000;
+const EPOCH_CHECK_MS = 60_000;
 
 export interface Epoch {
   id: string;
@@ -82,7 +97,11 @@ export function markApplied(opId: string) {
 
 export async function recordOp(db: DB, env: OpEnvelope) {
   if (!syncEnabled() || !db.epoch_id) return;
-  await put(`${ROOT}/ops/${db.epoch_id}/${pad(Date.parse(env.at))}-${env.id}.json`, JSON.stringify(env), opts);
+  try {
+    await put(`${ROOT}/ops/${db.epoch_id}/${pad(Date.parse(env.at))}-${env.id}.json`, JSON.stringify(env), opts);
+  } catch (e) {
+    tripBreaker(e); // the op is already applied locally; other instances just won't see it
+  }
 }
 
 /**

@@ -76,7 +76,14 @@ async function syncedDb(): Promise<DB> {
 }
 
 export async function getDb(): Promise<DB> {
-  if (process.env.BLOB_READ_WRITE_TOKEN) return syncedDb();
+  const sync = await import("./sync");
+  if (sync.syncEnabled()) {
+    try {
+      return await syncedDb();
+    } catch (e) {
+      sync.tripBreaker(e);
+    }
+  }
   if (rt.db) {
     // Request-driven lifecycle tick: serverless instances may be frozen between requests.
     if (rt.gateway && Date.now() - rt.lastTick > 5000) {
@@ -111,15 +118,19 @@ export async function getDb(): Promise<DB> {
 }
 
 export async function resetDb() {
-  if (process.env.BLOB_READ_WRITE_TOKEN) {
-    const sync = await import("./sync");
-    const { buildSeed } = await import("./seed");
-    const epoch = await sync.createEpoch(seedAnchor());
-    sync.resetApplied();
-    rt.db = buildSeed(new Date(epoch.anchor));
-    rt.db.epoch_id = epoch.id;
-    emit({ type: "demo.reset" });
-    return rt.db;
+  const sync = await import("./sync");
+  if (sync.syncEnabled()) {
+    try {
+      const { buildSeed } = await import("./seed");
+      const epoch = await sync.createEpoch(seedAnchor());
+      sync.resetApplied();
+      rt.db = buildSeed(new Date(epoch.anchor));
+      rt.db.epoch_id = epoch.id;
+      emit({ type: "demo.reset" });
+      return rt.db;
+    } catch (e) {
+      sync.tripBreaker(e);
+    }
   }
   const { buildSeed } = await import("./seed");
   rt.db = buildSeed(seedAnchor());

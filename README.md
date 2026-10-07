@@ -186,9 +186,9 @@ The demo runs on Vercel serverless functions, where requests can land on differe
 2. **Shared op log.** Every mutation is an `Op` (`apps/web/src/lib/server/ops.ts`) applied with ids derived from the op and its recorded timestamp, then appended to a private **Vercel Blob** log (`sync.ts`). Before serving, an instance replays the ops it hasn't seen. A shared *epoch* pins the seed time; a demo reset starts a new epoch.
 3. **Stateless sessions.** Console cookies and iOS tokens are HMAC-signed claims (`ORBIS_SESSION_SECRET`), so they verify on any instance.
 
-Tests cover both properties: two replicas replaying one log converge byte-for-byte (`replica.test.ts`), and two seeds with the same anchor are identical (`seed.test.ts`). Locally, without `BLOB_READ_WRITE_TOKEN`, the single process is the source of truth and data persists to `apps/web/.data/`.
+Tests cover both properties: two replicas replaying one log converge byte-for-byte (`replica.test.ts`), and two seeds with the same anchor are identical (`seed.test.ts`). Blob sync is **off by default** (it is opt-in with `ORBIS_BLOB_SYNC=1`): every pull is a metered Blob list, and the demo used up the Hobby allowance of 2,000 advanced operations a month within days. Without it each instance serves the deterministic hourly seed, so pages are identical everywhere; only live demo actions stay on the instance that handled them. Locally the single process is the source of truth and data persists to `apps/web/.data/`.
 
-Project settings: Root Directory `apps/web`, framework Next.js, region `iad1`, Fluid compute. Env: `ORBIS_SIGNING_SEED`, `ORBIS_SESSION_SECRET`, `BLOB_READ_WRITE_TOKEN` (from the connected Blob store).
+Project settings: Root Directory `apps/web`, framework Next.js, region `iad1`, Fluid compute. Env: `ORBIS_SIGNING_SEED`, `ORBIS_SESSION_SECRET`, `BLOB_READ_WRITE_TOKEN` (from the connected Blob store), used only when `ORBIS_BLOB_SYNC=1`.
 
 ## What's simulated
 - Persistence is a deterministic seed plus a Blob op log (or a local JSON file), not PostgreSQL; expiry/escalation is computed on request, not by Temporal.
